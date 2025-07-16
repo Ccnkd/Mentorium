@@ -4,7 +4,7 @@ const supabase = require('../config/db');
 // @route   POST /api/auth/register
 // @access  Public
 const registerUser = async (req, res) => {
-  const { email, password, firstName, lastName, phone, profileImgUrl } = req.body;
+  const { email, password, firstName, lastName, phone, indexNumber, yearOfAdmission } = req.body;
 
   // Validate required fields
   if (!email || !password) {
@@ -51,9 +51,14 @@ const registerUser = async (req, res) => {
     // Insert into role-specific table
     const { error: studentInsertError } = await supabase.from(table).insert({
       user_id,
-      first_name: firstName,
-      last_name: lastName,
-      "profileImgUrl": profileImgUrl
+      firstname: firstName,
+      lastname: lastName,
+      index_number: indexNumber || null,
+      year_of_admission: yearOfAdmission
+    });
+
+    await supabase.auth.admin.updateUserById(user_id, {
+      email_confirm: true
     });
 
     if (studentInsertError) {
@@ -153,7 +158,7 @@ const getUserProfile = async (req, res) => {
 
     const { data: profileData, error: profileError } = await supabase
       .from(table)
-      .select('first_name, last_name, phone')
+      .select('firstname, lastname')
       .eq('user_id', user_id)
       .maybeSingle();
 

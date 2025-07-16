@@ -13,7 +13,7 @@ const StudentDashboard :React.FC= () => {
     <>
         <div className="px-6 py-8 w-full">
           <div className="w-full flex items-start justify-start">
-            <h1 className="text-4xl text-left">Hello, {user?.first_name|| ""}</h1>
+            <h1 className="text-4xl text-left">Hello, {user?.firstname|| ""}</h1>
           </div>
           <br></br>
           <div>

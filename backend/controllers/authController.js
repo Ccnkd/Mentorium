@@ -54,7 +54,7 @@ const registerUser = async (req, res) => {
       firstname: firstName,
       lastname: lastName,
       index_number: indexNumber || null,
-      year_of_admission: yearOfAdmission
+      year_of_admission: yearOfAdmission || null
     });
 
     await supabase.auth.admin.updateUserById(user_id, {

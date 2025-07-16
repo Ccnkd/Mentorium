@@ -18,8 +18,10 @@ const SignUp: React.FC = () => {
 
   const[firstName, setfirstName]= useState<string>("");
   const[lastName, setlastName]= useState<string>("");
-  const[email, setEmail]= useState<string>("");
   const[password, setPassword]= useState<string>("");
+  const[email, setEmail]= useState<string>("");
+  const[indexNumber, setindexNumber]= useState<string>("");
+  const[yearOfAdmission, setyearOfAdmission]= useState<string>("");
   const[adminInviteToken, setadminInviteToken]= useState<string>("");
 
   const {updateUser} = useContext(UserContext);
@@ -48,6 +50,8 @@ const SignUp: React.FC = () => {
         lastName,
         email,
         password,
+        yearOfAdmission,
+        indexNumber,
         adminInviteToken,
       })
       
@@ -117,7 +121,27 @@ const SignUp: React.FC = () => {
                     onChange={(e) => setlastName(e.target.value)}
                     required
                   />
-              </div>        
+              </div>
+              <div className="grid gap-3 font-secondary">
+                <Label htmlFor="email">Index Number</Label>
+                  <Input
+                    id="indexNumber"
+                    type="indexNumber"
+                    value={indexNumber}
+                    onChange={(e) => setindexNumber(e.target.value)}
+                    required
+                  />
+              </div>
+              <div className="grid gap-3 font-secondary">
+                <Label htmlFor="email">Year Of Admission</Label>
+                  <Input
+                    id="yearOfAdmission"
+                    type="yearOfAdmission"
+                    value={yearOfAdmission}
+                    onChange={(e) => setyearOfAdmission(e.target.value)}
+                    required
+                  />
+              </div>     
               <div className="grid gap-3 font-secondary">
                 <Label htmlFor="email">Email</Label>
                   <Input
@@ -131,12 +155,6 @@ const SignUp: React.FC = () => {
               <div className="grid gap-3 font-secondary">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
-                  <a
-                    href="#"
-                    className="ml-auto text-sm underline-offset-2 hover:underline"
-                  >
-                    Forgot your password?
-                  </a>
                 </div>
                 <Input
                   id="password"

@@ -1,14 +1,45 @@
 const supabase = require('../config/db');
 
-const getTasks = async (req, res) => {
+const getProjects = async (req, res) => {
   try {
     const { status } = req.query;
     const userId = req.user.id;
 
     let query = supabase
+      .from('projects')
+      .select('*')
+      .or(`created_by.eq.${userId},assignedTo.eq.${userId}`);
+
+    if (status === 'pending') {
+      query = query.lt('progress', 100);
+    } else if (status === 'completed') {
+      query = query.eq('progress', 100);
+    }
+    // else: all tasks (no extra filter)
+
+    const { data: tasks, error } = await query;
+
+    if (error) {
+      return res.status(400).json({ message: 'Error fetching tasks', error: error.message });
+    }
+
+    res.status(200).json({ tasks });
+
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+//Get Project Tasks
+const getProjectTasks = async (req, res) => {
+  try {
+    const { status } = req.query;
+    const projectId = req.projects.id;
+
+    let query = supabase
       .from('tasks')
       .select('*')
-      .or(`created_by.eq.${userId},assignee_user_id.eq.${userId}`);
+      .or(`project_id.eq.${projectId}`);
 
     if (status === 'pending') {
       query = query.lt('progress', 100);
@@ -31,31 +62,15 @@ const getTasks = async (req, res) => {
 };
 
 
-
-const getTaskById = async (req, res) => {
-    try{
-        const task = await task.findbyId(req.params.id).populate(
-            "assignedTo",
-            "name",
-            "email",
-            "profileImgUrl",
-        );
-
-        if(!task) return res.status(404).json({message: "Task not found"});
-    }catch(error){
-        res.status(500).json({message: "Server error", error: error.message})
-    }
-};
-
-const createTask = async (req, res) => {
+const createProjectTask = async (req, res) => {
     try {
         const {
             title,
             description,
             priority,
             due_Date,
-            assignedTo,
-            subtasks,
+            project_id,
+            subtasks = []
         } = req.body;
 
         const created_By = req.user.id;
@@ -68,10 +83,10 @@ const createTask = async (req, res) => {
                 title,
                 description,
                 priority,
-                created_By : req.user._id,
+                created_By,
+                project_id : req.projects.id,   //Not entirely sure about this line
                 due_Date,
-                assignedTo,
-                progress,
+                progress
             }])
             .select()
             .single(); // So we can get the generated ID
@@ -110,25 +125,6 @@ const createTask = async (req, res) => {
     }
 };
 
-const updateTask = async (req, res) => {
-    try{
-
-        const task = await task.findbyId(req.params.id);
-
-        task.title = req.body.title || task.title;
-        task.description = req.body.description || task.description;
-        task.priority = req.body.priority || task.priority;
-        task.due_Date = req.body.due_Date || task.due_Date;
-        task.subtasks = req.body.subtasks || task.subtasks;
-
-
-        const updatedTask = await task.save();
-        res.json({message: "Task successfully updated"});
-    }catch(error){
-        res.status(500).json({message: "Server error", error: error.message})
-    }
-};
-
 const deleteTask = async (req, res) => {
     try{
 
@@ -148,7 +144,7 @@ const updateTaskStatus = async (req, res) => {
 };
 
 
-const updateTaskChecklist = async (req, res) => {
+const getDashboardData = async (req, res) => {
     try{
 
     }catch(error){
@@ -156,13 +152,28 @@ const updateTaskChecklist = async (req, res) => {
     }
 };
 
+const getUserDashboardData = async (req, res) => {
+    try{
+
+    }catch(error){
+        res.status(500).json({message: "Server error", error: error.message})
+    }
+};
+
+const createBudget = async (req, res) => {
+    try{
+
+    }catch(error){
+        res.status(500).json({message: "Server error", error: error.message})
+    }
+};
 
 module.exports={
-    getTasks,
-    getTaskById,
-    createTask,
-    updateTask,
+    getProjects,
+    getProjectTasks,
+    getUserDashboardData,
+    getDashboardData,
+    createProjectTask,
     deleteTask,
-    updateTaskChecklist,
-    updateTaskStatus,
+    createBudget,
 }

@@ -8,7 +8,8 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { BadgeDollarSignIcon, Ticket } from "lucide-react";
+import { BadgeCent, BadgeDollarSignIcon, InfoIcon, Ticket, TicketCheck, Volume2 } from "lucide-react";
+import ProgressChart from "./ProgressChart";
 
 const SectionCards: React.FC = () => {
   return (
@@ -17,8 +18,9 @@ const SectionCards: React.FC = () => {
       <Card className="col-span-2 font-secondary">
         <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
           <div className="flex items-center gap-2">
-            {/* Replace with icon */}
-            <div className="w-6 h-6 rounded-sm bg-muted" />
+            <div className="w-6 h-6 rounded-sm bg-muted flex items-center justify-center">
+            <InfoIcon className="size-4 text-muted-foreground"/>
+            </div>
             <CardTitle className="text-grey font-medium">Details</CardTitle>
           </div>
         </CardHeader>
@@ -61,12 +63,14 @@ const SectionCards: React.FC = () => {
       <Card className="col-span-2">
         <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
           <div className="flex items-center gap-2">
-            {/* Replace with icon */}
-            <div className="w-6 h-6 rounded-sm bg-muted" />
+            <div className="w-6 h-6 rounded-sm bg-muted flex items-center justify-center">
+            <TicketCheck className="size-4 text-muted-foreground"/>
+            </div>
             <CardTitle className="text-base font-semibold">Tasks</CardTitle>
           </div>
         </CardHeader>
-        <CardContent className="pt-0 text-sm">
+        <CardContent className="flex justify-between text-sm  ">
+          <div>
           <ul className="space-y-1 mb-4">
             <li>All Tasks (10)</li>
             <li className="text-red-500">Overdue (0)</li>
@@ -74,9 +78,9 @@ const SectionCards: React.FC = () => {
             <li className="text-yellow-500">Medium Priority (0)</li>
             <li className="text-green-500">Low Priority (7)</li>
           </ul>
-          {/* Replace this with actual progress donut chart */}
-          <div className="w-full flex justify-center">
-            <div className="text-2xl font-bold">27%</div>
+          </div>
+          <div className="w-[200px] h-[200px] gap-2">
+          <ProgressChart/>
           </div>
         </CardContent>
       </Card>
@@ -85,8 +89,9 @@ const SectionCards: React.FC = () => {
       <Card className="font-secondary col-span-2 gap-1">
         <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
           <div className="flex items-center gap-2">
-            {/* Replace with icon */}
-            <div className="w-6 h-6 rounded-sm bg-muted" />
+            <div className="w-6 h-6 rounded-sm bg-muted flex items-center justify-center">
+            <Volume2 className="size-4 text-muted-foreground"/>
+            </div>
             <CardTitle className="font-medium text-grey">Announcements</CardTitle>
           </div>
         </CardHeader>
@@ -105,8 +110,8 @@ const SectionCards: React.FC = () => {
       <Card className="font-secondary col-span-2 gap-1">
         <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-sm bg-muted">
-            <BadgeDollarSignIcon className="size-4"/>
+            <div className="w-6 h-6 rounded-sm bg-muted flex items-center justify-center">
+            <BadgeCent className="size-4 text-muted-foreground"/>
             </div>
             <CardTitle className="font-medium text-grey">Budget</CardTitle>
           </div>

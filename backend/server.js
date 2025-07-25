@@ -49,7 +49,7 @@ app.get('/api/users', async (req, res) => {
 
 
 app.use("/api/auth", authRoutes); // These routes would now use the `supabase` client for DB operations
-app.use("/api/auth", userRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/auth", taskRoutes);
 //app.use("/api/auth", reportRoutes);
 

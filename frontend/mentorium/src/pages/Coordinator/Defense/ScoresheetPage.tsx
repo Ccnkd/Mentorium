@@ -1,9 +1,9 @@
 import React from 'react'
 
-const CreateScoresheet :React.FC= () => {
+const ScoresheetPage :React.FC= () => {
   return (
     <div>CreateScoresheet</div>
   )
 }
 
-export default CreateScoresheet
+export default ScoresheetPage

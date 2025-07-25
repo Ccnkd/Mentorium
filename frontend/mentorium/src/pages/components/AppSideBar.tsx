@@ -10,105 +10,137 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-
+} from "@/components/ui/sidebar";
 
 import { UserContext } from "@/contexts/UserContext";
-import { SIDE_MENU_DATA, SIDE_MENU_DATA_COORDINATOR, SIDE_MENU_DATA_SUPERVISOR } from "@/utils/data";
+import {
+  SIDE_MENU_DATA,
+  SIDE_MENU_DATA_COORDINATOR,
+  SIDE_MENU_DATA_SUPERVISOR,
+} from "@/utils/data";
+
 import MentoriumIcon from "@/assets/icons/MentoriumIcon.svg?react";
-import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate ,Link } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { LogOut, Settings } from "lucide-react";
-// Menu items.
+import { cn } from "@/lib/utils"; // import cn helper
 
 type AppSidebarProps = {
   userDisplayName?: string;
   userRole?: string;
 };
 
-export function AppSidebar({ userDisplayName = "User", userRole = "Role" }: AppSidebarProps) {
-  const {user,clearUser}= useContext(UserContext);
+export function AppSidebar({
+  userDisplayName = "User",
+  userRole = "Role",
+}: AppSidebarProps) {
+  const { user, clearUser } = useContext(UserContext);
+  const location = useLocation();
   const [sideMenuData, setSideMenuData] = useState([]);
   const navigate = useNavigate();
-  
-  const handleLogout =() =>{
+
+  const handleLogout = () => {
     localStorage.clear();
     clearUser();
     navigate("/login");
-  }
+  };
 
-  useEffect(()=>{
-    if(user){
-      if(user.role ==='supervisor'){
-        setSideMenuData(SIDE_MENU_DATA_SUPERVISOR)
-      }else if (user.role==='coordinator'){
-        setSideMenuData(SIDE_MENU_DATA_COORDINATOR)
-      }else{
-        setSideMenuData(SIDE_MENU_DATA)
+  useEffect(() => {
+    if (user) {
+      if (user.role === "supervisor") {
+        setSideMenuData(SIDE_MENU_DATA_SUPERVISOR);
+      } else if (user.role === "coordinator") {
+        setSideMenuData(SIDE_MENU_DATA_COORDINATOR);
+      } else {
+        setSideMenuData(SIDE_MENU_DATA);
       }
     }
-    return()=>{};
-  },[user]);
+    return () => {};
+  }, [user]);
 
   return (
     <Sidebar collapsible="icon">
       <SidebarContent>
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              <a href="#">
-                <div>
-                  <MentoriumIcon className="size-8" />
-                </div>
-              </a>
-            </SidebarMenuButton>
-                <SidebarMenuButton size="lg" asChild>
+        <SidebarHeader>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton size="lg" asChild>
                 <a href="#">
-                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                  {userDisplayName?.[0] || "U"}
-                </div>
-                <div className="grid flex-1 text-left text-sm leading-tight text-grey font-secondary">
-                  <span className="truncate font-medium">{userDisplayName}</span>
-                  <span className="truncate text-xs">{userRole?.charAt(0).toUpperCase() + userRole?.slice(1)}</span>
-                </div>
-               </a>
-               </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarHeader>
+                  <div>
+                    <MentoriumIcon className="size-8" />
+                  </div>
+                </a>
+              </SidebarMenuButton>
+              <SidebarMenuButton size="lg" asChild>
+                <a href="#">
+                  <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+                    {userDisplayName?.[0] || "U"}
+                  </div>
+                  <div className="grid flex-1 text-left text-sm leading-tight text-grey font-secondary">
+                    <span className="truncate font-medium">{userDisplayName}</span>
+                    <span className="truncate text-xs">
+                      {userRole?.charAt(0).toUpperCase() + userRole?.slice(1)}
+                    </span>
+                  </div>
+                </a>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarHeader>
+
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {sideMenuData.map((item) => (
-                <SidebarMenuItem key={item.id}>
-                  <SidebarMenuButton asChild>
-                    <Link to={item.url} className="font-secondary text-grey text-lg font-medium">
-                      {<item.icon className="size-4"/>}
-                      <span >{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {sideMenuData.map((item) => {
+                  const pathname = location.pathname;
+                  const isActive =
+                    pathname === item.url || pathname.startsWith(item.url + "/");
+
+                return (
+                  <SidebarMenuItem key={item.id}>
+                    <SidebarMenuButton asChild>
+                      <Link
+                        to={item.url}
+                        className={cn(
+                          "relative font-secondary text-lg font-medium flex items-center gap-2 px-3 py-2 rounded-md transition-colors",
+                          isActive
+                            ? "bg-muted text-primary"
+                            : "text-muted-foreground hover:bg-muted"
+                        )}
+                      >
+                        {/* Red vertical indicator bar */}
+                        {isActive && (
+                          <div className="absolute left-0 h-full w-1 bg-red rounded-r-sm" />
+                        )}
+                        <item.icon className="size-4" />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
-      </SidebarGroup>
-      <SidebarSeparator className="mx-0" />
+        </SidebarGroup>
+
+        <SidebarSeparator className="mx-0" />
       </SidebarContent>
+
       <SidebarFooter>
-            <SidebarMenuButton asChild>
-                <a href="#" className="font-secondary text-grey text-lg font-medium">
-                      {<Settings className="size-4"/>}
-                      <span >Settings</span>
-                </a>
-            </SidebarMenuButton>
-            <SidebarMenuButton
-                className="font-secondary text-grey text-sm font-medium"
-                onClick = {handleLogout}>
-                      {<LogOut className="size-4"/>}
-                      <span >Log Out</span>
-            </SidebarMenuButton>
+        <SidebarMenuButton asChild>
+          <a href="#" className="font-secondary text-grey text-lg font-medium flex items-center gap-2 px-3 py-2">
+            <Settings className="size-4" />
+            <span>Settings</span>
+          </a>
+        </SidebarMenuButton>
+        <SidebarMenuButton
+          className="font-secondary text-grey text-sm font-medium flex items-center gap-2 px-3 py-2"
+          onClick={handleLogout}
+        >
+          <LogOut className="size-4" />
+          <span>Log Out</span>
+        </SidebarMenuButton>
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }

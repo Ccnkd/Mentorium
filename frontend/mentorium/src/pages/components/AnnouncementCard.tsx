@@ -7,3 +7,4 @@ const AnnouncementCard: React.FC<PropsWithChildren>= () => {
 }
 
 export default AnnouncementCard
+

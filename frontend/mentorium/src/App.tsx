@@ -15,10 +15,9 @@ import CreateTask from './pages/Shared/CreateTask';
 import CreateProject from './pages/Shared/CreateProject';
 import MyProjects from './pages/Shared/MyProjects';
 import Trash from './pages/Shared/Trash';
-import CreatePanel from './pages/Coordinator/CreatePanel';
-import DefenseDashboard from './pages/Coordinator/DefenseDashboard';
+import DefenseDashboard from './components/layouts/DefenseLayout';
 import SupervisorManagement from './pages/Coordinator/SupervisorManagement';
-import CreateSchedule from './pages/Coordinator/CreateSchedule';
+import CreateSchedule from './pages/Coordinator/Defense/CreateSchedule';
 import MyTasks from './pages/Shared/MyTasks';
 import StudentDashboard from './pages/Students/StudentDashboard';
 import CreateBudget from './pages/Students/CreateBudget';
@@ -34,6 +33,11 @@ import Overview from './pages/Projects/[projectId]/Overview';
 import GlobalLayout from './components/layouts/GlobalLayout';
 import TeamPage from './pages/Projects/[projectId]/TeamPage';
 import AnnouncementPage from './pages/Projects/[projectId]/AnnouncementPage';
+import ArchivesStudents from './pages/Shared/ArchivesStudents';
+import SupervisorPanel from './pages/Coordinator/Defense/SupervisorPanel';
+import DefenseOverview from './pages/Coordinator/Defense/DefenseOverview';
+import ScoresheetPage from './pages/Coordinator/Defense/ScoresheetPage';
+import DefenseLayout from './components/layouts/DefenseLayout';
 
 
 const App: React.FC = () => {
@@ -69,6 +73,7 @@ const App: React.FC = () => {
             {/* Student Routes */}
             <Route path="/student/projectdashboard" element={<StudentProjectDashboard />} />
             <Route path="/student/createBudget" element={<CreateBudget />} />
+            <Route path="/archivesStudent" element={<ArchivesStudents />} />
 
             {/* Supervisor Routes */}
             <Route element={<PrivateRoute allowedRoles={['supervisor']} />}>
@@ -79,13 +84,19 @@ const App: React.FC = () => {
 
             {/* Coordinator Routes */}
             <Route element={<PrivateRoute allowedRoles={['coordinator']} />}>
+              {/* Defense Management */}
+              <Route path="/defense" element={<DefenseLayout />}>
+                <Route index element={<DefenseOverview />} />
+                <Route path="panels" element={<SupervisorPanel />} />
+                <Route path="students" element={<StudentManagement />} />
+                <Route path="scoresheet" element={<ScoresheetPage />} />
+              </Route>
               <Route path="/coordinator/supervisorManagement" element={<SupervisorManagement />} />
-              <Route path="/coordinator/createPanel" element={<CreatePanel />} />
               <Route path="/coordinator/createSchedule" element={<CreateSchedule />} />
             </Route>
 
             {/* Project Pages under ProjectLayout */}
-            <Route path="/project/:projectId" element={<ProjectLayout />}>
+            <Route path="/project/:projectId" element={<ProjectLayout children={undefined} />}>
               <Route index element={<Overview />} />
               <Route path="tasks" element={<TasksPage />} />
               <Route path="budget" element={<BudgetPage />} />

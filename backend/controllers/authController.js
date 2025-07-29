@@ -78,6 +78,69 @@ const registerUser = async (req, res) => {
   }
 };
 
+const registerBulkUsers = async (req, res) => {
+  const users = req.body;
+
+  if (!Array.isArray(users) || users.length === 0) {
+    return res.status(400).json({ message: 'No users provided.' });
+  }
+
+  const results = [];
+
+  for (const user of users) {
+    const {
+      email,
+      password,
+      firstName,
+      lastName,
+      indexNumber,
+      yearOfAdmission
+    } = user;
+
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { role: 'student' } }
+      });
+
+      if (error) {
+        results.push({ email, status: 'fail', message: error.message });
+        continue;
+      }
+
+      const user_id = data?.user?.id;
+
+      await supabase.from('users')
+        .update({ role: 'student' })
+        .eq('user_id', user_id);
+
+      const { error: insertError } = await supabase.from('students').insert({
+        user_id,
+        firstname: firstName,
+        lastname: lastName,
+        index_number: indexNumber,
+        year_of_admission: yearOfAdmission
+      });
+
+      await supabase.auth.admin.updateUserById(user_id, {
+        email_confirm: true
+      });
+
+      if (insertError) {
+        results.push({ email, status: 'fail', message: insertError.message });
+      } else {
+        results.push({ email, status: 'success' });
+      }
+
+    } catch (err) {
+      results.push({ email, status: 'fail', message: err.message });
+    }
+  }
+
+  return res.status(207).json({ results });
+};
+
 // Placeholder methods
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
@@ -129,6 +192,8 @@ const loginUser = async (req, res) => {
   }
 };
 
+
+
 const getUserProfile = async (req, res) => {
   const user_id = req.user?.id;
 
@@ -154,7 +219,7 @@ const getUserProfile = async (req, res) => {
     }
 
     const { role, email } = userData;
-    const table = role === 'student' ? 'students' : 'supervisors';
+    const table = role === 'student' ? 'students' : 'lecturers';
 
     const { data: profileData, error: profileError } = await supabase
       .from(table)
@@ -197,7 +262,7 @@ const updateUserProfile = async (req, res) => {
       return res.status(404).json({ message: 'User not found.' });
     }
 
-    const table = userData.role === 'student' ? 'students' : 'supervisors';
+    const table = userData.role === 'student' ? 'students' : 'lecturers';
 
     // Update user profile
     const { error: updateError } = await supabase
@@ -223,6 +288,7 @@ const updateUserProfile = async (req, res) => {
 
 module.exports = {
   registerUser,
+  registerBulkUsers,
   loginUser,
   getUserProfile,
   updateUserProfile

@@ -1,11 +1,12 @@
 const express = require("express");
-const { registerUser, loginUser, getUserProfile, updateUserProfile } = require("../controllers/authController");
+const { registerUser, loginUser, getUserProfile, updateUserProfile, registerBulkUsers, changeRole } = require("../controllers/authController");
 const {protect} = require("../middleware/authMiddleware");
 //const upload = require("../middleware/uploadMiddleware");
 const router = express.Router();
 
 
 router.post("/register", registerUser); // Register User
+router.post("/registerbulk", registerBulkUsers); // Register Bulk User
 router.post("/login", loginUser); // Register User
 router.get("/profile",protect, getUserProfile); // Register User
 router.put("/profile", updateUserProfile); // Register User

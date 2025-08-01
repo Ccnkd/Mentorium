@@ -9,19 +9,31 @@ export const API_PATHS = {
 
     USERS: {
         GET_ALL_USERS:"/api/users",
+        GET_LECTURERS:"/api/users/supervisors",
+        GET_MENTEES:"/api/users/mentees",
+        GET_STUDENTS:"/api/users/students",
         GET_USER_BY_ID:(userId: any) =>`/api/users/${userId}`,
         UPDATE_USER:(userId: any) =>`/api/users/${userId}`,
         DELETE_USER: (userId: any) =>`/api/users/${userId}`,
     },
 
-    TASKS:{
-        
-        CREATE_TASK:`/api/tasks`,
-        DELETE_TASK: (taskId: any)=> `/api/tasks/${taskId}`,
-        UPDATE_TASK: (taskId: any)=> `/api/tasks/${taskId}`,
-        GET_TASK_BY_ID: (taskId: any) => `/api/tasks/${taskId}`,
-        GET_ALL_TASKS:`/api/tasks`,
-        UPDATE_TASK_STATUS: (taskId: any) => `/api/task/${taskId}`,
+    TASKS: {
+    CREATE_TASK: `/api/task/createtask`,
+    DELETE_TASK: (taskId: any) => `/api/task/${taskId}`,
+    UPDATE_TASK: (taskId: any) => `/api/task/${taskId}`,
+    GET_TASK_BY_ID: (taskId: any) => `/api/task/${taskId}`,
+    GET_ALL_TASKS: `/api/task/gettasks`,
+    GET_COMPLETED_TASKS: `/api/task/gettasks?status=completed`,
+    GET_PENDING_TASKS: `/api/task/gettasks?status=pending`,
+    UPDATE_TASK_STATUS: (taskId: any) => `/api/task/${taskId}/status`,
+    UPDATE_TASK_CHECKLIST: (taskId: any) => `/api/task/${taskId}/todo`,
+    },
+
+    DEFENSE: {
+    CREATE_PANEL: `/api/defense/createPanel`,
+    GET_PANELS: `/api/defense/getPanels`,
+    DELETE_PANEL: (panelId: any)=> `/api/defense/${panelId}/deletePanel`,
+    ASSIGN_PANEL: `/api/defense/assignPanel`,
     },
 
     PROJECTS: {

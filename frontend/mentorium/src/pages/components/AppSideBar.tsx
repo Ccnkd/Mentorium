@@ -24,6 +24,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { LogOut, Settings } from "lucide-react";
 import { cn } from "@/lib/utils"; // import cn helper
+import { CreateModal } from "../Shared/CreateModal";
 
 type AppSidebarProps = {
   userDisplayName?: string;
@@ -34,6 +35,7 @@ export function AppSidebar({
   userDisplayName = "User",
   userRole = "Role",
 }: AppSidebarProps) {
+  const [isCreateModalOpen, setCreateModalOpen] = useState(false);
   const { user, clearUser } = useContext(UserContext);
   const location = useLocation();
   const [sideMenuData, setSideMenuData] = useState([]);
@@ -58,7 +60,16 @@ export function AppSidebar({
     return () => {};
   }, [user]);
 
+    const handleMenuClick = (item) => {
+    if (item.title === "Create") {
+      setCreateModalOpen(true); // open modal
+    } else if (item.url && item.url !== "#") {
+      navigate(item.url);
+    }
+  };
+
   return (
+  <>
     <Sidebar collapsible="icon">
       <SidebarContent>
         <SidebarHeader>
@@ -99,8 +110,8 @@ export function AppSidebar({
                 return (
                   <SidebarMenuItem key={item.id}>
                     <SidebarMenuButton asChild>
-                      <Link
-                        to={item.url}
+                      <button
+                        onClick={() => handleMenuClick(item)}
                         className={cn(
                           "relative font-secondary text-lg font-medium flex items-center gap-2 px-3 py-2 rounded-md transition-colors",
                           isActive
@@ -114,7 +125,7 @@ export function AppSidebar({
                         )}
                         <item.icon className="size-4" />
                         <span>{item.title}</span>
-                      </Link>
+                      </button>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );
@@ -142,5 +153,8 @@ export function AppSidebar({
         </SidebarMenuButton>
       </SidebarFooter>
     </Sidebar>
+
+    <CreateModal isOpen={isCreateModalOpen} onClose={() => setCreateModalOpen(false)} />
+    </>
   );
 }

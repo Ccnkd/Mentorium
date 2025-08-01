@@ -8,6 +8,7 @@ const supabase = require('./config/db');
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const taskRoutes = require("./routes/taskRoutes");
+const defenseRoutes = require("./routes/defenseRoutes");
 //const reportRoutes = require("./routes/ReportRoutes");
 
 const app = express();
@@ -50,7 +51,8 @@ app.get('/api/users', async (req, res) => {
 
 app.use("/api/auth", authRoutes); // These routes would now use the `supabase` client for DB operations
 app.use("/api/users", userRoutes);
-app.use("/api/auth", taskRoutes);
+app.use("/api/task", taskRoutes);
+app.use("/api/defense", defenseRoutes);
 //app.use("/api/auth", reportRoutes);
 
 

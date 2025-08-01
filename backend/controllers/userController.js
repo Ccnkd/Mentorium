@@ -36,7 +36,7 @@ const getSupervisors = async (req, res) => {
   try {
     // 1. Fetch all supervisors
     const { data: users, error: userError } = await supabase
-      .from('supervisors')
+      .from('lecturers')
       .select('*');
 
     if (userError) {
@@ -49,6 +49,7 @@ const getSupervisors = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
+
 
 const getAllStudents = async (req, res) => {
   try {

@@ -11,6 +11,7 @@ import {
   GraduationCap
 } from "lucide-react";
 
+
 export const SIDE_MENU_DATA = [
   {
     id: "01",

@@ -11,8 +11,6 @@ import SignUp from './pages/Auth/SignUp';
 import ManageTasks from './pages/Supervisors/ManageTasks';
 import ManageProjects from './pages/Supervisors/ManageProjects';
 import EditTask from './pages/Shared/EditTask';
-import CreateTask from './pages/Shared/CreateTask';
-import CreateProject from './pages/Shared/CreateProject';
 import MyProjects from './pages/Shared/MyProjects';
 import Trash from './pages/Shared/Trash';
 import DefenseDashboard from './components/layouts/DefenseLayout';
@@ -34,7 +32,7 @@ import GlobalLayout from './components/layouts/GlobalLayout';
 import TeamPage from './pages/Projects/[projectId]/TeamPage';
 import AnnouncementPage from './pages/Projects/[projectId]/AnnouncementPage';
 import ArchivesStudents from './pages/Shared/ArchivesStudents';
-import SupervisorPanel from './pages/Coordinator/Defense/SupervisorPanel';
+import { PanelPage } from './pages/Coordinator/Defense/PanelPage';
 import DefenseOverview from './pages/Coordinator/Defense/DefenseOverview';
 import ScoresheetPage from './pages/Coordinator/Defense/ScoresheetPage';
 import DefenseLayout from './components/layouts/DefenseLayout';
@@ -63,8 +61,6 @@ const App: React.FC = () => {
             <Route path="/coordinator/defenseDashboard" element={<DefenseDashboard />} />
 
             {/* Shared Routes */}
-            <Route path="/createtask" element={<CreateTask />} />
-            <Route path="/createproject" element={<CreateProject />} />
             <Route path="/edittask" element={<EditTask />} />
             <Route path="/mytasks" element={<MyTasks />} />
             <Route path="/myprojects" element={<MyProjects />} />
@@ -87,7 +83,7 @@ const App: React.FC = () => {
               {/* Defense Management */}
               <Route path="/defense" element={<DefenseLayout />}>
                 <Route index element={<DefenseOverview />} />
-                <Route path="panels" element={<SupervisorPanel />} />
+                <Route path="panels" element={<PanelPage />} />
                 <Route path="students" element={<StudentManagement />} />
                 <Route path="scoresheet" element={<ScoresheetPage />} />
               </Route>

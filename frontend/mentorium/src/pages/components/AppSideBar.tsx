@@ -23,6 +23,7 @@ import MentoriumIcon from "@/assets/icons/MentoriumIcon.svg?react";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { LogOut, Settings } from "lucide-react";
+import { ProjectsSection } from "./ProjectsSection"; // Import TeamsSection component
 import { cn } from "@/lib/utils"; // import cn helper
 import { CreateModal } from "../Shared/CreateModal";
 
@@ -88,7 +89,9 @@ export function AppSidebar({
                     {userDisplayName?.[0] || "U"}
                   </div>
                   <div className="grid flex-1 text-left text-sm leading-tight text-grey font-secondary">
-                    <span className="truncate font-medium">{userDisplayName}</span>
+                    <span className="truncate font-medium">
+                      {userDisplayName}
+                    </span>
                     <span className="truncate text-xs">
                       {userRole?.charAt(0).toUpperCase() + userRole?.slice(1)}
                     </span>
@@ -103,9 +106,9 @@ export function AppSidebar({
           <SidebarGroupContent>
             <SidebarMenu>
               {sideMenuData.map((item) => {
-                  const pathname = location.pathname;
-                  const isActive =
-                    pathname === item.url || pathname.startsWith(item.url + "/");
+                const pathname = location.pathname;
+                const isActive =
+                  pathname === item.url || pathname.startsWith(item.url + "/");
 
                 return (
                   <SidebarMenuItem key={item.id}>
@@ -135,11 +138,17 @@ export function AppSidebar({
         </SidebarGroup>
 
         <SidebarSeparator className="mx-0" />
+        <ProjectsSection />
+
+        <SidebarSeparator className="mx-0" />
       </SidebarContent>
 
       <SidebarFooter>
         <SidebarMenuButton asChild>
-          <a href="#" className="font-secondary text-grey text-lg font-medium flex items-center gap-2 px-3 py-2">
+          <a
+            href="#"
+            className="font-secondary text-grey text-lg font-medium flex items-center gap-2 px-3 py-2"
+          >
             <Settings className="size-4" />
             <span>Settings</span>
           </a>

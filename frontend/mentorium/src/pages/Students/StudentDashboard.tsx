@@ -1,14 +1,34 @@
 import { UserContext } from '@/contexts/UserContext';
 import { useUserAuth } from '@/hooks/useUserAuth'
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import type {Task} from "../../utils/types"
 import AnnouncementView from '../components/AnnouncementView';
-import TaskList from '../components/TaskList';
 import { Link } from 'react-router-dom';
+import TaskCard from '../components/TaskCard';
+import axiosInstance from '@/utils/axiosInstance';
+import { API_PATHS } from '@/utils/apiPaths';
 
 
 const StudentDashboard :React.FC= () => {
   useUserAuth();
   const{user} = useContext(UserContext);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [ loading,setLoading] = useState(false);
+  useEffect(()=>{
+    const fetchData = async ()=>{
+    try {
+      setLoading(true);
+      const TasksRes = await axiosInstance.get(API_PATHS.TASKS.GET_ALL_TASKS);
+      setTasks(TasksRes.data.tasks); // Adjust based on actual structure
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+    }finally{
+      setLoading(false);
+    }
+    }
+
+    fetchData();
+  },[]);
   return (
     <>
         <div className="px-6 py-8 w-full">
@@ -25,7 +45,11 @@ const StudentDashboard :React.FC= () => {
           <div className='text-grey font-alternate font-semibold tracking-widest'>
             TASKS
           </div>
-            <TaskList/>
+          <div className='flex grid gap-2'>
+            {tasks.map((task) => (
+          <TaskCard key={task.task_id} task={task}/>
+          ))}
+          </div>
           </div>
     </>
   )

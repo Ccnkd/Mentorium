@@ -15,6 +15,7 @@ export const API_PATHS = {
         GET_USER_BY_ID:(userId: any) =>`/api/users/${userId}`,
         UPDATE_USER:(userId: any) =>`/api/users/${userId}`,
         DELETE_USER: (userId: any) =>`/api/users/${userId}`,
+        PROMOTE_LECTURER: (lecturerId: string) => `/api/users/${lecturerId}/promote`,
     },
 
     TASKS: {
@@ -34,6 +35,12 @@ export const API_PATHS = {
     GET_PANELS: `/api/defense/getPanels`,
     DELETE_PANEL: (panelId: any)=> `/api/defense/${panelId}/deletePanel`,
     ASSIGN_PANEL: `/api/defense/assignPanel`,
+    },
+
+    ANNOUNCEMENT: {
+    CREATE: `/api/announcement/createAnnouncement`,
+    GET_ANNOUNCEMENTS: `/api/announcement/getAnnouncements`,
+    DELETE_ANNOUNCEMENT: (announcementId: any)=> `/api/announcement/${announcementId}/deletePanel`,
     },
 
     PROJECTS: {

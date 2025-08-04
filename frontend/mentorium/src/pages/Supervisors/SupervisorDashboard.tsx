@@ -1,16 +1,32 @@
 import { UserContext } from '@/contexts/UserContext';
 import { useUserAuth } from '@/hooks/useUserAuth'
-import React, { useContext } from 'react'
+import type {Task} from "../../utils/types"
+import React, { useContext, useEffect, useState } from 'react'
 import AnnouncementView from '../components/AnnouncementView';
-import TaskList from '../components/TaskList';
 import { Link } from 'react-router-dom';
 import TaskCard from '../components/TaskCard';
 import ProjectCard from '../components/ProjectCard';
+import axiosInstance from '@/utils/axiosInstance';
+import { API_PATHS } from '@/utils/apiPaths'
 
 
 const SupervisorDashboard :React.FC= () => {
   useUserAuth();
   const{user} = useContext(UserContext);
+  const [tasks, setTasks] = useState<Task[]>([]);
+
+  useEffect(()=>{
+    const fetchData = async ()=>{
+    try {
+      const TasksRes = await axiosInstance.get(API_PATHS.TASKS.GET_PENDING_TASKS);
+      setTasks(TasksRes.data.tasks); // Adjust based on actual structure
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+    }
+    }
+
+    fetchData();
+  },[]);
   return (
     <>
         <div className="px-6 py-8 w-full">
@@ -27,8 +43,10 @@ const SupervisorDashboard :React.FC= () => {
           <div className='text-grey text-xs font-alternate font-semibold tracking-widest'>
             TASKS
           </div>
-          <div className='flex px-2 py-2'>
-            <TaskCard/>
+          <div className='flex grid gap-2'>
+            {tasks.map((task) => (
+          <TaskCard key={task.task_id} task={task}/>
+          ))}
           </div>
           <br/>
           <div className='text-grey text-xs font-alternate font-semibold tracking-widest'>

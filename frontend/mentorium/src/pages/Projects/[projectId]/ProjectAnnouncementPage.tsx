@@ -4,7 +4,7 @@ import { useUserAuth } from '@/hooks/useUserAuth'
 import React, { useContext } from 'react';
 
 
-const AnnouncementPage :React.FC= () => {
+const ProjectAnnouncementPage :React.FC= () => {
   useUserAuth();
   //const{user} = useContext(UserContext);
   return (
@@ -14,4 +14,4 @@ const AnnouncementPage :React.FC= () => {
   )
 }
 
-export default AnnouncementPage
+export default ProjectAnnouncementPage

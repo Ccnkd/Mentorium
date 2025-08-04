@@ -2,37 +2,39 @@ const supabase = require('../config/db');
 
 const getTasks = async (req, res) => {
   try {
-    const { status } = req.query;   // e.g., "completed", "in-progress"
+    const { status } = req.query;
     const userId = req.user.id;
 
-    let query = supabase
+    // 1. Query all tasks where user is creator or assignee
+    const { data, error } = await supabase
       .from('tasks')
-      .select('*, task_assignees!left(*)')
-      .leftJoin('task_assignees', 'tasks.task_id', 'task_assignees.task_id')
-      .or(`created_by.eq.${userId},task_assignees.user_id.eq.${userId}`);
-
-    // Optional filter: filter by completion status
-    if (status === 'completed') {
-      query = query.eq('is_completed', true);
-    } else if (status === 'in-progress') {
-      query = query.eq('is_completed', false);
-    }
-
-    const { data, error } = await query;
-
+      .select(`
+        *`)
+      
     if (error) {
       console.error('Error fetching tasks:', error.message);
       return res.status(500).json({ message: 'Failed to fetch tasks', error: error.message });
     }
 
-    // Remove duplicate tasks
-    const uniqueTasks = Array.from(new Map(data.map(task => [task.task_id, task])).values());
+    // 2. Filter by completion status if specified
+    let filteredTasks = data;
+    if (status === 'completed') {
+      filteredTasks = data.filter(task => task.is_completed === true);
+    } else if (status === 'in-progress') {
+      filteredTasks = data.filter(task => task.is_completed === false);
+    }
+
+    // 3. Remove duplicates (caused by join-like behavior)
+    const uniqueTasks = Array.from(
+      new Map(filteredTasks.map(task => [task.task_id, task])).values()
+    );
 
     return res.status(200).json({ tasks: uniqueTasks });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
+
 
 const getTaskById = async (req, res) => {
     try{

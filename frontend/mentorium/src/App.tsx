@@ -30,12 +30,14 @@ import BudgetPage from './pages/Projects/[projectId]/BudgetPage';
 import Overview from './pages/Projects/[projectId]/Overview';
 import GlobalLayout from './components/layouts/GlobalLayout';
 import TeamPage from './pages/Projects/[projectId]/TeamPage';
-import AnnouncementPage from './pages/Projects/[projectId]/AnnouncementPage';
 import ArchivesStudents from './pages/Shared/ArchivesStudents';
 import { PanelPage } from './pages/Coordinator/Defense/PanelPage';
 import DefenseOverview from './pages/Coordinator/Defense/DefenseOverview';
 import ScoresheetPage from './pages/Coordinator/Defense/ScoresheetPage';
 import DefenseLayout from './components/layouts/DefenseLayout';
+import CompletedPage from './pages/Shared/CompletedPage';
+import AnnouncementPage from './pages/Shared/AnnouncementPage';
+import DefenseSchedule from './pages/Coordinator/Defense/DefenseSchedule';
 
 
 const App: React.FC = () => {
@@ -64,6 +66,8 @@ const App: React.FC = () => {
             <Route path="/edittask" element={<EditTask />} />
             <Route path="/mytasks" element={<MyTasks />} />
             <Route path="/myprojects" element={<MyProjects />} />
+            <Route path="/announcements" element={< AnnouncementPage/>} />
+            <Route path="/completed" element={<CompletedPage />} />
             <Route path="/trash" element={<Trash />} />
 
             {/* Student Routes */}
@@ -85,6 +89,7 @@ const App: React.FC = () => {
                 <Route index element={<DefenseOverview />} />
                 <Route path="panels" element={<PanelPage />} />
                 <Route path="students" element={<StudentManagement />} />
+                <Route path="schedule" element={<DefenseSchedule />} />
                 <Route path="scoresheet" element={<ScoresheetPage />} />
               </Route>
               <Route path="/coordinator/supervisorManagement" element={<SupervisorManagement />} />
@@ -119,8 +124,8 @@ const Root = () => {
   if (user.role === "supervisor") {
     return <Navigate to="/supervisor/dashboard" />;
   } else if (user.role === "coordinator") {
-    return <Navigate to="/coordinator/dashboard" />;
-  } else {
+    return <Navigate to="/supervisor/dashboard" />;
+  } else if (user.role === "student"){
     return <Navigate to="/student/dashboard" />;
   }
 };

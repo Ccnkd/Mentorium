@@ -6,7 +6,7 @@ const router = express.Router();
 //Task Management Routes
 router.get("/gettasks",protect, getTasks); // Register User
 router.get("/:id",protect, getTaskById); // Register User
-router.post("/createtask", createTask);
+router.post("/createtask",protect, createTask);
 router.put("/:id", updateTask); // Register User
 router.delete("/:id", deleteTask); // Register User
 router.put("/:id/status", updateTaskStatus); // Register User

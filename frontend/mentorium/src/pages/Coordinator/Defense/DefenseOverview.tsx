@@ -1,4 +1,3 @@
-import  DefenseLayout  from '@/components/layouts/ProjectLayout';
 //import { UserContext } from '@/contexts/UserContext';
 import { useUserAuth } from '@/hooks/useUserAuth'
 import React, { useContext } from 'react';
@@ -10,7 +9,7 @@ const DefenseOverview :React.FC= () => {
 
   return (
     <div>
-      This is the Defense Overview
+      <SectionCards/>
     </div>
   )
 }

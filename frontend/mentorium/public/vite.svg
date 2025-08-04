@@ -1,1 +1,46 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="31.88" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 257"><defs><linearGradient id="IconifyId1813088fe1fbc01fb466" x1="-.828%" x2="57.636%" y1="7.652%" y2="78.411%"><stop offset="0%" stop-color="#41D1FF"></stop><stop offset="100%" stop-color="#BD34FE"></stop></linearGradient><linearGradient id="IconifyId1813088fe1fbc01fb467" x1="43.376%" x2="50.316%" y1="2.242%" y2="89.03%"><stop offset="0%" stop-color="#FFEA83"></stop><stop offset="8.333%" stop-color="#FFDD35"></stop><stop offset="100%" stop-color="#FFA800"></stop></linearGradient></defs><path fill="url(#IconifyId1813088fe1fbc01fb466)" d="M255.153 37.938L134.897 252.976c-2.483 4.44-8.862 4.466-11.382.048L.875 37.958c-2.746-4.814 1.371-10.646 6.827-9.67l120.385 21.517a6.537 6.537 0 0 0 2.322-.004l117.867-21.483c5.438-.991 9.574 4.796 6.877 9.62Z"></path><path fill="url(#IconifyId1813088fe1fbc01fb467)" d="M185.432.063L96.44 17.501a3.268 3.268 0 0 0-2.634 3.014l-5.474 92.456a3.268 3.268 0 0 0 3.997 3.378l24.777-5.718c2.318-.535 4.413 1.507 3.936 3.838l-7.361 36.047c-.495 2.426 1.782 4.5 4.151 3.78l15.304-4.649c2.372-.72 4.652 1.36 4.15 3.788l-11.698 56.621c-.732 3.542 3.979 5.473 5.943 2.437l1.313-2.028l72.516-144.72c1.215-2.423-.88-5.186-3.54-4.672l-25.505 4.922c-2.396.462-4.435-1.77-3.759-4.114l16.646-57.705c.677-2.35-1.37-4.583-3.769-4.113Z"></path></svg>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 27.3.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 32.3 32.3" style="enable-background:new 0 0 32.3 32.3;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:url(#SVGID_1_);}
+	.st1{fill:url(#SVGID_00000163779822025770891810000006760190362613653917_);}
+	.st2{fill:#FFFFFF;}
+	.st3{fill:#EC1C24;}
+	.st4{fill:#F6A2A0;}
+	.st5{fill:none;}
+</style>
+<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="-558.2442" y1="668.9553" x2="-557.6596" y2="668.2477" gradientTransform="matrix(31.8754 0 0 -28.4068 17749.6777 19002.9883)">
+	<stop  offset="0" style="stop-color:#41D1FF"/>
+	<stop  offset="1" style="stop-color:#BD34FE"/>
+</linearGradient>
+<path class="st0" d="M-20.1,4.7l-15,26.8c-0.3,0.6-1.1,0.6-1.4,0L-51.8,4.7c-0.3-0.6,0.2-1.3,0.9-1.2l15,2.7c0.1,0,0.2,0,0.3,0
+	L-21,3.5C-20.3,3.4-19.8,4.1-20.1,4.7z"/>
+<linearGradient id="SVGID_00000003102491307752299100000001326384835529966013_" gradientUnits="userSpaceOnUse" x1="-538.6298" y1="667.2861" x2="-538.5604" y2="666.4182" gradientTransform="matrix(14.6164 0 0 -26.6459 7838.7686 17780.9375)">
+	<stop  offset="0" style="stop-color:#FFEA83"/>
+	<stop  offset="8.333001e-02" style="stop-color:#FFDD35"/>
+	<stop  offset="1" style="stop-color:#FFA800"/>
+</linearGradient>
+<path style="fill:url(#SVGID_00000003102491307752299100000001326384835529966013_);" d="M-28.8,0l-11.1,2.2c-0.2,0-0.3,0.2-0.3,0.4
+	l-0.7,11.5c0,0.2,0.2,0.4,0.4,0.4c0,0,0.1,0,0.1,0l3.1-0.7c0.3-0.1,0.5,0.2,0.5,0.5l-0.9,4.5c-0.1,0.3,0.2,0.6,0.5,0.5l1.9-0.6
+	c0.3-0.1,0.6,0.2,0.5,0.5l-1.5,7.1c-0.1,0.4,0.5,0.7,0.7,0.3l0.2-0.3l9-18c0.2-0.3-0.1-0.6-0.4-0.6l-3.2,0.6
+	c-0.3,0.1-0.6-0.2-0.5-0.5l2.1-7.2C-28.2,0.2-28.5-0.1-28.8,0L-28.8,0z"/>
+<g>
+	<g>
+		<path class="st2" d="M32.3,16.2c0,8.9-7.2,16.1-16.2,16.1c-1.7,0-3.4-0.3-4.9-0.8c-1-0.3-1.9-0.8-1.9-0.8C3.8,28.2,0,22.6,0,16.2
+			C0,7.2,7.2,0,16.2,0C25.1,0,32.3,7.2,32.3,16.2z"/>
+		<g>
+			<path class="st3" d="M16.2,0C7.2,0,0,7.2,0,16.2c0,6.5,3.8,12.1,9.3,14.6v-25c1.2-0.6,1.9,0,1.9,0v25.7c1.5,0.5,3.2,0.8,4.9,0.8
+				c8.9,0,16.2-7.2,16.2-16.1C32.3,7.2,25.1,0,16.2,0z M20.9,18.4c0,0-0.4-0.1-1-0.2c-1.8-0.3-5.5-0.9-8.6,0V6.9
+				c0,0,8.8,0.9,9.6,2.7V18.4z"/>
+		</g>
+		<g>
+			<g>
+				<path class="st4" d="M28.1,17.4c0,0-0.9,1.8-4.8,2.4l-0.1-0.1c-1.2-1-1.6-3.8-1.7-5.3C23,15.6,25.6,17.4,28.1,17.4z"/>
+			</g>
+		</g>
+	</g>
+	<polyline class="st5" points="16.2,16.1 16.2,16.2 16.2,16.2 16.2,16.3 	"/>
+	<polyline class="st5" points="16.2,16.1 16.2,16.1 16.2,16.2 16.2,16.3 	"/>
+</g>
+</svg>

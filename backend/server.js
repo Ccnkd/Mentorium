@@ -9,6 +9,7 @@ const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const taskRoutes = require("./routes/taskRoutes");
 const defenseRoutes = require("./routes/defenseRoutes");
+const announcementRoutes = require("./routes/announcementRoutes");
 //const reportRoutes = require("./routes/ReportRoutes");
 
 const app = express();
@@ -53,6 +54,7 @@ app.use("/api/auth", authRoutes); // These routes would now use the `supabase` c
 app.use("/api/users", userRoutes);
 app.use("/api/task", taskRoutes);
 app.use("/api/defense", defenseRoutes);
+app.use("/api/announcement", announcementRoutes);
 //app.use("/api/auth", reportRoutes);
 
 

@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 import axiosInstance from "../utils/axiosInstance";
 import { API_PATHS } from "../utils/apiPaths";
+import LoadingFlag from "@/components/ui/loadingflag";
 
 export const UserContext = createContext();
 
@@ -48,7 +49,13 @@ export default function UserProvider({ children }: { children: React.ReactNode }
 
   return (
     <UserContext.Provider value={{ user, loading, updateUser, clearUser, refetchUser: fetchUser }}>
-      {children}
+    {loading ? (
+      <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
+        <LoadingFlag />
+      </div>
+    ) : (
+      children
+    )}
     </UserContext.Provider>
   );
 }

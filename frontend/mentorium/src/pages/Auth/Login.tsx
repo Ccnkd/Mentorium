@@ -11,6 +11,7 @@ import {validateEmail} from "../../utils/helper";
 import { API_PATHS } from '@/utils/apiPaths';
 import { UserContext } from '@/contexts/UserContext';
 import { LogInIcon } from 'lucide-react';
+import LoadingFlag from '@/components/ui/loadingflag';
 
 
 
@@ -19,6 +20,7 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, seterror] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { refetchUser } = useContext(UserContext);
   //const {updateUser} = useContext(UserContext);
@@ -40,6 +42,7 @@ const Login: React.FC = () => {
 
     seterror("");
     //Login API Call
+    setLoading(true);
     try{
       const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
         email,
@@ -54,12 +57,12 @@ const Login: React.FC = () => {
       }
 
       if (role === "supervisor"){
-        navigate("/supervisor/dashboard");
+        navigate("/");
       }
       else if (role === 'coordinator'){
-        navigate("/coordinator/dashboard")
+        navigate("/")
       }else{
-        navigate("/student/dashboard")
+        navigate("/")
       }
     }catch (error){
       if (error.response && error.response.data.message){
@@ -67,9 +70,18 @@ const Login: React.FC = () => {
       }else{
         seterror("Something went wrong.")
       }
+    }finally{
+      setLoading(false)
     }
   }
   return (
+    <>
+          {loading && (
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
+          <LoadingFlag />
+        </div>
+      )}
+      
     <Authlayout>
       <div className={cn("flex flex-col gap-6")}>
       <Card className="overflow-hidden p-0">
@@ -169,12 +181,9 @@ const Login: React.FC = () => {
           </div>
         </CardContent>
       </Card>
-      <div className="font-secondary text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <a href="#">Privacy Policy</a>.
-      </div>
     </div>
     </Authlayout>
+    </>
   )
 }
 

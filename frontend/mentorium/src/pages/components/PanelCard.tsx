@@ -39,8 +39,13 @@ const PanelCard: React.FC<PanelCardProps> = ({ panel, onEdit, onDelete, previewM
       <div className="mt-2 text-sm space-y-2">
         {panel.lecturers.length > 0 ? (
           panel.lecturers.map((lecturer: Lecturer) => (
-            <div key={lecturer.id} className="p-2 rounded bg-muted text-muted-foreground">
-              {lecturer.title} {lecturer.firstname} {lecturer.lastname} - {lecturer.department}
+            <div key={lecturer.id} className="font-secondary border-l-3 border-primary/50 p-2 rounded-lg">
+              <div className="text-muted-foreground text-sm">
+              {lecturer.department}
+              </div>
+              <div className="font-medium text-grey text-xl">
+              {lecturer.title} {lecturer.firstname} {lecturer.lastname}
+              </div>
             </div>
           ))
         ) : (

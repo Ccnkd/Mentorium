@@ -47,7 +47,7 @@ const registerUser = async (req, res) => {
       .update({ role })
       .eq('user_id', user_id);
 
-    const table = role === 'student' ? 'students' : 'supervisors';
+    const table = role === 'student' ? 'students' : 'lecturers';
     // Insert into role-specific table
     const { error: studentInsertError } = await supabase.from(table).insert({
       user_id,

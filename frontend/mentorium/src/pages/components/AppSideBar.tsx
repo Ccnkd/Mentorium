@@ -26,6 +26,7 @@ import { LogOut, Settings } from "lucide-react";
 import { ProjectsSection } from "./ProjectsSection"; // Import TeamsSection component
 import { cn } from "@/lib/utils"; // import cn helper
 import { CreateModal } from "../Shared/CreateModal";
+import { ManagementSection } from "./ManagementSection";
 
 type AppSidebarProps = {
   userDisplayName?: string;
@@ -136,11 +137,10 @@ export function AppSidebar({
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-
+        <SidebarSeparator className="mx-0 " />
+        <ManagementSection/>
         <SidebarSeparator className="mx-0" />
         <ProjectsSection />
-
-        <SidebarSeparator className="mx-0" />
       </SidebarContent>
 
       <SidebarFooter>

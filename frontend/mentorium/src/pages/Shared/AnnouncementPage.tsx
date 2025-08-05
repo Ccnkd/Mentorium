@@ -3,13 +3,16 @@ import { UserContext } from '@/contexts/UserContext';
 import { API_PATHS } from '@/utils/apiPaths';
 import axiosInstance from '@/utils/axiosInstance';
 import type { Announcement } from '@/utils/types';
-import {Volume2Icon } from 'lucide-react'
+import {PlusCircle, Volume2Icon } from 'lucide-react'
 import React, { useContext, useEffect, useState } from 'react'
 import AnnouncementCard from '../components/AnnouncementCard';
+import { Button } from '@/components/ui/button';
+import AnnouncementForm from '../components/AnnouncementForm';
 
 const AnnouncementPage :React.FC= () => {
   useUserAuth();
   const{user} = useContext(UserContext);
+  const [showForm, setShowForm] = useState(false);
   const [announcements, setAnnouncement] = useState<Announcement[]>([]);
 
   useEffect(()=>{
@@ -27,13 +30,29 @@ const AnnouncementPage :React.FC= () => {
   return (
         <div className="px-6 py-8 w-full">
         {/* Header */}
-        <div className="flex items-center gap-3 mb-6">
+        <div className="sticky top-0 z-50 bg-white w-full flex items-center gap-3 mb-6">
             <div className="w-10 h-10 bg-muted rounded-md flex items-center justify-center">
             <Volume2Icon className="text-muted-foreground size-5" />
             </div>
             <h1 className="text-4xl font-semibold text-grey">Announcements</h1>
+            
+            <div className="ml-auto">
+              <Button
+                className="text-md bg-white border-none text-primary shadow-none hover:bg-white hover:cursor-pointer hover:text-primary/65"
+                onClick={() => setShowForm(true)}
+              >
+                <PlusCircle />
+                Create Announcement
+              </Button>
+            </div>
         </div>
 
+        <div className='pb-7'>
+        <AnnouncementForm
+          open={showForm}
+          onCancel={() => setShowForm(false)}
+        />
+        </div>
         {/* Announcements Grid */}
         <div className='flex grid gap-2'>
             {announcements.length > 0 ? (

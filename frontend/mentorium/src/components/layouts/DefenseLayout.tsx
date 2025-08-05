@@ -1,4 +1,4 @@
-import { FolderClosed, GraduationCap } from 'lucide-react'
+import {GraduationCap } from 'lucide-react'
 import React, { useContext } from 'react'
 import { UserContext } from '@/contexts/UserContext';
 import { NavLink, Outlet } from 'react-router-dom'
@@ -7,7 +7,6 @@ import {
 } from "@/utils/data";
 
 const DefenseLayout :React.FC= () => {
-  const { user } = useContext(UserContext);
   const navItems = DEFENSE_NAVBAR;
   return (
         <main className="flex flex-1 flex-col px-6 py-4 gap-4">
@@ -22,15 +21,17 @@ const DefenseLayout :React.FC= () => {
           {/* Project Tabs */}
           <div className="flex gap-10 border-b text-sm font-medium text-muted-foreground font-secondary">
             {navItems.map((item) => (
-              <NavLink
-                key={item.title}
-                to={`/defense/${item.path}`}
-                className={({ isActive }) =>
-                  `pb-2 ${isActive ? "border-b-3 border-primary" : ""}`
-                }
-              >
-                {item.title}
-              </NavLink>
+            <NavLink
+              key={item.title}
+              to={`/defense/${item.path}`}
+              end={item.path === ""}
+              className={({ isActive }) =>
+                `pb-2 ${isActive ? "border-b-3 border-primary" : ""}`
+              }
+            >
+              {item.title}
+            </NavLink>
+
             ))}
           </div>
 

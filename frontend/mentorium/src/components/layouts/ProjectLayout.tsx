@@ -34,6 +34,7 @@ export default function ProjectLayout({ children }: { children: React.ReactNode 
               <NavLink
                 key={item.title}
                 to={`/project/${projectId}/${item.path}`}
+                end={item.path ===""}
                 className={({ isActive }) =>
                   `pb-2 ${isActive ? "border-b-3 border-primary" : ""}`
                 }

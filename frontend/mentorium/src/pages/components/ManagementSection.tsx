@@ -59,7 +59,7 @@ export function ManagementSection() {
                   </SidebarMenuSubButton>
 
                   <SidebarMenuSubButton asChild>
-                    <Link to="#" className={navLinkClass("#")}>
+                    <Link to="/coordinator/studentManagement" className={navLinkClass("#")}>
                       <GraduationCapIcon className="size-4" />
                       <span>Students</span>
                     </Link>

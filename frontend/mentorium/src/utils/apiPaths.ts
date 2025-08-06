@@ -33,7 +33,7 @@ export const API_PATHS = {
     DEFENSE: {
     CREATE_PANEL: `/api/defense/createPanel`,
     GET_PANELS: `/api/defense/getPanels`,
-    DELETE_PANEL: (panelId: any)=> `/api/defense/${panelId}/deletePanel`,
+    DELETE_PANEL: (id: any)=> `/api/defense/${id}/deletePanel`,
     ASSIGN_PANEL: `/api/defense/assignPanel`,
     },
 

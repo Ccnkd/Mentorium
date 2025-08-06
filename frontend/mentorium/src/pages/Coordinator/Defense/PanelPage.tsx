@@ -17,8 +17,18 @@ export const PanelPage: React.FC = () => {
       const panelRes = await axiosInstance.get(API_PATHS.DEFENSE.GET_PANELS);
       const lecturerRes = await axiosInstance.get(API_PATHS.USERS.GET_LECTURERS);
 
-      setPanels(panelRes.data);
-      setLecturers(lecturerRes.data.users);
+      if (panelRes?.data) {
+        setPanels(panelRes.data);
+      } else {
+        console.warn("No panel data received:", panelRes);
+      }
+
+      if (lecturerRes?.data?.users) {
+        setLecturers(lecturerRes.data.users);
+      } else {
+        console.warn("No lecturer data received:", lecturerRes);
+      }
+
     };
 
     fetchData();
@@ -56,7 +66,7 @@ const handleSaveShuffled = async () => {
     const assignments = shuffledPanels.flatMap(panel =>
       panel.lecturers.map(lecturer => ({
         panelId: panel.id,
-        lecturerId: lecturer.id,
+        lecturerId: lecturer.user_id,
       }))
     );
 
@@ -73,10 +83,10 @@ const handleSaveShuffled = async () => {
   }
 };
 
-  const handleDeletePanel = async(panelId: string) => {
+  const handleDeletePanel = async(id: string) => {
      try {
-      await axiosInstance.delete(API_PATHS.DEFENSE.DELETE_PANEL(panelId))
-      setPanels((prev) => prev.filter(p => p.id !== panelId))
+      await axiosInstance.delete(API_PATHS.DEFENSE.DELETE_PANEL(id))
+      setPanels((prev) => prev.filter(p => p.id !== id))
     } catch (error) {
       console.error("Error deleting panel", error)
     }

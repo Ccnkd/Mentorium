@@ -1,5 +1,5 @@
 export type Lecturer = {
-  id: string
+  user_id: string
   firstname: string
   lastname: string
   title: string
@@ -8,9 +8,19 @@ export type Lecturer = {
   panel_id: string | null;
 }
 
+export type Student = {
+  user_id: string
+  index_number : string
+  current_cwa : string
+  firstname: string
+  lastname: string
+  year_of_admission : string
+}
+
 export type Panel = {
   id: string
   name: string
+  venue: string
   lecturers: Lecturer[] // ✅ This should now work correctly
 }
 
@@ -58,14 +68,6 @@ export type Subtask = {
 }
 
 export type Project = {
-  id: string
-  firstName: string
-  lastName: string
-  title: string
-  department: string
-}
-
-export type Student = {
   id: string
   firstName: string
   lastName: string

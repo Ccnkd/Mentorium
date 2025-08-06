@@ -1,9 +1,9 @@
 import React from 'react'
 
-const StudentManagement:React.FC = () => {
+const MenteeManagement:React.FC = () => {
   return (
     <div>StudentManagement</div>
   )
 }
 
-export default StudentManagement
+export default MenteeManagement

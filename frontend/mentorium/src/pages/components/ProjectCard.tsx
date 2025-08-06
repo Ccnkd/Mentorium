@@ -5,12 +5,12 @@ import {
   CardContent
 } from "@/components/ui/card"
 import { Badge } from '@/components/ui/badge';
-import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from 'recharts';
 import { Calendar, MoreVertical, Star } from 'lucide-react';
+import ProgressRing from './ProgressRing';
 
 const ProjectCard: React.FC<PropsWithChildren> = () => {
     const [isFavorite, setIsFavorite] = useState(false)
-    const chartData = [{ name: "Progress", value: 10 }]
+    const chartData = [{ name: "Progress", value: 75 }]
     const progress = chartData[0].value
 
   return (
@@ -49,28 +49,10 @@ const ProjectCard: React.FC<PropsWithChildren> = () => {
           </button>
 
           {/* Progress Ring */}
-          <div className="w-20 h-25">
-            <RadialBarChart
-              width={100}
-              height={100}
-              innerRadius="85%"
-              outerRadius="100%"
-              data={chartData}
-              startAngle={90}
-              endAngle={-270}
-            >
-              <PolarRadiusAxis type="number" domain={[0, 100]} tick={false} axisLine={false} />
-              <RadialBar
-                background
-                dataKey="value"
-                cornerRadius={5}
-                fill="#4ade80"
-              />
-            
-
-            </RadialBarChart>
+          <div>
+          <ProgressRing progress={progress} size={95}/>
           </div>
-        </div>
+         </div>
       </CardContent>
     </Card>
   )

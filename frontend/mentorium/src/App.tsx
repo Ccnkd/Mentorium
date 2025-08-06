@@ -15,12 +15,10 @@ import MyProjects from './pages/Shared/MyProjects';
 import Trash from './pages/Shared/Trash';
 import DefenseDashboard from './components/layouts/DefenseLayout';
 import SupervisorManagement from './pages/Coordinator/SupervisorManagement';
-import CreateSchedule from './pages/Coordinator/Defense/CreateSchedule';
 import MyTasks from './pages/Shared/MyTasks';
 import StudentDashboard from './pages/Students/StudentDashboard';
 import CreateBudget from './pages/Students/CreateBudget';
 import PrivateRoute from './routes/PrivateRoute';
-import StudentManagement from './pages/Supervisors/StudentManagement';
 import UserProvider, { UserContext } from './contexts/UserContext';
 import SupervisorDashboard from './pages/Supervisors/SupervisorDashboard';
 import StudentProjectDashboard from './pages/Students/StudentProjectDashboard';
@@ -38,6 +36,8 @@ import DefenseLayout from './components/layouts/DefenseLayout';
 import CompletedPage from './pages/Shared/CompletedPage';
 import AnnouncementPage from './pages/Shared/AnnouncementPage';
 import DefenseSchedule from './pages/Coordinator/Defense/DefenseSchedule';
+import StudentManagement from'./pages/Coordinator/StudentManagement';
+import MenteeManagement from './pages/Supervisors/MenteeManagement';
 
 
 const App: React.FC = () => {
@@ -77,7 +77,7 @@ const App: React.FC = () => {
 
             {/* Supervisor Routes */}
             <Route element={<PrivateRoute allowedRoles={['supervisor']} />}>
-              <Route path="/supervisor/studentManagement" element={<StudentManagement />} />
+              <Route path="/supervisor/menteeManagement" element={<MenteeManagement />} />
               <Route path="/supervisor/tasks" element={<ManageTasks />} />
               <Route path="/supervisor/projects" element={<ManageProjects />} />
             </Route>
@@ -93,7 +93,7 @@ const App: React.FC = () => {
                 <Route path="scoresheet" element={<ScoresheetPage />} />
               </Route>
               <Route path="/coordinator/supervisorManagement" element={<SupervisorManagement />} />
-              <Route path="/coordinator/createSchedule" element={<CreateSchedule />} />
+              <Route path="/coordinator/studentManagement" element={<StudentManagement />} />
             </Route>
 
             {/* Project Pages under ProjectLayout */}

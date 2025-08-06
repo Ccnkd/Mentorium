@@ -36,8 +36,9 @@ const getPanels = async (req, res) => {
       .select(`
         id,
         name,
+        venue,
         lecturers (
-          id,
+          user_id,
           firstname,
           lastname,
           title,
@@ -89,7 +90,7 @@ const assignLecturersToPanels = async (req, res) => {
     supabase
       .from('lecturers')
       .update({ panel_id: panelId })
-      .eq('id', lecturerId)
+      .eq('user_id', lecturerId)
   );
 
   try {

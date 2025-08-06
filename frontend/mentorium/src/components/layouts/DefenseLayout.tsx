@@ -5,18 +5,14 @@ import { NavLink, Outlet } from 'react-router-dom'
 import {
   DEFENSE_NAVBAR
 } from "@/utils/data";
+import PageHeader from '@/pages/components/PageHeader';
 
 const DefenseLayout :React.FC= () => {
   const navItems = DEFENSE_NAVBAR;
   return (
         <main className="flex flex-1 flex-col px-6 py-4 gap-4">
           {/* Project Header */}
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-muted rounded-md flex items-center justify-center">
-              <GraduationCap className="text-muted-foreground size-5" />
-            </div>
-            <h1 className="text-4xl text-grey">Defense</h1>
-          </div>
+          <PageHeader title="Project Defense" icon={GraduationCap} />
 
           {/* Project Tabs */}
           <div className="flex gap-10 border-b text-sm font-medium text-muted-foreground font-secondary">

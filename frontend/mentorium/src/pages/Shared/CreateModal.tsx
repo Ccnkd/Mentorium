@@ -89,7 +89,7 @@ export const CreateModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md p-0">
+      <DialogContent className="max-w-md p-2">
         <DialogHeader className="p-4 pb-0">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-sm bg-muted flex items-center justify-center">

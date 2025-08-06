@@ -9,7 +9,7 @@ const router = express.Router();
 //Defense Controller Routes
 router.post("/createPanel", createPanel);
 router.get("/getPanels", getPanels);
-router.post("/:id/deletePanel", deletePanel);
+router.delete("/:id/deletePanel", deletePanel);
 router.post("/assignPanel", assignLecturersToPanels);
 
 module.exports = router;

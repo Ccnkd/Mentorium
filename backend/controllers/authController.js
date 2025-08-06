@@ -1,10 +1,12 @@
 const supabase = require('../config/db');
+const helper = require('../config/authhelper');
 
 // @desc    Register a new user
 // @route   POST /api/auth/register
 // @access  Public
 const registerUser = async (req, res) => {
-  const { email, password, firstName, lastName, phone, indexNumber, yearOfAdmission } = req.body;
+  const { email, password, firstName, lastName, indexNumber, studentId, gender, cwa, department, title} = req.body;
+  
 
   // Validate required fields
   if (!email || !password) {
@@ -12,14 +14,12 @@ const registerUser = async (req, res) => {
   }
 
   // Determine role based on email domain
-  let role = '';
-  if (email.endsWith('@st.knust.edu.gh')) {
-    role = 'student';
-  } else if (email.endsWith('@knust.edu.gh')) {
-    role = 'supervisor';
-  } else {
+  const role = helper.determineRole(email)
+  if(!role){
     return res.status(400).json({ message: 'Invalid email domain.' });
   }
+
+  const roleInsert = helper.roleConfigs[role];
 
   try {
     // Sign up in Supabase Auth
@@ -47,23 +47,16 @@ const registerUser = async (req, res) => {
       .update({ role })
       .eq('user_id', user_id);
 
-    const table = role === 'student' ? 'students' : 'lecturers';
-    // Insert into role-specific table
-    const { error: studentInsertError } = await supabase.from(table).insert({
-      user_id,
-      firstname: firstName,
-      lastname: lastName,
-      index_number: indexNumber || null,
-      year_of_admission: yearOfAdmission || null
-    });
+    const payload = roleInsert.getPayload({ user_id, firstName, lastName, indexNumber, gender, department, studentId, email, cwa, title });
+    const { error: insertError } = await supabase.from(roleInsert.table).insert(payload);
 
     await supabase.auth.admin.updateUserById(user_id, {
       email_confirm: true
     });
 
-    if (studentInsertError) {
-      console.error("Student insert failed:", studentInsertError);
-      return res.status(500).json({ message: 'Failed to insert student data', error: studentInsertError.message });
+    if (insertError) {
+      console.error("Student insert failed:", insertError);
+      return res.status(500).json({ message: 'Failed to insert student data', error: insertError.message });
     }
 
     return res.status(201).json({
@@ -89,19 +82,31 @@ const registerBulkUsers = async (req, res) => {
 
   for (const user of users) {
     const {
-      email,
-      password,
-      firstName,
-      lastName,
-      indexNumber,
-      yearOfAdmission
+      email,password,firstName,lastName,indexNumber,studentId,
+      gender,cwa,department,title
     } = user;
 
+    // Step 1: Validate required fields
+    if (!email || !password) {
+      results.push({ email: email || 'N/A', status: 'fail', message: 'Missing email or password.' });
+      continue;
+    }
+
+    // Step 2: Determine role from email
+    const role = helper.determineRole(email);
+    if (!role || !helper.roleConfigs[role]) {
+      results.push({ email, status: 'fail', message: 'Invalid or unsupported email domain.' });
+      continue;
+    }
+
+    const roleConfig = helper.roleConfigs[role];
+
     try {
+      // Step 3: Create user in Supabase Auth
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
-        options: { data: { role: 'student' } }
+        options: { data: { role } }
       });
 
       if (error) {
@@ -111,34 +116,46 @@ const registerBulkUsers = async (req, res) => {
 
       const user_id = data?.user?.id;
 
-      await supabase.from('users')
-        .update({ role: 'student' })
+      // Step 4: Update role in core users table
+      const { error: updateError } = await supabase
+        .from('users')
+        .update({ role })
         .eq('user_id', user_id);
 
-      const { error: insertError } = await supabase.from('students').insert({
-        user_id,
-        firstname: firstName,
-        lastname: lastName,
-        index_number: indexNumber,
-        year_of_admission: yearOfAdmission
+      if (updateError) {
+        results.push({ email, status: 'fail', message: updateError.message });
+        continue;
+      }
+
+      // Step 5: Generate payload based on role
+      const payload = roleConfig.getPayload({
+        user_id,firstName,lastName,indexNumber,studentId,
+        gender,cwa,department,email,title
       });
 
+      // Step 6: Insert into appropriate role-based table
+      const { error: insertError } = await supabase
+        .from(roleConfig.table)
+        .insert(payload);
+
+      if (insertError) {
+        results.push({ email, status: 'fail', message: insertError.message });
+        continue;
+      }
+
+      // Step 7: Confirm email manually
       await supabase.auth.admin.updateUserById(user_id, {
         email_confirm: true
       });
 
-      if (insertError) {
-        results.push({ email, status: 'fail', message: insertError.message });
-      } else {
-        results.push({ email, status: 'success' });
-      }
+      results.push({ email, role, status: 'success' });
 
     } catch (err) {
       results.push({ email, status: 'fail', message: err.message });
     }
   }
 
-  return res.status(207).json({ results });
+  return res.status(207).json({ results }); // 207 = Multi-Status
 };
 
 // Placeholder methods

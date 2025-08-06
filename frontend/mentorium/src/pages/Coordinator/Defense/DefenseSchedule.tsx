@@ -29,7 +29,14 @@ const [panels, setPanels] = React.useState<Panel[]>([])
 
     <div className="grid grid-cols-4 sm:grid-cols-4 gap-4">
         {panels.map((panel) => (
+          <>
+          <div className='flex grid gap-2'>
           <PanelCard key={panel.id} panel={panel}/>
+          <div className="relative border rounded-xl p-3 min-h-[50px]">
+            <p className="absolute bottom-3 left-3 text-sm font-secondary text-muted-foreground">{panel.venue}</p>
+          </div>
+          </div>
+          </>
         ))}
       </div>
     </div>

@@ -5,7 +5,6 @@ import {
   Card,
   CardContent
 } from "@/components/ui/card"
-import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from 'recharts';
 import { Calendar, MoreVertical, Star } from 'lucide-react';
 import { PriorityBadge } from './PriorityBadge';
 import ProgressRing from './ProgressRing';

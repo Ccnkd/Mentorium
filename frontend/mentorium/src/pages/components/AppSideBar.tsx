@@ -22,7 +22,7 @@ import {
 import MentoriumIcon from "@/assets/icons/MentoriumIcon.svg?react";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import { LogOut, Moon, Settings, Sun, User } from "lucide-react";
+import { LogOut, Moon, Sun, User } from "lucide-react";
 import { ProjectsSection } from "./ProjectsSection"; // Import TeamsSection component
 import { cn } from "@/lib/utils"; // import cn helper
 import { CreateModal } from "../Shared/CreateModal";
@@ -96,21 +96,68 @@ export function AppSidebar({
                     </div>
                   </a>
                 </SidebarMenuButton>
-                <SidebarMenuButton size="lg" asChild>
-                  <a href="#">
-                    <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                      {userDisplayName?.[0] || "U"}
-                    </div>
-                    <div className="grid flex-1 text-left text-sm leading-tight text-grey font-secondary">
-                      <span className="truncate font-medium">
-                        {userDisplayName}
-                      </span>
-                      <span className="truncate text-xs">
-                        {userRole?.charAt(0).toUpperCase() + userRole?.slice(1)}
-                      </span>
-                    </div>
-                  </a>
-                </SidebarMenuButton>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <SidebarMenuButton size="lg" asChild>
+                      <a href="#">
+                        <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+                          {userDisplayName?.[0] || "U"}
+                        </div>
+                        <div className="grid flex-1 text-left text-sm leading-tight text-grey font-secondary">
+                          <span className="truncate font-medium">
+                            {userDisplayName}
+                          </span>
+                          <span className="truncate text-xs">
+                            {userRole?.charAt(0).toUpperCase() +
+                              userRole?.slice(1)}
+                          </span>
+                        </div>
+                      </a>
+                    </SidebarMenuButton>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align="start"
+                    className="w-56 rounded-2xl"
+                  >
+                    <DropdownMenuItem className="rounded-2xl">
+                      <Link to={""} className="flex items-center gap-2 w-full">
+                        <User className="h-4 w-4" />
+                        Profile Settings
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuSub>
+                      <DropdownMenuSubTrigger className="flex items-center justify-between rounded-2xl">
+                        Theme
+                        {document.documentElement.classList.contains("dark") ? (
+                          <Moon className="h-4 w-4" />
+                        ) : (
+                          <Sun className="h-4 w-4" />
+                        )}
+                      </DropdownMenuSubTrigger>
+                      <DropdownMenuSubContent className="w-48 rounded-2xl">
+                        <DropdownMenuItem
+                          className="rounded-2xl"
+                          onClick={() => setTheme("light")}
+                        >
+                          Light
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="rounded-2xl"
+                          onClick={() => setTheme("dark")}
+                        >
+                          Dark
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="rounded-2xl"
+                          onClick={() => setTheme("system")}
+                        >
+                          System
+                        </DropdownMenuItem>
+                      </DropdownMenuSubContent>
+                    </DropdownMenuSub>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarHeader>
@@ -163,49 +210,6 @@ export function AppSidebar({
         </SidebarContent>
 
         <SidebarFooter>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <SidebarMenuButton asChild onClick={() => setTheme("dark")}>
-                <a
-                  href="#"
-                  className="font-secondary text-grey text-lg font-medium flex items-center gap-2 px-3 py-2"
-                >
-                  <Settings className="size-4" />
-                  <span>Settings</span>
-                </a>
-              </SidebarMenuButton>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-56">
-              <DropdownMenuItem>
-                <Link to={""} className="flex items-center gap-2 w-full">
-                  <User className="h-4 w-4" />
-                  Profile Settings
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuSub>
-                <DropdownMenuSubTrigger className="flex items-center justify-between">
-                  Theme
-                  {document.documentElement.classList.contains("dark") ? (
-                    <Moon className="h-4 w-4" />
-                  ) : (
-                    <Sun className="h-4 w-4" />
-                  )}
-                </DropdownMenuSubTrigger>
-                <DropdownMenuSubContent className="w-48">
-                  <DropdownMenuItem onClick={() => setTheme("light")}>
-                    Light
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTheme("dark")}>
-                    Dark
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTheme("system")}>
-                    System
-                  </DropdownMenuItem>
-                </DropdownMenuSubContent>
-              </DropdownMenuSub>
-            </DropdownMenuContent>
-          </DropdownMenu>
           <SidebarMenuButton
             className="font-secondary text-grey text-sm font-medium flex items-center gap-2 px-3 py-2"
             onClick={handleLogout}

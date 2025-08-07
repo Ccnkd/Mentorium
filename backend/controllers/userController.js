@@ -37,7 +37,16 @@ const getSupervisors = async (req, res) => {
     // 1. Fetch all supervisors
     const { data: users, error: userError } = await supabase
       .from('lecturers')
-      .select('*');
+      .select(`
+        user_id,
+        department,
+        panel_id,
+        users (
+          firstname,
+          lastname,
+          email
+        )
+      `)
 
     if (userError) {
       return res.status(500).json({ message: 'Error fetching users', error: userError.message });
@@ -56,7 +65,19 @@ const getAllStudents = async (req, res) => {
     // 1. Fetch all supervisors
     const { data: users, error: userError } = await supabase
       .from('students')
-      .select('*')
+      .select(`
+        user_id,
+        index_number,
+        department,
+        student_id,
+        current_cwa,
+        year_of_admission,
+        users (
+          firstname,
+          lastname,
+          email
+        )
+      `)
 
     if (userError) {
       return res.status(500).json({ message: 'Error fetching users', error: userError.message });
@@ -89,7 +110,16 @@ const getAllMentees = async (req, res) => {
     // Step 2: Fetch all students in the same mentee group
     const { data: students, error: studentError } = await supabase
       .from('students')
-      .select('*, users(*)') // join users table for name/email if needed
+      .select(`
+        user_id,
+        index_number,
+        department,
+        users (
+          firstname,
+          lastname,
+          email
+        )
+      `)
       .eq('mentee_group_id', menteeGroupId);
 
     if (studentError) {

@@ -211,57 +211,41 @@ const loginUser = async (req, res) => {
 
 
 
-const getUserProfile = async (req, res) => {
-  const user_id = req.user?.id;
+  const getUserProfile = async (req, res) => {
+    const user_id = req.user?.id;
 
-  if (!user_id) {
-    console.error("Missing user ID in request");
-    return res.status(401).json({ message: 'Unauthorized: No user ID' });
-  }
-
-  console.log("Fetching profile for user_id:", user_id);
-
-  try {
-    const { data: userData, error: userError } = await supabase
-      .from('users')
-      .select('email, role')
-      .eq('user_id', user_id)
-      .maybeSingle();
-
-    console.log("User Data:", userData);
-    if (userError) console.error("User fetch error:", userError);
-
-    if (!userData) {
-      return res.status(404).json({ message: 'User not found in users table.' });
+    if (!user_id) {
+      console.error("Missing user ID in request");
+      return res.status(401).json({ message: 'Unauthorized: No user ID' });
     }
 
-    const { role, email } = userData;
-    const table = role === 'student' ? 'students' : 'lecturers';
+    console.log("Fetching profile for user_id:", user_id);
 
-    const { data: profileData, error: profileError } = await supabase
-      .from(table)
-      .select('firstname, lastname')
-      .eq('user_id', user_id)
-      .maybeSingle();
+    try {
+      const { data: userData, error: userError } = await supabase
+        .from('users')
+        .select('email, role, firstname, lastname')
+        .eq('user_id', user_id)
+        .maybeSingle();
 
-    console.log("Profile Data:", profileData);
-    if (profileError) console.error("Profile fetch error:", profileError);
+      if (userError) {
+        console.error("User fetch error:", userError);
+        return res.status(500).json({ message: 'Error fetching user data.' });
+      }
 
-    if (!profileData) {
-      return res.status(404).json({ message: 'Profile not found in ' + table + ' table.' });
+      if (!userData) {
+        return res.status(404).json({ message: 'User not found in users table.' });
+      }
+
+      // Return the user data directly
+      return res.status(200).json(userData);
+
+    } catch (err) {
+      console.error('Error getting user profile:', err.message || err);
+      return res.status(500).json({ message: 'Server error.' });
     }
+  };
 
-    return res.status(200).json({
-      email,
-      role,
-      ...profileData,
-    });
-
-  } catch (err) {
-    console.error('Error getting user profile:', err.message || err);
-    return res.status(500).json({ message: 'Server error.' });
-  }
-};
 
 const updateUserProfile = async (req, res) => {
   const { user_id } = req.params;

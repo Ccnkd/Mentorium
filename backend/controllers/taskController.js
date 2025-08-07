@@ -6,10 +6,31 @@ const getTasks = async (req, res) => {
     const userId = req.user.id;
 
     // 1. Query all tasks where user is creator or assignee
-    const { data, error } = await supabase
-      .from('tasks')
-      .select(`
-        *`)
+const { data, error } = await supabase
+  .from('tasks')
+  .select(`
+    task_id,
+    project_id,
+    title,
+    description,
+    due_date,
+    is_completed,
+    is_favorite,
+    progress,
+    priority,
+    created_by (
+      user_id,
+      firstname,
+      lastname
+    ),
+    assignees:task_assignees (
+      user_id,
+      users (
+        firstname,
+        lastname
+      )
+    )
+  `);
       
     if (error) {
       console.error('Error fetching tasks:', error.message);
@@ -39,8 +60,7 @@ const getTasks = async (req, res) => {
 const getTaskById = async (req, res) => {
     try{
         const task = await task.findbyId(req.params.id).populate(
-            "assignedTo",
-            "name email",
+
         );
 
         if(!task) return res.status(404).json({message: "Task not found"});
@@ -50,6 +70,7 @@ const getTaskById = async (req, res) => {
 };
 
 const createTask = async (req, res) => {
+  const created_by = req.user.id;
   try {
     const {
       title,
@@ -149,14 +170,13 @@ const deleteTask = async (req, res) => {
   const { task_id } = req.params
 
   try {
-    const { error: taskError } = await supabase
+    const { error } = await supabase
       .from('tasks')
       .delete()
-      .eq('task_id', task_id)
+      .eq('id', id)
 
-    if (taskError) {
-      console.error("Supabase delete error:", taskError);
-      return res.status(400).json({ message: "Task delete failed", error: taskError.message });
+    if (error) {
+      throw error
     }
 
     res.status(204).send()

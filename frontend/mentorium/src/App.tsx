@@ -15,7 +15,7 @@ import MyProjects from "./pages/Shared/MyProjects";
 import Trash from "./pages/Shared/Trash";
 import DefenseDashboard from "./components/layouts/DefenseLayout";
 import SupervisorManagement from "./pages/Coordinator/SupervisorManagement";
-import MyTasks from "./pages/Shared/MyTasks";
+import MyTasks from "./pages/Shared/TaskModal";
 import StudentDashboard from "./pages/Students/StudentDashboard";
 import CreateBudget from "./pages/Students/CreateBudget";
 import PrivateRoute from "./routes/PrivateRoute";

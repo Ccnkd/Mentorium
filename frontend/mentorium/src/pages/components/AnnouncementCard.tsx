@@ -16,7 +16,7 @@ type AnnouncementProps = {
 const AnnouncementCard: React.FC<AnnouncementProps> = ({announcement}) => {
   const date = new Date(announcement.created_at);
   const fullName = announcement.lecturer
-  ? `${announcement.lecturer.title} ${announcement.lecturer.firstname} ${announcement.lecturer.lastname}`
+  ? `${announcement.lecturer.title} ${announcement.lecturer.users.firstname} ${announcement.lecturer.users.lastname}`
   : "Unknown";
   const formatted = date.toLocaleDateString('en-GB', {
   day: 'numeric',

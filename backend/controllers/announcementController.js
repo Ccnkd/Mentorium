@@ -2,34 +2,43 @@ const supabase = require('../config/db');
 
 const getAnnouncements = async (req, res) => {
   try {
-    const userId = req.user.id;
-
-    // 1. Query all tasks where user is creator or assignee
-    const { data: announcements, error } = await supabase
-    .from("announcements")
-    .select(`
+    const { data, error } = await supabase
+      .from('announcements')
+      .select(`
         announcement_id,
         title,
         description,
         created_at,
         created_by,
         lecturer:lecturers (
-        title,
-        firstname,
-        lastname
+          title,
+          users (
+            firstname,
+            lastname
+          )
+        ),
+        assignees:announcement_assignees (
+          assignee_id,
+          users (
+            firstname,
+            lastname
+          )
         )
-    `).order("created_at", { ascending: false });
-      
+      `)
+      .order('created_at', { ascending: false });
+
     if (error) {
       console.error('Error fetching announcements:', error.message);
       return res.status(500).json({ message: 'Failed to fetch announcements', error: error.message });
     }
 
-    return res.status(200).json({ announcements });
+    return res.status(200).json({ announcements: data });
   } catch (error) {
+    console.error('Server error:', error.message);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
+
 
 const createAnnouncement = async (req, res) => {
   try {

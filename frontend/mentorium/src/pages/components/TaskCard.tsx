@@ -10,6 +10,7 @@ import { PriorityBadge } from './PriorityBadge';
 import ProgressRing from './ProgressRing';
 import axiosInstance from '@/utils/axiosInstance';
 import { API_PATHS } from '@/utils/apiPaths';
+import TaskModal from '../Shared/TaskModal';
 
 type TaskCardProps = {
   task: Task;
@@ -18,6 +19,7 @@ type TaskCardProps = {
 const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
   const [isFavorite, setIsFavorite] = useState(task.is_favorite || false);
   const [isComplete, setIsComplete] = useState(task.is_completed || false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isActionActive, setIsActionActive] = useState(false);
 
   const handleDeleteTask = async (task_id: string) => {
@@ -42,7 +44,12 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
 
 
   return (
-    <Card className="w-full border px-4 py-3">
+    <>
+    <Card 
+      onClick={()=>setIsModalOpen(true)}
+      onMouseEnter={()=>setIsActionActive(true)}
+      onMouseLeave={()=>setIsActionActive(false)}
+      className="w-full border px-4 py-3 hover:cursor-pointer">
       <CardContent className="flex items-center justify-between gap-3 p-0">
         {/* Left Section */}
         <div className="flex items-center gap-3">
@@ -92,19 +99,27 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
             <button onClick={() => {}}>
               <Pencil className="size-5 hover:cursor-pointer hover:text-primary" />
             </button>
-            <button onClick={() => {handleDeleteTask(task.task_id)}}>
+            <button onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteTask(task.task_id);
+                  }}
+                >
               <Trash2 className="size-5 hover:cursor-pointer hover:text-primary" />
             </button>
           </div>
 
 
           {/* Toggle Button */}
-          <button onClick={() => setIsActionActive(prev => !prev)}>
-            <MoreVertical className="w-4 h-4 text-muted-foreground cursor-pointer" />
-          </button>
         </div>
       </CardContent>
     </Card>
+    {isModalOpen && (
+      <TaskModal
+        task={task}
+        onClose={() => setIsModalOpen(false)}
+      />
+    )}
+    </>
   );
 };
 

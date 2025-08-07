@@ -59,7 +59,7 @@ export const CreateModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
       title: '',
       description: '',
       due_date: new Date().toISOString(),
-      assignee: []
+      assignees: []
   })
 
   const handleTaskChange = <K extends keyof Task>(key: K, value: Task[K]) => {
@@ -75,12 +75,14 @@ export const CreateModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
   const handleSubmit = async () => {
     if (activeTab === "Task") {
       // Handle task creation
-      console.log("Creating task:", taskData);
-      await createTask(taskData)
+      const fullTaskData = { ...taskData, subtasks };
+      console.log("Creating task:", fullTaskData);
+      await createTask(fullTaskData);
     } else if (activeTab === "Project") {
       console.log("Creating project:", projectData);
       await createProject(projectData)
     }
+    clearData();
     onClose(); // close modal after creation
   };
 
@@ -100,23 +102,24 @@ export const CreateModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
 
   const createTask = async (task: Partial<Task>) => {
     try {
-      console.log("Submitting task:", JSON.stringify(taskData, null, 2));
+      console.log("Submitting task:", JSON.stringify(task, null, 2)); // ✅ not taskData
       const res = await axiosInstance.post(API_PATHS.TASKS.CREATE_TASK, task);
       console.log("Task Created:", res.data);
     } catch (error: any) {
-        console.error("Failed to create task:", error);
+      console.error("Failed to create task:", error);
 
-        if (error.response) {
-          console.log("Response data:", error.response.data);
-          console.log("Status code:", error.response.status);
-          console.log("Headers:", error.response.headers);
-        } else if (error.request) {
-          console.log("No response received:", error.request);
-        } else {
-          console.log("Other error:", error.message);
-        }
+      if (error.response) {
+        console.log("Response data:", error.response.data);
+        console.log("Status code:", error.response.status);
+        console.log("Headers:", error.response.headers);
+      } else if (error.request) {
+        console.log("No response received:", error.request);
+      } else {
+        console.log("Other error:", error.message);
       }
+    }
   };
+
 
   const createProject = async (project: Partial<Project>) => {
     try {
@@ -224,9 +227,9 @@ export const CreateModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
               />
             </div>):(
               <></>
-            )}
-           
+            )}           
             </div>
+
             <SubtasksInput subtask={subtasks} setSubtasks={setSubtasks} />
             </div>
           </TabsContent>
@@ -264,32 +267,25 @@ export const CreateModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
 
             {/*Assigned To*/}
             <div className="flex items-center gap-4 p-0">
-            <div>
+            {user?.role==="coordinator" || user?.role ==="supervisor" ?(<div>
               <Label className="pb-2">Assigned To</Label>
-              <Select>
-              <SelectTrigger className="w-[180px] shadow-none">
-                <SelectValue placeholder="Low Priority" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Low">Low</SelectItem>
-                <SelectItem value="Medium">Medium</SelectItem>
-                <SelectItem value="High">High</SelectItem>
-              </SelectContent>
-            </Select>
-            </div>
-            <div className="flex items-center pt-5">
-             <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-              
-              <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
+              <SelectUsers                
+                selectedIds={projectData.assignees?.map(a => a.assignee_id) || []}
+                setSelectedIds={(ids: string[]) =>
+                  setTaskData(prev => ({
+                    ...prev,
+                    assignees: ids.map(id => ({ assignee_id: id })),
+                  }))
+                }
+                fetchData={fetchStudents}
+                renderLabel={(user) => `${user.firstname} ${user.lastname}`}
+                title="Assign Users"
+              />
+            </div>):(
+              <></>
+            )}           
             </div>
             
-            </div>
             </div>
           </TabsContent>
         </Tabs>

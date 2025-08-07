@@ -14,7 +14,7 @@ const SupervisorDashboard :React.FC= () => {
   useUserAuth();
   const{user} = useContext(UserContext);
   const [tasks, setTasks] = useState<Task[]>([]);
-const [announcement, setAnnouncement] = useState<Announcement | null>(null);
+  const [announcement, setAnnouncement] = useState<Announcement | null>(null);
   const [ loading,setLoading] = useState(false);
 
   useEffect(()=>{

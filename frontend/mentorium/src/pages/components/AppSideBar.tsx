@@ -21,8 +21,8 @@ import {
 
 import MentoriumIcon from "@/assets/icons/MentoriumIcon.svg?react";
 import { useContext, useEffect, useState } from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom";
-import { LogOut, Moon, Sun, User } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { LogOut, Moon, Sun } from "lucide-react";
 import { ProjectsSection } from "./ProjectsSection"; // Import TeamsSection component
 import { cn } from "@/lib/utils"; // import cn helper
 import { CreateModal } from "../Shared/CreateModal";
@@ -38,6 +38,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { UserDetailsModal } from "./ProfileSettingsPage";
 
 type AppSidebarProps = {
   userDisplayName?: string;
@@ -119,11 +120,9 @@ export function AppSidebar({
                     align="start"
                     className="w-56 rounded-2xl"
                   >
-                    <DropdownMenuItem className="rounded-2xl">
-                      <Link to={""} className="flex items-center gap-2 w-full">
-                        <User className="h-4 w-4" />
-                        Profile Settings
-                      </Link>
+                    {/* Replaced DropdownMenuItem with UserDetailsModal */}
+                    <DropdownMenuItem asChild>
+                      <UserDetailsModal />
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuSub>

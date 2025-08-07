@@ -21,7 +21,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
-import type { Project, Task } from "../../utils/types"
+import type { Project, Subtask, Task } from "../../utils/types"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Edit, PlusCircle } from "lucide-react"
@@ -34,12 +34,16 @@ import axiosInstance from "@/utils/axiosInstance"
 import { API_PATHS } from "@/utils/apiPaths"
 import { PRIORITY_OPTIONS } from "@/utils/data"
 import { fetchStudents } from "@/utils/userService"
+import { UserContext } from "@/contexts/UserContext"
+import SubtasksInput from "./SubtasksInput"
 
 export const CreateModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const location = useLocation();
+  const { user } = React.useContext(UserContext);
   const { taskId } = location.state || {};
   const [activeTab, setActiveTab] = React.useState("Task");
   const [loading, setLoading] = React.useState(false)
+  const [subtasks, setSubtasks] = React.useState<Subtask[]>([]);
 
   const [taskData, setTaskData] = React.useState<Partial<Task>>({
     title: '',
@@ -204,7 +208,7 @@ export const CreateModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
             </div>
             {/*Assigned To*/}
             <div className="flex items-center gap-4 p-0">
-            <div>
+            {user?.role==="coordinator" || user?.role ==="supervisor" ?(<div>
               <Label className="pb-2">Assigned To</Label>
               <SelectUsers                
                 selectedIds={taskData.assignees?.map(a => a.assignee_id) || []}
@@ -218,20 +222,12 @@ export const CreateModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                 renderLabel={(user) => `${user.firstname} ${user.lastname}`}
                 title="Assign Users"
               />
+            </div>):(
+              <></>
+            )}
+           
             </div>
-            <div className="flex items-center pt-5">
-             <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-              
-              <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-            </div>
-            
-            </div>
+            <SubtasksInput subtask={subtasks} setSubtasks={setSubtasks} />
             </div>
           </TabsContent>
 

@@ -1,9 +1,8 @@
-import { useUserAuth } from "@/hooks/useUserAuth";
 import { UserContext } from "@/contexts/UserContext";
 import { API_PATHS } from "@/utils/apiPaths";
 import axiosInstance from "@/utils/axiosInstance";
 import type { Announcement } from "@/utils/types";
-import { Megaphone, PlusCircle, Volume2Icon } from "lucide-react";
+import { Megaphone, PlusCircle} from "lucide-react";
 import React, { useContext, useEffect, useState } from "react";
 import AnnouncementCard from "../components/AnnouncementCard";
 import { Button } from "@/components/ui/button";
@@ -11,7 +10,6 @@ import AnnouncementForm from "../components/AnnouncementForm";
 import PageHeader from "../components/PageHeader";
 
 const AnnouncementPage: React.FC = () => {
-  useUserAuth();
   const { user } = useContext(UserContext);
   const [showForm, setShowForm] = useState(false);
   const [announcements, setAnnouncement] = useState<Announcement[]>([]);
@@ -33,17 +31,19 @@ const AnnouncementPage: React.FC = () => {
   return (
     <div className="px-6 py-8 w-full">
       {/* Header */}
-      <div className="sticky top-0 z-50 bg-sidebar p-4 w-full flex items-center gap-3 mb-6">
-        <PageHeader title="Announcement" icon={Megaphone} />
+      <div className="sticky top-0 z-50 w-full flex items-center gap-3 mb-6">
+        <PageHeader title="Announcements" icon={Megaphone} />
 
         <div className="ml-auto">
-          <Button
+          {user?.role==="coordinator" || user?.role ==="supervisor" ?(<Button
             className="text-md bg-white border-none text-primary shadow-none hover:bg-white hover:cursor-pointer hover:text-primary/65"
             onClick={() => setShowForm(true)}
           >
             <PlusCircle />
             Create Announcement
-          </Button>
+          </Button>):(
+            <></>
+          )}
         </div>
       </div>
 

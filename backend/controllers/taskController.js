@@ -50,7 +50,6 @@ const getTaskById = async (req, res) => {
 };
 
 const createTask = async (req, res) => {
-  const created_by = req.user.id;
   try {
     const {
       title,
@@ -78,8 +77,8 @@ const createTask = async (req, res) => {
       .single(); // Get task_id
 
     if (taskError) {
-      console.error("Supabase insert error:", error); // 👈 check this
-      return res.status(400).json({ error: error.message });
+      console.error("Supabase insert error:", taskError);
+      return res.status(400).json({ message: "Task insert failed", error: taskError.message });
     }
 
     const task_id = task.task_id;
@@ -121,6 +120,7 @@ const createTask = async (req, res) => {
     res.status(201).json({ message: "Task created successfully", task });
 
   } catch (error) {
+    
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
@@ -146,11 +146,23 @@ const updateTask = async (req, res) => {
 };
 
 const deleteTask = async (req, res) => {
-    try{
+  const { task_id } = req.params
 
-    }catch(error){
-        res.status(500).json({message: "Server error", error: error.message})
+  try {
+    const { error: taskError } = await supabase
+      .from('tasks')
+      .delete()
+      .eq('task_id', task_id)
+
+    if (taskError) {
+      console.error("Supabase delete error:", taskError);
+      return res.status(400).json({ message: "Task delete failed", error: taskError.message });
     }
+
+    res.status(204).send()
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message })
+  }
 };
 
 const updateTaskStatus = async (req, res) => {

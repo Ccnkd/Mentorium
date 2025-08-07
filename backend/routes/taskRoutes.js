@@ -7,10 +7,10 @@ const router = express.Router();
 router.get("/gettasks",protect, getTasks); // Register User
 router.get("/:id",protect, getTaskById); // Register User
 router.post("/createtask",protect, createTask);
-router.put("/:id", updateTask); // Register User
-router.delete("/:id", deleteTask); // Register User
-router.put("/:id/status", updateTaskStatus); // Register User
-router.put("/:id/todo", updateTaskChecklist);
+router.put("/:task_id", updateTask); // Register User
+router.delete("/:task_id", deleteTask); // Register User
+router.put("/:task_id/status", updateTaskStatus); // Register User
+router.put("/:task_id/todo", updateTaskChecklist);
 
 
 module.exports = router;

@@ -33,13 +33,13 @@ import {SelectUsers } from "./SelectUsers"
 import axiosInstance from "@/utils/axiosInstance"
 import { API_PATHS } from "@/utils/apiPaths"
 import { PRIORITY_OPTIONS } from "@/utils/data"
+import { fetchStudents } from "@/utils/userService"
 
 export const CreateModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const location = useLocation();
   const { taskId } = location.state || {};
   const [activeTab, setActiveTab] = React.useState("Task");
   const [loading, setLoading] = React.useState(false)
-  const [selected, setSelected] = React.useState<string[]>([]);
 
   const [taskData, setTaskData] = React.useState<Partial<Task>>({
     title: '',
@@ -66,51 +66,7 @@ export const CreateModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
     setProjectData((prev) => ({ ...prev, [key]: value }));
   };
 
-  const fetchMentees = async() =>{
-  try {
-    const response = await axiosInstance.get(API_PATHS.USERS.GET_MENTEES);
 
-    if (response.data) {
-      return response.data;
-    } else {
-      return []; // Return empty array if no data
-    }
-  } catch (error) {
-    console.warn("No mentee data received", error);
-    return []; // Ensure consistent return type
-  }
-  }
-
-  const fetchUsers = async() =>{
-  try {
-    const response = await axiosInstance.get(API_PATHS.USERS.GET_ALL_USERS);
-
-    if (response.data.users) {
-      return response.data.users;
-    } else {
-      return []; // Return empty array if no data
-    }
-  } catch (error) {
-    console.warn("No mentee data received", error);
-    return []; // Ensure consistent return type
-  }
-  }
-
-
-  const fetchStudents = async() =>{
-  try {
-    const response = await axiosInstance.get(API_PATHS.USERS.GET_STUDENTS);
-
-    if (response.data.users) {
-      return response.data.users;
-    } else {
-      return []; // Return empty array if no data
-    }
-  } catch (error) {
-    console.warn("No mentee data received", error);
-    return []; // Ensure consistent return type
-  }
-  }
 
   const handleSubmit = async () => {
     if (activeTab === "Task") {
@@ -144,13 +100,19 @@ export const CreateModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
       console.log("Submitting task:", JSON.stringify(taskData, null, 2));
       const res = await axiosInstance.post(API_PATHS.TASKS.CREATE_TASK, task);
       console.log("Task Created:", res.data);
-    } catch (err: any) {
-      if (err.response) {
-        console.error("Failed to create task:", err.response.data);
-      } else {
-        console.error("Failed to create task:", err.message);
+    } catch (error: any) {
+        console.error("Failed to create task:", error);
+
+        if (error.response) {
+          console.log("Response data:", error.response.data);
+          console.log("Status code:", error.response.status);
+          console.log("Headers:", error.response.headers);
+        } else if (error.request) {
+          console.log("No response received:", error.request);
+        } else {
+          console.log("Other error:", error.message);
+        }
       }
-    }
   };
 
   return (
@@ -225,7 +187,7 @@ export const CreateModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
             <div className="flex items-center gap-4 p-0">
             <div>
               <Label className="pb-2">Assigned To</Label>
-              <SelectUsers
+              <SelectUsers                
                 selectedIds={taskData.assignees?.map(a => a.assignee_id) || []}
                 setSelectedIds={(ids: string[]) =>
                   setTaskData(prev => ({

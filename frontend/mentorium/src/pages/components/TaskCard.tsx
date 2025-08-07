@@ -20,13 +20,26 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
   const [isComplete, setIsComplete] = useState(task.is_completed || false);
   const [isActionActive, setIsActionActive] = useState(false);
 
-  const handleDeleteTask = async(task_id: string) => {
-     try {
-      await axiosInstance.delete(API_PATHS.TASKS.DELETE_TASK(task_id))
-    } catch (error) {
-      console.error("Error deleting panel", error)
+  const handleDeleteTask = async (task_id: string) => {
+    try {
+      console.log("Deleting task ID:", task_id);
+      const response = await axiosInstance.delete(API_PATHS.TASKS.DELETE_TASK(task_id));
+      console.log("Task deleted successfully", response);
+    } catch (error: any) {
+      if (error.response) {
+        console.error("Delete failed:", {
+          status: error.response.status,
+          data: error.response.data,
+          headers: error.response.headers,
+        });
+      } else if (error.request) {
+        console.error("No response received:", error.request);
+      } else {
+        console.error("Request setup error:", error.message);
+      }
     }
-  }
+  };
+
 
   return (
     <Card className="w-full border px-4 py-3">

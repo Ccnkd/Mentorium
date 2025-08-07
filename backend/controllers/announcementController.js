@@ -18,7 +18,7 @@ const getAnnouncements = async (req, res) => {
         firstname,
         lastname
         )
-    `);
+    `).order("created_at", { ascending: false });
       
     if (error) {
       console.error('Error fetching announcements:', error.message);
@@ -53,7 +53,8 @@ const createAnnouncement = async (req, res) => {
       .single();
 
     if (error) {
-      return res.status(400).json({ message: "Announcement creation failed", error });
+      console.error("Supabase insert error:", error);
+      return res.status(400).json({ message: "Announcement creation", error: error.message });
     }
 
     const announcement_id = announcement.announcement_id // adjust based on actual key

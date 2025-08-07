@@ -31,10 +31,10 @@ export type ProjectGroup = {
 }
 
 export type Announcement = {
-  announcement_id: string
+  announcement_id?: string
   title: string
-  description: string
-  created_at: string
+  description?: string
+  created_at?: string
   created_by: string
   lecturer: {
     title: string

@@ -20,14 +20,14 @@ export const API_PATHS = {
 
     TASKS: {
     CREATE_TASK: `/api/task/createtask`,
-    DELETE_TASK: (taskId: any) => `/api/task/${taskId}`,
-    UPDATE_TASK: (taskId: any) => `/api/task/${taskId}`,
-    GET_TASK_BY_ID: (taskId: any) => `/api/task/${taskId}`,
+    DELETE_TASK: (task_id: string) => `/api/task/${task_id}`,
+    UPDATE_TASK: (task_id: any) => `/api/task/${task_id}`,
+    GET_TASK_BY_ID: (task_id: any) => `/api/task/${task_id}`,
     GET_ALL_TASKS: `/api/task/gettasks`,
     GET_COMPLETED_TASKS: `/api/task/gettasks?status=completed`,
     GET_PENDING_TASKS: `/api/task/gettasks?status=pending`,
-    UPDATE_TASK_STATUS: (taskId: any) => `/api/task/${taskId}/status`,
-    UPDATE_TASK_CHECKLIST: (taskId: any) => `/api/task/${taskId}/todo`,
+    UPDATE_TASK_STATUS: (task_id: any) => `/api/task/${task_id}/status`,
+    UPDATE_TASK_CHECKLIST: (task_id: any) => `/api/task/${task_id}/todo`,
     },
 
     DEFENSE: {

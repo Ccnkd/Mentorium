@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/table";
 import { BookOpenTextIcon } from "lucide-react";
 import PageHeader from "../components/PageHeader";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const StudentManagement :React.FC= () => {
   const [students, setStudents] = React.useState<Student[]>([])
@@ -51,7 +52,7 @@ const StudentManagement :React.FC= () => {
             <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody>          
           {students.map((student) => (
             <TableRow key={student.user_id} className="font-secondary">
               <TableCell>{student.index_number}</TableCell>

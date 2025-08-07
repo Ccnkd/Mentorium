@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableHeader, TableBody, TableRow, TableCell, TableHead } from '@/components/ui/table';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { PlusCircleIcon } from 'lucide-react';
 
 export type SelectUserItem = {
   id: string;
@@ -73,7 +74,8 @@ export function SelectUsers<T extends SelectUserItem>({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Assign</Button>
+        <Button variant="outline" className='shadow-none text-primary'>
+          <PlusCircleIcon/>Assign</Button>
       </DialogTrigger>
       <DialogContent className="w-4xl">
         <DialogHeader>

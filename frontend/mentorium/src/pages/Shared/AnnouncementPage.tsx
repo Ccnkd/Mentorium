@@ -8,14 +8,13 @@ import React, { useContext, useEffect, useState } from 'react'
 import AnnouncementCard from '../components/AnnouncementCard';
 import { Button } from '@/components/ui/button';
 import AnnouncementForm from '../components/AnnouncementForm';
+import { SelectUsers } from './SelectUsers';
 
 const AnnouncementPage :React.FC= () => {
   useUserAuth();
   const{user} = useContext(UserContext);
   const [showForm, setShowForm] = useState(false);
   const [announcements, setAnnouncement] = useState<Announcement[]>([]);
-
-
 
   useEffect(()=>{
     const fetchData = async ()=>{
@@ -38,8 +37,7 @@ const AnnouncementPage :React.FC= () => {
             </div>
             <h1 className="text-4xl font-semibold text-grey">Announcements</h1>
             
-            <div className="ml-auto">
-              
+            <div className="ml-auto">                    
               <Button
                 className="text-md bg-white border-none text-primary shadow-none hover:bg-white hover:cursor-pointer hover:text-primary/65"
                 onClick={() => setShowForm(true)}

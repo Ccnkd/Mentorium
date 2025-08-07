@@ -50,40 +50,44 @@ const getTaskById = async (req, res) => {
 };
 
 const createTask = async (req, res) => {
+  const created_by = req.user.id;
   try {
     const {
       title,
       description,
       priority,
-      due_Date,
-      assignedTo,   // Array of user IDs
+      due_date,
+      assignees,   // Array of user IDs
       subtasks,
     } = req.body;
 
     const created_by = req.user.id;
+    const formattedDueDate = due_date?.split("T")[0] ?? null;
 
     // 1. Create main task
     const { data: task, error: taskError } = await supabase
       .from('tasks')
       .insert([{
+        created_by,
         title,
         description,
         priority,
-        due_date: due_Date,
-        created_by,
+        due_date: formattedDueDate,        
       }])
       .select()
       .single(); // Get task_id
 
     if (taskError) {
-      return res.status(400).json({ message: "Task creation failed", error: taskError.message });
+      console.error("Supabase insert error:", error); // 👈 check this
+      return res.status(400).json({ error: error.message });
     }
 
     const task_id = task.task_id;
+    
 
     // 2. Insert assignees if any
-    if (Array.isArray(assignedTo) && assignedTo.length > 0) {
-      const assigneesData = assignedTo.map(user_id => ({
+    if (Array.isArray(assignees) && assignees.length > 0) {
+      const assigneesData = assignees.map(user_id => ({
         task_id,
         user_id,
       }));

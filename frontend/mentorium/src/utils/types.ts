@@ -21,7 +21,7 @@ export type Panel = {
   id: string
   name: string
   venue: string
-  lecturers: Lecturer[] // ✅ This should now work correctly
+  lecturers: Lecturer[]
 }
 
 export type ProjectGroup = {
@@ -41,24 +41,29 @@ export type Announcement = {
     firstname: string
     lastname: string
   }
-  assignees: Assignee []
+  assignees: Announcement_Assignee []
 }
 
-export type Assignee = {
+export type Announcement_Assignee = {
   assignee_id: string
 }
 
 export type Task = {
-  task_id: string
-  project_id: string
+  task_id?: string
+  project_id?: string
   title: string
-  description: string
-  due_date: string
-  is_completed: boolean
-  is_favorite: boolean
-  progress: number
-  priority: number
-  subtasks: Subtask []
+  description?: string
+  due_date?: string
+  is_completed?: boolean
+  is_favorite?: boolean
+  progress?: number
+  priority?: number
+  assignees?: Task_Assignee[]
+  subtasks?: Subtask []
+}
+
+export type Task_Assignee = {
+  assignee_id: string
 }
 
 export type Subtask = {
@@ -69,10 +74,15 @@ export type Subtask = {
 
 export type Project = {
   id: string
-  firstName: string
-  lastName: string
   title: string
-  department: string
+  description: string
+  due_date: string
+  assignee: Project_Assignee[]
+}
+
+export type Project_Assignee = {
+  assignee_id: string
+  role: "student"
 }
 
 export type Coordinator = {

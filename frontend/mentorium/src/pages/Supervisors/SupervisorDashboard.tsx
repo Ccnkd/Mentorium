@@ -44,20 +44,16 @@ const [announcement, setAnnouncement] = useState<Announcement | null>(null);
             <h1 className="text-4xl text-left">Hello, {user?.firstname|| ""}</h1>
           </div>
           <br></br>
-          <Link to="/announcements">
-            <div className="cursor-pointer hover:opacity-90 transition duration-200 hover:border-l-3">
-              {announcement && (
-                <Link to="/announcements">
-                  <div className="cursor-pointer hover:opacity-90 transition duration-200">
-                    <AnnouncementCard
-                      key={announcement.announcement_id}
-                      announcement={announcement}
-                    />
-                  </div>
-                </Link>
-              )}
-            </div>
-          </Link>
+          {announcement ? (
+            <Link to="/announcements">
+              <div className="cursor-pointer hover:opacity-90 transition duration-200 hover:border-l-3">
+                <AnnouncementCard
+                  key={announcement.announcement_id}
+                  announcement={announcement}
+                />
+              </div>
+            </Link>
+          ) : null}
           <br></br>
           <div className='text-grey text-xs font-alternate font-semibold tracking-widest'>
             TASKS

@@ -5,6 +5,7 @@ import type { Panel, Lecturer } from "../../../utils/types"
 import ShufflePreviewModal from '../../components/ShufflePreviewModal';
 import axiosInstance from "@/utils/axiosInstance"
 import { API_PATHS } from "@/utils/apiPaths"
+import { toast } from "sonner";
 
 export const PanelPage: React.FC = () => {
   const [panels, setPanels] = React.useState<Panel[]>([])
@@ -76,7 +77,7 @@ const handleSaveShuffled = async () => {
 
     console.log("Response:", res.data);
     setIsModalOpen(false);
-    alert('Assignments saved!');
+    toast.success("Assignments Saved!");
   } catch (error: any) {
     console.error("Assignment failed:", error.response?.data || error.message);
     alert(`Assignment failed: ${error.response?.data?.message || error.message}`);

@@ -167,21 +167,14 @@ export const SIDE_MENU_DATA_COORDINATOR = [
 ]
 
 
-export const priorityMap = {
-  VeryLow: 1,
-  Low: 2,
-  Medium: 3,
-  High: 4,
-  VeryHigh: 5
-};
+export const PRIORITY_OPTIONS = [
+  { label: "Very Low", value: 1 },
+  { label: "Low", value: 2 },
+  { label: "Medium", value: 3 },
+  { label: "High", value: 4 },
+  { label: "Very High", value: 5 }
+];
 
-export const reversePriorityMap = {
-  1: "Very Low",
-  2: "Low",
-  3: "Medium",
-  4: "High",
-  5: "Very High",
-};
 
 export const STUDENT_PROJECT_NAVBAR = [
   { title: "Overview", path: "" },

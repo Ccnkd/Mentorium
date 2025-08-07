@@ -15,6 +15,8 @@ const AnnouncementPage :React.FC= () => {
   const [showForm, setShowForm] = useState(false);
   const [announcements, setAnnouncement] = useState<Announcement[]>([]);
 
+
+
   useEffect(()=>{
     const fetchData = async ()=>{
     try {
@@ -37,6 +39,7 @@ const AnnouncementPage :React.FC= () => {
             <h1 className="text-4xl font-semibold text-grey">Announcements</h1>
             
             <div className="ml-auto">
+              
               <Button
                 className="text-md bg-white border-none text-primary shadow-none hover:bg-white hover:cursor-pointer hover:text-primary/65"
                 onClick={() => setShowForm(true)}

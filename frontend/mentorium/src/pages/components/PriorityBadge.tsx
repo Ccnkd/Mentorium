@@ -6,11 +6,11 @@ type PriorityBadgeProps = {
 };
 
 const priorityMap: Record<number, { label: string; className: string }> = {
-  1: { label: "Low", className: "bg-green-100 text-green-700 border-green-200 font-secondary" },
-  2: { label: "Medium", className: "bg-yellow-100 text-yellow-700 border-yellow-200 font-secondary" },
-  3: { label: "High", className: "bg-red-100 text-red-700 border-red-200 font-secondary" },
-  4: { label: "Critical", className: "bg-orange-100 text-orange-700 border-orange-200 font-secondary" },
-  5: { label: "Urgent", className: "bg-purple-100 text-purple-700 border-purple-200 font-secondary" },
+  1: { label: "Very Low", className: "bg-green-100 text-green-700 border-green-200 font-secondary" },
+  2: { label: "Low", className: "bg-yellow-100 text-yellow-700 border-yellow-200 font-secondary" },
+  3: { label: "Medium", className: "bg-red-100 text-red-700 border-red-200 font-secondary" },
+  4: { label: "High", className: "bg-orange-100 text-orange-700 border-orange-200 font-secondary" },
+  5: { label: "Critical", className: "bg-purple-100 text-purple-700 border-purple-200 font-secondary" },
 };
 
 export const PriorityBadge: React.FC<PriorityBadgeProps> = ({ priority }) => {

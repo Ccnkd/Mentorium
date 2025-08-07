@@ -53,7 +53,7 @@ const StudentManagement :React.FC= () => {
         </TableHeader>
         <TableBody>
           {students.map((student) => (
-            <TableRow key={student.id} className="font-secondary">
+            <TableRow key={student.user_id} className="font-secondary">
               <TableCell>{student.index_number}</TableCell>
               <TableCell>{student.firstname} {student.lastname}</TableCell>
               <TableCell>{student.current_cwa}</TableCell>

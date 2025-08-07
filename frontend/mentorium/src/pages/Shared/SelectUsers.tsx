@@ -1,76 +1,144 @@
-import { API_PATHS } from '@/utils/apiPaths';
-import axiosInstance from '@/utils/axiosInstance';
 import React, { useEffect, useState } from 'react';
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Table, TableHeader, TableBody, TableRow, TableCell, TableHead } from '@/components/ui/table';
+import { Checkbox } from '@/components/ui/checkbox';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
-type SelectUsersProps = {
-    selectedUsers: string[];
-    setSelectedUsers: (ids: string[]) => void;
+export type SelectUserItem = {
+  id: string;
+  [key: string]: any;
 };
 
-export const SelectUsers: React.FC<SelectUsersProps> = ({ selectedUsers, setSelectedUsers }) => {
-    const [allUsers, setAllUsers] = useState<any[]>([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [tempSelectedUsers, setTempSelectedUsers] = useState<string[]>([]);
+type SelectUsersProps<T extends SelectUserItem> = {
+  selectedIds: string[];
+  setSelectedIds: (ids: string[]) => void;
+  fetchData: () => Promise<T[]>;
+  renderLabel: (item: T) => React.ReactNode;
+  title?: string;
+};
 
-    const getAllUsers = async () => {
-        try {
-            const response = await axiosInstance.get(API_PATHS.USERS.GET_ALL_USERS);
-            if (response.data?.length > 0) {
-                setAllUsers(response.data);
-            }
-        } catch (error) {
-            console.error("Error fetching users:", error);
-        }
-    };
+export function SelectUsers<T extends SelectUserItem>({
+  selectedIds,
+  setSelectedIds,
+  fetchData,
+  renderLabel,
+  title = 'Select Users',
+}: SelectUsersProps<T>) {
+  const [users, setUsers] = useState<T[]>([]);
+  const [tempSelected, setTempSelected] = useState<string[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
 
-    const toggleUserSelection = (userId: string) => {
-        setTempSelectedUsers((prev) =>
-            prev.includes(userId) ? prev.filter((id) => id !== userId) : [...prev, userId]
-        );
-    };
+  useEffect(() => {
+    fetchData().then(setUsers).catch(console.error);
+  }, [fetchData]);
 
-    const handleAssign = () => {
-        setSelectedUsers(tempSelectedUsers);
-        setIsModalOpen(false);
-    };
+  useEffect(() => {
+    setTempSelected([...selectedIds]);
+  }, [selectedIds]);
 
-    useEffect(() => {
-        getAllUsers();
-    }, []);
-
-    useEffect(() => {
-        if (selectedUsers.length === 0) {
-            setTempSelectedUsers([]);
-        } else {
-            setTempSelectedUsers([...selectedUsers]);
-        }
-    }, [selectedUsers]);
-
-    return (
-        <div>
-            <button onClick={() => setIsModalOpen(true)}>Assign Users</button>
-
-            {isModalOpen && (
-                <div className="modal">
-                    <h3>Select Users</h3>
-                    <ul>
-                        {allUsers.map((user) => (
-                            <li key={user.id}>
-                                <label>
-                                    <input
-                                        type="checkbox"
-                                        checked={tempSelectedUsers.includes(user.id)}
-                                        onChange={() => toggleUserSelection(user.id)}
-                                    />
-                                    {user.name}
-                                </label>
-                            </li>
-                        ))}
-                    </ul>
-                    <button onClick={handleAssign}>Assign</button>
-                    <button onClick={() => setIsModalOpen(false)}>Cancel</button>
-                </div>
-            )}
-        </div>
+  const toggleSelection = (id: string) => {
+    setTempSelected((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
     );
-};
+  };
+
+  const handleAssign = () => {
+    setSelectedIds(tempSelected);
+    setIsOpen(false);
+  };
+
+  const handleSelectAll = () => {
+    setTempSelected(filteredUsers.map((u) => u.user_id));
+  };
+
+  const handleDeselectAll = () => {
+    setTempSelected([]);
+  };
+
+  const filteredUsers = users.filter((user) => {
+    const label = renderLabel(user);
+    return label?.toString().toLowerCase().includes(searchTerm.toLowerCase());
+  });
+
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline">Assign</Button>
+      </DialogTrigger>
+      <DialogContent className="w-4xl">
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+        </DialogHeader>
+
+        <div className="flex items-center gap-2 mb-4">
+          <Input
+            placeholder="Search..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full"
+          />
+          <br/>
+          <Button variant="secondary" onClick={handleSelectAll}>
+            Select All
+          </Button>
+          <Button variant="ghost" onClick={handleDeselectAll}>
+            Deselect All
+          </Button>
+        </div>
+
+        <ScrollArea className="h-[400px] border-1 rounded-xl">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-8"></TableHead>
+                <TableHead>User</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredUsers.map((user) => (
+                <TableRow key={user.user_id} className='font-secondary'>
+                  <TableCell>
+                    <Checkbox
+                    className='shadow-none border-1'
+                      checked={tempSelected.includes(user.user_id)}
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          setTempSelected((prev) => [...prev, user.user_id]);
+                        } else {
+                          setTempSelected((prev) => prev.filter((id) => id !== user.user_id));
+                        }
+                      }}
+                      
+                    />
+                    
+                  </TableCell>
+                  <TableCell>{renderLabel(user)}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </ScrollArea>
+
+        <DialogFooter className="pt-4">
+          <div className="text-muted-foreground flex-1 text-sm">
+            {tempSelected.length} user(s) selected
+          </div>
+          <Button onClick={handleAssign}>Assign</Button>
+          <Button variant="ghost" onClick={() => setIsOpen(false)}>
+            Cancel
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}

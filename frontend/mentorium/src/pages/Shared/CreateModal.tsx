@@ -74,9 +74,8 @@ export const CreateModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
       console.log("Creating task:", taskData);
       await createTask(taskData)
     } else if (activeTab === "Project") {
-      // Handle project creation
       console.log("Creating project:", projectData);
-      // e.g. await createProject(projectData)
+      await createProject(projectData)
     }
     onClose(); // close modal after creation
   };
@@ -102,6 +101,26 @@ export const CreateModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
       console.log("Task Created:", res.data);
     } catch (error: any) {
         console.error("Failed to create task:", error);
+
+        if (error.response) {
+          console.log("Response data:", error.response.data);
+          console.log("Status code:", error.response.status);
+          console.log("Headers:", error.response.headers);
+        } else if (error.request) {
+          console.log("No response received:", error.request);
+        } else {
+          console.log("Other error:", error.message);
+        }
+      }
+  };
+
+  const createProject = async (project: Partial<Project>) => {
+    try {
+      console.log("Submitting task:", JSON.stringify(projectData, null, 2));
+      const res = await axiosInstance.post(API_PATHS.PROJECTS.CREATE_PROJECT, project);
+      console.log("Project Created:", res.data);
+    } catch (error: any) {
+        console.error("Failed to create project:", error);
 
         if (error.response) {
           console.log("Response data:", error.response.data);

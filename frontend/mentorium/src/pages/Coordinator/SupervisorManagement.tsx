@@ -11,7 +11,8 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
-import { BookOpenTextIcon } from "lucide-react";
+import { BookOpenTextIcon, LibraryBig } from "lucide-react";
+import PageHeader from "../components/PageHeader";
 
 const SupervisorManagement :React.FC= () => {
   const [lecturers, setLecturers] = React.useState<Lecturer[]>([])
@@ -38,12 +39,7 @@ const SupervisorManagement :React.FC= () => {
 
  return (
     <div className="p-6 space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-muted rounded-md flex items-center justify-center">
-              <BookOpenTextIcon className="text-muted-foreground size-5" />
-            </div>
-            <h1 className="text-4xl text-grey">Lecturer Management</h1>
-          </div>
+      <PageHeader title="Lecturer Management" icon={LibraryBig} />
       <Table>
         <TableHeader>
           <TableRow>

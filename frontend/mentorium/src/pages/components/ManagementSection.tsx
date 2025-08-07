@@ -5,6 +5,8 @@ import {
   ChevronDown,
   ChevronRight,
   GraduationCapIcon,
+  IdCardLanyard,
+  LibraryBigIcon,
   SquareCheckBigIcon,
 } from "lucide-react";
 
@@ -55,9 +57,9 @@ export function ManagementSection() {
 
             <CollapsibleContent>
               <SidebarMenuSub>
-                <SidebarMenuSubItem>
-                  <SidebarMenuSubButton asChild>
-                    <Link to="/defense/" className={navLinkClass("/defense")}>
+                <SidebarMenuSubItem className="font-secondary">
+                  <SidebarMenuSubButton asChild className="text-grey">
+                    <Link to="/defense/">
                       <GraduationCapIcon className="size-4" />
                       <span>Project Defense</span>
                     </Link>
@@ -66,9 +68,8 @@ export function ManagementSection() {
                   <SidebarMenuSubButton asChild>
                     <Link
                       to="/coordinator/studentManagement"
-                      className={navLinkClass("#")}
                     >
-                      <GraduationCapIcon className="size-4" />
+                      <IdCardLanyard className="size-4" />
                       <span>Students</span>
                     </Link>
                   </SidebarMenuSubButton>
@@ -76,17 +77,14 @@ export function ManagementSection() {
                   <SidebarMenuSubButton asChild>
                     <Link
                       to="/coordinator/supervisorManagement"
-                      className={navLinkClass(
-                        "/coordinator/supervisorManagement"
-                      )}
                     >
-                      <BookOpenTextIcon className="size-4" />
+                      <LibraryBigIcon className="size-4" />
                       <span>Supervisors</span>
                     </Link>
                   </SidebarMenuSubButton>
 
                   <SidebarMenuSubButton asChild>
-                    <Link to="#" className={navLinkClass("approvals")}>
+                    <Link to="/approvals">
                       <SquareCheckBigIcon className="size-4" />
                       <span>Approvals</span>
                     </Link>

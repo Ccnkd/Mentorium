@@ -1,5 +1,42 @@
 const supabase = require('../config/db');
 
+
+const createDefense = async (req, res) => {
+  try {
+    // Step 1: Insert a placeholder panel to get the ID
+    const{
+      title,
+      faculty,
+      start_date,
+      end_date,
+      year,
+      project_groups, //array of project group ids
+
+    } = req.body
+
+    const coordinator_id = req.user.id;
+
+    const {data: projectdefense, error: defenseError}= await supabase
+    .from('project_defense')
+    .insert([{
+      coordinator_id,
+      title,
+      start_date,
+      end_date,
+      faculty
+    }])
+
+    if (defenseError){
+      console.error("Supabase insert error:",defenseError);
+      return res.status(400).json({message: "Failed to insert defense",error: defenseError.message})
+    }
+
+    res.status(201).json({ ...updated[0], lecturers: [] })
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message })
+  }
+}
+
 const createPanel = async (req, res) => {
   try {
     // Step 1: Insert a placeholder panel to get the ID

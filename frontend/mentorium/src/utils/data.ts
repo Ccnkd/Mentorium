@@ -9,6 +9,7 @@ import {
   Pencil,
   BookMarked,
   Volume2,
+  SquareCheckBigIcon,
 } from "lucide-react";
 
 export interface SideMenuItem {
@@ -49,8 +50,9 @@ export const SIDE_MENU_DATA_SUPERVISOR: SideMenuItem[] = [
   { id: "06", title: "Calendar", url: "#", icon: Calendar },
   { id: "07", title: "Notifications", url: "#", icon: Bell },
   { id: "08", title: "Announcements", url: "/announcements", icon: Volume2 },
-  { id: "09", title: "Archives", url: "#", icon: BookMarked },
-  { id: "10", title: "Trash", url: "#", icon: Trash2 },
+  { id: "09", title: "Approvals", url: "/approvals", icon: SquareCheckBigIcon },
+  { id: "10", title: "Archives", url: "#", icon: BookMarked },
+  { id: "11", title: "Trash", url: "/trash", icon: Trash2 },
 ];
 
 export const SIDE_MENU_DATA_COORDINATOR: SideMenuItem[] = [
@@ -66,8 +68,9 @@ export const SIDE_MENU_DATA_COORDINATOR: SideMenuItem[] = [
   { id: "05", title: "Calendar", url: "#", icon: Calendar },
   { id: "06", title: "Notifications", url: "/project/test-id/", icon: Bell },
   { id: "07", title: "Announcements", url: "/announcements", icon: Volume2 },
-  { id: "08", title: "Archives", url: "/archivesStudent", icon: BookMarked },
-  { id: "09", title: "Trash", url: "/trash", icon: Trash2 },
+  { id: "09", title: "Approvals", url: "/approvals", icon: SquareCheckBigIcon },
+  { id: "10", title: "Archives", url: "#", icon: BookMarked },
+  { id: "11", title: "Trash", url: "/trash", icon: Trash2 },
 ];
 
 export const PRIORITY_OPTIONS = [

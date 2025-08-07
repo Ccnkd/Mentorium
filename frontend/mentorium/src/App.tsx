@@ -39,6 +39,7 @@ import DefenseSchedule from "./pages/Coordinator/Defense/DefenseSchedule";
 import StudentManagement from "./pages/Coordinator/StudentManagement";
 import MenteeManagement from "./pages/Supervisors/MenteeManagement";
 import { ThemeProvider } from "./pages/components/ThemeProvider";
+import Approvals from "./pages/Supervisors/Approvals";
 
 const App: React.FC = () => {
   return (
@@ -77,6 +78,7 @@ const App: React.FC = () => {
                 <Route path="/announcements" element={<AnnouncementPage />} />
                 <Route path="/completed" element={<CompletedPage />} />
                 <Route path="/trash" element={<Trash />} />
+                <Route path="/approvals" element={<Approvals />} />
 
                 {/* Student Routes */}
                 <Route

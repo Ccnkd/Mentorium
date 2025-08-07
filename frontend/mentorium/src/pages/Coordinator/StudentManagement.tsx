@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
-import { BookOpenTextIcon } from "lucide-react";
+import { BookOpenTextIcon, IdCardLanyard } from "lucide-react";
 import PageHeader from "../components/PageHeader";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -40,7 +40,7 @@ const StudentManagement :React.FC= () => {
 
  return (
     <div className="p-6 space-y-4">
-      <PageHeader title="Student Management" icon={BookOpenTextIcon} />
+      <PageHeader title="Student Management" icon={IdCardLanyard} />
       <Table>
         <TableHeader className="font-secondary text-grey">
           <TableRow>

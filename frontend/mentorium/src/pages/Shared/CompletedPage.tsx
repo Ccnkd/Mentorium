@@ -6,10 +6,10 @@ import type { Task } from '@/utils/types';
 import { TicketCheck} from 'lucide-react'
 import React, { useContext, useEffect, useState } from 'react'
 import TaskCard from '../components/TaskCard';
+import PageHeader from '../components/PageHeader';
 
 const CompletedPage :React.FC= () => {
   useUserAuth();
-  const{user} = useContext(UserContext);
   const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(()=>{
@@ -26,12 +26,7 @@ const CompletedPage :React.FC= () => {
   },[]);
   return (
     <div className="px-6 py-8 w-full">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-muted rounded-md flex items-center justify-center">
-              <TicketCheck className="text-muted-foreground size-5" />
-            </div>
-            <h1 className="text-4xl text-grey">Completed</h1>
-          </div>
+      <PageHeader title="Completed" icon={TicketCheck} />
           
      {/* Main Content */}
       <div className="flex-1 flex items-center justify-center">

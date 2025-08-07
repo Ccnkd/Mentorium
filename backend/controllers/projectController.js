@@ -7,8 +7,7 @@ const getProjects = async (req, res) => {
 
     let query = supabase
       .from('projects')
-      .select('*')
-      .or(`created_by.eq.${userId},assignedTo.eq.${userId}`);
+      .select('*');
 
     if (status === 'pending') {
       query = query.lt('progress', 100);
@@ -125,25 +124,6 @@ const createProjectTask = async (req, res) => {
     }
 };
 
-const deleteTask = async (req, res) => {
-    try{
-
-    }catch(error){
-        res.status(500).json({message: "Server error", error: error.message})
-    }
-};
-
-const updateTaskStatus = async (req, res) => {
-    try{
-
-    
-    //put 404 error message here
-    }catch(error){
-        res.status(500).json({message: "Server error", error: error.message})
-    }
-};
-
-
 const getDashboardData = async (req, res) => {
     try{
 
@@ -174,6 +154,5 @@ module.exports={
     getUserDashboardData,
     getDashboardData,
     createProjectTask,
-    deleteTask,
     createBudget,
 }

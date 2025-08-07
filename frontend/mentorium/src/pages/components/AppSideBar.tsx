@@ -21,12 +21,23 @@ import {
 
 import MentoriumIcon from "@/assets/icons/MentoriumIcon.svg?react";
 import { useContext, useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { LogOut, Settings } from "lucide-react";
+import { useNavigate, useLocation, Link } from "react-router-dom";
+import { LogOut, Moon, Settings, Sun, User } from "lucide-react";
 import { ProjectsSection } from "./ProjectsSection"; // Import TeamsSection component
 import { cn } from "@/lib/utils"; // import cn helper
 import { CreateModal } from "../Shared/CreateModal";
 import { ManagementSection } from "./ManagementSection";
+import { useTheme } from "./ThemeProvider";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 type AppSidebarProps = {
   userDisplayName?: string;
@@ -42,6 +53,7 @@ export function AppSidebar({
   const location = useLocation();
   const [sideMenuData, setSideMenuData] = useState<SideMenuItem[]>([]);
   const navigate = useNavigate();
+  const { setTheme } = useTheme();
 
   const handleLogout = () => {
     localStorage.clear();
@@ -74,7 +86,7 @@ export function AppSidebar({
     <>
       <Sidebar collapsible="icon">
         <SidebarContent>
-          <SidebarHeader className="sticky top-0 z-[99] bg-white">
+          <SidebarHeader className="sticky top-0 z-[99] bg-sidebar">
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton size="lg" asChild>
@@ -151,15 +163,49 @@ export function AppSidebar({
         </SidebarContent>
 
         <SidebarFooter>
-          <SidebarMenuButton asChild>
-            <a
-              href="#"
-              className="font-secondary text-grey text-lg font-medium flex items-center gap-2 px-3 py-2"
-            >
-              <Settings className="size-4" />
-              <span>Settings</span>
-            </a>
-          </SidebarMenuButton>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <SidebarMenuButton asChild onClick={() => setTheme("dark")}>
+                <a
+                  href="#"
+                  className="font-secondary text-grey text-lg font-medium flex items-center gap-2 px-3 py-2"
+                >
+                  <Settings className="size-4" />
+                  <span>Settings</span>
+                </a>
+              </SidebarMenuButton>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-56">
+              <DropdownMenuItem>
+                <Link to={""} className="flex items-center gap-2 w-full">
+                  <User className="h-4 w-4" />
+                  Profile Settings
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger className="flex items-center justify-between">
+                  Theme
+                  {document.documentElement.classList.contains("dark") ? (
+                    <Moon className="h-4 w-4" />
+                  ) : (
+                    <Sun className="h-4 w-4" />
+                  )}
+                </DropdownMenuSubTrigger>
+                <DropdownMenuSubContent className="w-48">
+                  <DropdownMenuItem onClick={() => setTheme("light")}>
+                    Light
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setTheme("dark")}>
+                    Dark
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setTheme("system")}>
+                    System
+                  </DropdownMenuItem>
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <SidebarMenuButton
             className="font-secondary text-grey text-sm font-medium flex items-center gap-2 px-3 py-2"
             onClick={handleLogout}

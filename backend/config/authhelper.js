@@ -11,8 +11,6 @@ const roleConfigs = {
     table: 'students',
     getPayload: ({ user_id, firstName, lastName, indexNumber, studentId, gender, cwa, department }) => ({
       user_id,
-      firstname: firstName,
-      lastname: lastName,
       index_number: indexNumber,
       student_id: studentId,
       current_cwa: cwa,
@@ -24,10 +22,7 @@ const roleConfigs = {
     table: 'lecturers',
     getPayload: ({ user_id, email, title, firstName, lastName, gender, department }) => ({
       user_id,
-      email: email ?? null,
       title : title ?? null,
-      firstname: firstName,
-      lastname: lastName,
       gender: gender ?? null,
       department: department,
     }),

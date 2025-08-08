@@ -1,6 +1,6 @@
 import { UserContext } from '@/contexts/UserContext';
 import { useUserAuth } from '@/hooks/useUserAuth'
-import type {Announcement, Task} from "../../utils/types"
+import type {Announcement, Project, Task} from "../../utils/types"
 import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import TaskCard from '../components/TaskCard';
@@ -15,17 +15,20 @@ const SupervisorDashboard :React.FC= () => {
   const{user} = useContext(UserContext);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [announcement, setAnnouncement] = useState<Announcement | null>(null);
-  const [ loading,setLoading] = useState(false);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading,setLoading] = useState(false);
 
   useEffect(()=>{
     const fetchData = async ()=>{
     try {
       setLoading(true);
       const TasksRes = await axiosInstance.get(API_PATHS.TASKS.GET_ALL_TASKS);
+      const ProjectsRes = await axiosInstance.get(API_PATHS.PROJECTS.GET_ALL_PROJECTS);
       const announcementRes = await axiosInstance.get(API_PATHS.ANNOUNCEMENT.GET_ANNOUNCEMENTS);
       const firstAnnouncement = announcementRes.data.announcements[0];
       
       setTasks(TasksRes.data.tasks); // Adjust based on actual structure
+      setProjects(ProjectsRes.data.projects); // Adjust based on actual structure
 
       if (firstAnnouncement) {
         setAnnouncement(firstAnnouncement); // store it as an array with one item
@@ -67,8 +70,10 @@ const SupervisorDashboard :React.FC= () => {
           <div className='text-grey text-xs font-alternate font-semibold tracking-widest'>
             PROJECTS
           </div>
-          <div className='flex px-2 py-2'>
-            <ProjectCard/>
+          <div className='flex grid gap-2'>
+          {projects.map((project) => (
+          <ProjectCard key={project.project_id} project={project}/>
+          ))}
           </div>
           </div>
     </>

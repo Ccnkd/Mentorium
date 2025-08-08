@@ -4,6 +4,7 @@ import { InfoIcon } from "lucide-react";
 import type { Task } from "@/utils/types";
 import { Checkbox } from "@/components/ui/checkbox";
 import { PriorityBadge } from "../components/PriorityBadge";
+import ProgressRing from "../components/ProgressRing";
 
 type TaskModalProps = {
   task: Task;
@@ -11,18 +12,10 @@ type TaskModalProps = {
 };
 
 const TaskModal: React.FC<TaskModalProps> = ({ task, onClose }) => {
-
-  const date = new Date(task.due_date);
-
-  const formatted = date.toLocaleDateString('en-GB', {
-  day: 'numeric',
-  month: 'long',
-  year: 'numeric',
-  });
-
+  
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-      <Card className="w-[60vw] h-[70vh] max-h-[90vh] overflow-y-auto">
+      <Card className="w-[60vw] h-[60vh] max-h-[90vh] overflow-y-auto">
         <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-sm bg-muted flex items-center justify-center">
@@ -42,18 +35,13 @@ const TaskModal: React.FC<TaskModalProps> = ({ task, onClose }) => {
                 <Checkbox className="size-6 rounded-2xl"/>
                 <p className="font-medium text-grey text-3xl">{task.title}</p>
               </div>
+
               <div>
                 <p className="text-muted-foreground text-sm">Priority</p>
                 <PriorityBadge priority={task.priority}/>
               </div>
               <div>
-                  <ul className="text-sm text-gray-700">
-                    {task.assignees.map((assignee, index) => (
-                      <li key={index}>
-                        {assignee.users.firstname} {assignee.users.lastname}
-                      </li>
-                    ))}
-                  </ul>
+                <p className="font-medium text-grey text-3xl">{task.description}</p>
               </div>
             </div>
 
@@ -64,9 +52,13 @@ const TaskModal: React.FC<TaskModalProps> = ({ task, onClose }) => {
               </div>
               <div>
                 <p className="text-muted-foreground text-sm">Assignees</p>
-                <p className="font-medium text-grey text-xl">
-                  Kwame Nkrumah University of Science & Technology
-                </p>
+                  <ul className="text-xl text-grey">
+                    {task.assignees.map((assignee, index) => (
+                      <li key={index}>
+                        {assignee.users.firstname} {assignee.users.lastname}
+                      </li>
+                    ))}
+                  </ul>
               </div>
             </div>
           </div>

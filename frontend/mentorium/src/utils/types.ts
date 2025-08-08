@@ -6,16 +6,26 @@
     department: string
     email: string;
     panel_id: string | null;
+    users: {
+      firstname: string;
+      lastname: string;
+      email: string;
+    };
   }
 
   export type Student = {
-    user_id: string
-    index_number : string
-    current_cwa : string
-    firstname: string
-    lastname: string
-    year_of_admission : string
-  }
+    user_id: string;
+    index_number: string;
+    department: string;
+    student_id: string;
+    current_cwa: number;
+    year_of_admission: number;
+    users: {
+      firstname: string;
+      lastname: string;
+      email: string;
+    };
+  };
 
   export type Panel = {
     id: string
@@ -23,6 +33,26 @@
     venue: string
     lecturers: Lecturer[]
   }
+
+  export type MenteeGroup = {
+    id: string;
+    name: string;
+    mentor: {
+      user_id: string;
+      title: string;
+      department: string;
+      firstname: string;
+      lastname: string;
+    };
+    students: {
+      user_id: string;
+      firstname: string;
+      lastname: string;
+      index_number: string;
+      department: string;
+      year_of_admission: number;
+    }[];
+  };
 
   export type ProjectGroup = {
     id: string
@@ -87,13 +117,33 @@ export type Subtask = {
   is_completed: boolean
 }
 
-export type Project = {
-  id: string
-  title: string
-  description: string
-  due_date: string
-  assignees: Project_Assignee[]
-}
+  export type Project = {
+    project_id: string;
+    title: string;
+    description?: string;
+    due_date?: string;
+    is_completed: boolean;
+    is_final_year_project: boolean;
+    is_favorite?: boolean;
+    progress?: number;
+    priority?: string;
+    project_group:{
+      id: string;
+      title: string;
+    }
+    created_by: {
+      user_id: string;
+      firstname: string;
+      lastname: string;
+    };
+    assignees: {
+      user_id: string;
+      users: {
+        firstname: string;
+        lastname: string;
+      };
+    }[];
+  };
 
 export type Project_Assignee = {
   assignee_id: string

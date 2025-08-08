@@ -10,6 +10,7 @@ import {
   BookMarked,
   Volume2,
   SquareCheckBigIcon,
+  IdCardIcon,
 } from "lucide-react";
 
 export interface SideMenuItem {
@@ -44,7 +45,7 @@ export const SIDE_MENU_DATA_SUPERVISOR: SideMenuItem[] = [
     icon: Home,
   },
   { id: "02", title: "Create", url: "#", icon: PlusCircle },
-  { id: "03", title: "Manage", url: "#", icon: Pencil },
+  { id: "03", title: "Mentees", url: "/mentee", icon: IdCardIcon },
   { id: "04", title: "Search", url: "#", icon: Search },
   { id: "05", title: "Completed", url: "#", icon: TicketCheckIcon },
   { id: "06", title: "Calendar", url: "#", icon: Calendar },
@@ -63,11 +64,12 @@ export const SIDE_MENU_DATA_COORDINATOR: SideMenuItem[] = [
     icon: Home,
   },
   { id: "02", title: "Create", url: "#", icon: PlusCircle },
-  { id: "03", title: "Search", url: "#", icon: Search },
-  { id: "04", title: "Completed", url: "/completed", icon: TicketCheckIcon },
-  { id: "05", title: "Calendar", url: "#", icon: Calendar },
-  { id: "06", title: "Notifications", url: "/project/test-id/", icon: Bell },
-  { id: "07", title: "Announcements", url: "/announcements", icon: Volume2 },
+  { id: "03", title: "Mentees", url: "mentees/management", icon: IdCardIcon },
+  { id: "04", title: "Search", url: "#", icon: Search },
+  { id: "05", title: "Completed", url: "/completed", icon: TicketCheckIcon },
+  { id: "06", title: "Calendar", url: "#", icon: Calendar },
+  { id: "07", title: "Notifications", url: "/project/test-id/", icon: Bell },
+  { id: "08", title: "Announcements", url: "/announcements", icon: Volume2 },
   { id: "09", title: "Approvals", url: "/approvals", icon: SquareCheckBigIcon },
   { id: "10", title: "Archives", url: "#", icon: BookMarked },
   { id: "11", title: "Trash", url: "/trash", icon: Trash2 },
@@ -104,4 +106,18 @@ export const DEFENSE_NAVBAR = [
   { title: "Students", path: "students" },
   { title: "Schedule", path: "schedule" },
   { title: "Scoresheet", path: "scoresheet" },
+];
+
+export const STUDENT_MANAGEMENT_NAVBAR = [
+  { title: "Overview", path: "" },
+  { title: "Students", path: "students" },
+  { title: "Mentee Groups", path: "menteegroups" },
+  { title: "Analytics", path: "analytics" },
+];
+
+export const MENTEE_MANAGEMENT_NAVBAR = [
+  { title: "Overview", path: "" },
+  { title: "Mentees", path: "allmentees" },
+  { title: "Project Groups", path: "projectgroups" },
+  { title: "Analytics", path: "menteeanalytics" },
 ];

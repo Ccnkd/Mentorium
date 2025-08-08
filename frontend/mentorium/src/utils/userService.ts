@@ -1,51 +1,35 @@
-import { API_PATHS } from "./apiPaths";
-import axiosInstance from "./axiosInstance";
+import axiosInstance from "@/utils/axiosInstance";
+import { API_PATHS } from "@/utils/apiPaths";
 
-  
-  
-
-export const fetchMentees = async() =>{
+// Fetch all mentees
+export const fetchMentees = async () => {
   try {
     const response = await axiosInstance.get(API_PATHS.USERS.GET_MENTEES);
-
-    if (response.data) {
-      return response.data;
-    } else {
-      return []; // Return empty array if no data
-    }
+    return response.data?.mentees || []; // Assumes the backend sends { mentees: [...] }
   } catch (error) {
-    console.warn("No mentee data received", error);
-    return []; // Ensure consistent return type
+    console.warn("Error fetching mentees:", error);
+    return [];
   }
-  }
+};
 
-
-export const fetchStudents = async() =>{
+// Fetch all students
+export const fetchStudents = async () => {
   try {
     const response = await axiosInstance.get(API_PATHS.USERS.GET_STUDENTS);
-
-    if (response.data.users) {
-      return response.data.users;
-    } else {
-      return []; // Return empty array if no data
-    }
+    return response.data.users || []; // Assumes the backend sends { students: [...] }
   } catch (error) {
-    console.warn("No mentee data received", error);
-    return []; // Ensure consistent return type
+    console.warn("Error fetching students:", error);
+    return [];
   }
-  }
+};
 
-const fetchUsers = async() =>{
+// Fetch all users
+export const fetchUsers = async () => {
   try {
     const response = await axiosInstance.get(API_PATHS.USERS.GET_ALL_USERS);
-
-    if (response.data.users) {
-      return response.data.users;
-    } else {
-      return []; // Return empty array if no data
-    }
+    return response.data?.users || []; // Assumes the backend sends { users: [...] }
   } catch (error) {
-    console.warn("No mentee data received", error);
-    return []; // Ensure consistent return type
+    console.warn("Error fetching users:", error);
+    return [];
   }
-  }
+};

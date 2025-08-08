@@ -36,10 +36,18 @@ import DefenseLayout from "./components/layouts/DefenseLayout";
 import CompletedPage from "./pages/Shared/CompletedPage";
 import AnnouncementPage from "./pages/Shared/AnnouncementPage";
 import DefenseSchedule from "./pages/Coordinator/Defense/DefenseSchedule";
-import StudentManagement from "./pages/Coordinator/StudentManagement";
-import MenteeManagement from "./pages/Supervisors/MenteeManagement";
+import StudentManagement from "./pages/Coordinator/Management/StudentManagement";
+import MenteeManagement from "./pages/Supervisors/Mentee/MenteeManagement";
 import { ThemeProvider } from "./pages/components/ThemeProvider";
 import Approvals from "./pages/Supervisors/Approvals";
+import ManagementLayout from "./components/layouts/ManagementLayout";
+import StudentsOverview from "./pages/Coordinator/Management/StudentsOverview";
+import ManagementAnalytics from "./pages/Coordinator/Management/ManagementAnalytics";
+import MenteeOverview from "./pages/Supervisors/Mentee/MenteeOverview";
+import ProjectGroupPage from "./pages/Supervisors/Mentee/ProjectGroupPage";
+import MenteeAnalytics from "./pages/Supervisors/Mentee/MenteeAnalytics";
+import MenteeManagementLayout from "./components/layouts/MenteeManagementLayout";
+import { MenteeGroupPage } from "./pages/Coordinator/Management/MenteeGroupPage";
 
 const App: React.FC = () => {
   return (
@@ -73,7 +81,6 @@ const App: React.FC = () => {
 
                 {/* Shared Routes */}
                 <Route path="/edittask" element={<EditTask />} />
-                <Route path="/mytasks" element={<MyTasks />} />
                 <Route path="/myprojects" element={<MyProjects />} />
                 <Route path="/announcements" element={<AnnouncementPage />} />
                 <Route path="/completed" element={<CompletedPage />} />
@@ -92,11 +99,13 @@ const App: React.FC = () => {
                 <Route path="/archivesStudent" element={<ArchivesStudents />} />
 
                 {/* Supervisor Routes */}
-                <Route element={<PrivateRoute allowedRoles={["supervisor"]} />}>
-                  <Route
-                    path="/supervisor/menteeManagement"
-                    element={<MenteeManagement />}
-                  />
+                <Route element={<PrivateRoute allowedRoles={["supervisor","coordinator"]} />}>
+                  <Route path="/mentee" element={<MenteeManagementLayout />}>
+                    <Route index element={<MenteeOverview />} />
+                    <Route path="allmentees" element={<MenteeManagement />} />
+                    <Route path="projectgroups" element={<ProjectGroupPage />} />
+                    <Route path="menteeanalytics" element={<MenteeAnalytics />} />
+                  </Route>
                   <Route path="/supervisor/tasks" element={<ManageTasks />} />
                   <Route
                     path="/supervisor/projects"
@@ -115,6 +124,12 @@ const App: React.FC = () => {
                     <Route path="students" element={<StudentManagement />} />
                     <Route path="schedule" element={<DefenseSchedule />} />
                     <Route path="scoresheet" element={<ScoresheetPage />} />
+                  </Route>
+                  <Route path="/management" element={<ManagementLayout />}>
+                    <Route index element={<StudentsOverview />} />
+                    <Route path="students" element={<StudentManagement />} />
+                    <Route path="menteegroups" element={<MenteeGroupPage />} />
+                    <Route path="analytics" element={<ManagementAnalytics />} />
                   </Route>
                   <Route
                     path="/coordinator/supervisorManagement"

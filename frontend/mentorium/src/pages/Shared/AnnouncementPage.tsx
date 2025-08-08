@@ -8,6 +8,7 @@ import AnnouncementCard from "../components/AnnouncementCard";
 import { Button } from "@/components/ui/button";
 import AnnouncementForm from "../components/AnnouncementForm";
 import PageHeader from "../components/PageHeader";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const AnnouncementPage: React.FC = () => {
   const { user } = useContext(UserContext);
@@ -51,6 +52,7 @@ const AnnouncementPage: React.FC = () => {
         <AnnouncementForm open={showForm} onCancel={() => setShowForm(false)} />
       </div>
       {/* Announcements Grid */}
+      <ScrollArea className="h-[75vh] border-b-1">
       <div className="flex grid gap-2">
         {announcements.length > 0 ? (
           announcements.map((announcement) => (
@@ -64,7 +66,9 @@ const AnnouncementPage: React.FC = () => {
             No announcements available.
           </div>
         )}
+        
       </div>
+      </ScrollArea>
     </div>
   );
 };

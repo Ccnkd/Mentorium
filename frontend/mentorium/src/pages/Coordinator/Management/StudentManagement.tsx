@@ -1,4 +1,4 @@
-import type {Student } from "../../utils/types"
+import type {Student } from "../../../utils/types"
 import { API_PATHS } from "@/utils/apiPaths"
 import React, { useEffect, useState } from "react";
 import axiosInstance from "@/utils/axiosInstance";
@@ -11,9 +11,6 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
-import { BookOpenTextIcon, IdCardLanyard } from "lucide-react";
-import PageHeader from "../components/PageHeader";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 const StudentManagement :React.FC= () => {
   const [students, setStudents] = React.useState<Student[]>([])
@@ -39,8 +36,7 @@ const StudentManagement :React.FC= () => {
   };
 
  return (
-    <div className="p-6 space-y-4">
-      <PageHeader title="Student Management" icon={IdCardLanyard} />
+    <div className="space-y-4">
       <Table>
         <TableHeader className="font-secondary text-grey">
           <TableRow>
@@ -56,7 +52,7 @@ const StudentManagement :React.FC= () => {
           {students.map((student) => (
             <TableRow key={student.user_id} className="font-secondary">
               <TableCell>{student.index_number}</TableCell>
-              <TableCell>{student.firstname} {student.lastname}</TableCell>
+              <TableCell>{student.users.firstname} {student.users.lastname}</TableCell>
               <TableCell>{student.current_cwa}</TableCell>
               <TableCell>{student.mentor}</TableCell>
               <TableCell>{student.year_of_admission}</TableCell>

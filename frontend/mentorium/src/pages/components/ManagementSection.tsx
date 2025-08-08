@@ -67,7 +67,7 @@ export function ManagementSection() {
 
                   <SidebarMenuSubButton asChild>
                     <Link
-                      to="/coordinator/studentManagement"
+                      to="/management"
                     >
                       <IdCardLanyard className="size-4" />
                       <span>Students</span>
@@ -80,13 +80,6 @@ export function ManagementSection() {
                     >
                       <LibraryBigIcon className="size-4" />
                       <span>Supervisors</span>
-                    </Link>
-                  </SidebarMenuSubButton>
-
-                  <SidebarMenuSubButton asChild>
-                    <Link to="/approvals">
-                      <SquareCheckBigIcon className="size-4" />
-                      <span>Approvals</span>
                     </Link>
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>

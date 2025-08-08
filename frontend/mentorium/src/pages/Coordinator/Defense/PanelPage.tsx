@@ -110,12 +110,16 @@ const handleSaveShuffled = async () => {
         ))}
       </div>
       
-      <ShufflePreviewModal
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        shuffledPanels={shuffledPanels}
-        onSave={handleSaveShuffled}
-      />
+    <ShufflePreviewModal
+      open={isModalOpen}
+      title="Preview"
+      onClose={() => setIsModalOpen(false)}
+      onSave={handleSaveShuffled}
+    >
+      {shuffledPanels.map((panel) => (
+        <PanelCard key={panel.id} panel={panel} previewMode />
+      ))}
+    </ShufflePreviewModal>
     </div>
   )
 }

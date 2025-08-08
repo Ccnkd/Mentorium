@@ -64,8 +64,6 @@ const createPanel = async (req, res) => {
   }
 }
 
-
-
 const getPanels = async (req, res) => {
   try {
     const { data: panels, error } = await supabase
@@ -76,22 +74,25 @@ const getPanels = async (req, res) => {
         venue,
         lecturers (
           user_id,
-          firstname,
-          lastname,
           title,
           department,
-          email,
-          panel_id
+          panel_id,
+          users (
+            firstname,
+            lastname
+          )
         )
-      `)
+      `);
 
-    if (error) throw error
+    if (error) throw error;
 
-    res.status(200).json(panels) // ✅ correct reference
+    res.status(200).json(panels);
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message })
+    console.error("Supabase fetch error:", error); // ✅ Log actual error
+    res.status(500).json({ message: "Server error", error: error.message });
   }
-}
+};
+
 
 
 

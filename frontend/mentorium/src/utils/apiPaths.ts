@@ -11,6 +11,8 @@ export const API_PATHS = {
         GET_ALL_USERS:"/api/users",
         GET_LECTURERS:"/api/users/supervisors",
         GET_MENTEES:"/api/users/mentees",
+        GET_MENTEE_GROUPS:"/api/users/menteegroups",
+        ASSIGN_MENTEE_GROUPS:"/api/users/assignmenteegroups",
         GET_STUDENTS:"/api/users/students",
         GET_USER_BY_ID:(userId: any) =>`/api/users/${userId}`,
         UPDATE_USER:(userId: any) =>`/api/users/${userId}`,
@@ -44,7 +46,9 @@ export const API_PATHS = {
     },
 
     PROJECTS: {
-        //empty
+    CREATE_PROJECT: `/api/project/createproject`,
+    GET_ALL_PROJECTS: `/api/project/getprojects`,
+    DELETE_PROJECTS: (project_id: string) => `/api/project/${project_id}`,
     },
 
     REPORTS: {

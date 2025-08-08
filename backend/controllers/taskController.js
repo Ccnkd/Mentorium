@@ -107,9 +107,9 @@ const createTask = async (req, res) => {
 
     // 2. Insert assignees if any
     if (Array.isArray(assignees) && assignees.length > 0) {
-      const assigneesData = assignees.map(user_id => ({
+      const assigneesData = assignees.map(a => ({
         task_id,
-        user_id,
+        user_id: a.user_id,
       }));
 
       const { error: assigneeError } = await supabase
@@ -173,7 +173,7 @@ const deleteTask = async (req, res) => {
     const { error } = await supabase
       .from('tasks')
       .delete()
-      .eq('id', id)
+      .eq('task_id', task_id)
 
     if (error) {
       throw error

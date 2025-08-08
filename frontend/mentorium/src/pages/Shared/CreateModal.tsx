@@ -36,6 +36,7 @@ import { PRIORITY_OPTIONS } from "@/utils/data"
 import { fetchStudents } from "@/utils/userService"
 import { UserContext } from "@/contexts/UserContext"
 import SubtasksInput from "./SubtasksInput"
+import { Checkbox } from "@/components/ui/checkbox"
 
 export const CreateModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const location = useLocation();
@@ -55,11 +56,12 @@ export const CreateModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
   });
 
   const [projectData, setProjectData] = React.useState<Partial<Project>>({
-      id: '',
       title: '',
       description: '',
       due_date: new Date().toISOString(),
-      assignees: []
+      is_final_year_project: false,
+      priority: 1,
+      assignees: [],
   })
 
   const handleTaskChange = <K extends keyof Task>(key: K, value: Task[K]) => {
@@ -123,7 +125,7 @@ export const CreateModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
 
   const createProject = async (project: Partial<Project>) => {
     try {
-      console.log("Submitting task:", JSON.stringify(projectData, null, 2));
+      console.log("Submitting project:", JSON.stringify(projectData, null, 2));
       const res = await axiosInstance.post(API_PATHS.PROJECTS.CREATE_PROJECT, project);
       console.log("Project Created:", res.data);
     } catch (error: any) {
@@ -213,18 +215,18 @@ export const CreateModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
             <div className="flex items-center gap-4 p-0">
             {user?.role==="coordinator" || user?.role ==="supervisor" ?(<div>
               <Label className="pb-2">Assigned To</Label>
-              <SelectUsers                
-                selectedIds={taskData.assignees?.map(a => a.assignee_id) || []}
-                setSelectedIds={(ids: string[]) =>
-                  setTaskData(prev => ({
-                    ...prev,
-                    assignees: ids.map(id => ({ assignee_id: id })),
-                  }))
-                }
-                fetchData={fetchStudents}
-                renderLabel={(user) => `${user.firstname} ${user.lastname}`}
-                title="Assign Users"
-              />
+            <SelectUsers
+              selectedIds={taskData.assignees?.map(a => a.user_id) || []}
+              setSelectedIds={(ids: string[]) =>
+                setTaskData(prev => ({
+                  ...prev,
+                  assignees: ids.map(id => ({ user_id: id })), // 🔥 Only this shape
+                }))
+              }
+              fetchData={fetchStudents}
+              renderLabel={(student) => `${student.users.firstname} ${student.users.lastname}`}
+              title="Assign Users"
+            />
             </div>):(
               <></>
             )}           
@@ -251,9 +253,29 @@ export const CreateModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                 onChange={(e) => handleProjectChange("description", e.target.value)}
                 className="shadow-none rounded-lg border-0 p-0 min-h-7"
               />
-              
+            
               {/*Priority Dropdown*/}             
             <div className="flex items-center gap-4 p-0 ">
+              <div>
+                <Label className="pb-2">Priority</Label>
+                <Select
+                  value={String(projectData.priority)}
+                  onValueChange={(val) => handleTaskChange("priority", Number(val))}
+                > 
+              <SelectTrigger className="w-[180px] shadow-none">
+                <SelectValue placeholder="Low Priority" />
+              </SelectTrigger>
+                <SelectContent>
+                  {PRIORITY_OPTIONS.map((p) => (
+                    <SelectItem key={p.value} value={String(p.value)}>
+                      {p.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+            </Select>
+            </div>
+            <div>
+            </div>
 
             <div className="pt-6">
               <NLDatePicker
@@ -267,23 +289,26 @@ export const CreateModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
 
             {/*Assigned To*/}
             <div className="flex items-center gap-4 p-0">
-            {user?.role==="coordinator" || user?.role ==="supervisor" ?(<div>
+            {user?.role==="coordinator" || user?.role ==="supervisor" ?(
+            <div>
               <Label className="pb-2">Assigned To</Label>
-              <SelectUsers                
-                selectedIds={projectData.assignees?.map(a => a.assignee_id) || []}
-                setSelectedIds={(ids: string[]) =>
-                  setTaskData(prev => ({
-                    ...prev,
-                    assignees: ids.map(id => ({ assignee_id: id })),
-                  }))
-                }
-                fetchData={fetchStudents}
-                renderLabel={(user) => `${user.firstname} ${user.lastname}`}
-                title="Assign Users"
-              />
-            </div>):(
+            <SelectUsers
+              selectedIds={projectData.assignees?.map(a => a.user_id) || []}
+              setSelectedIds={(ids: string[]) =>
+                setProjectData(prev => ({
+                  ...prev,
+                  assignees: ids.map(id => ({ user_id: id })),
+                }))
+              }
+              fetchData={fetchStudents}
+              renderLabel={(student) => `${student.users.firstname} ${student.users.lastname}`}
+              title="Assign Users"
+            />
+            </div>
+            
+            ):(
               <></>
-            )}           
+            )}         
             </div>
             
             </div>

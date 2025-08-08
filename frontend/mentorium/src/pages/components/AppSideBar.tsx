@@ -196,7 +196,7 @@ export function AppSidebar({
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
-          {user?.role === "coordinator" || user?.role === "supervisor" ? (
+          {user?.role === "coordinator" ? (
             <>
               <SidebarSeparator className="mx-0 " />
               <ManagementSection />

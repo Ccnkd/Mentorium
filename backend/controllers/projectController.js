@@ -5,9 +5,22 @@ const getProjects = async (req, res) => {
     const { status } = req.query;
     const userId = req.user.id;
 
-    let query = supabase
-      .from('projects')
-      .select('*');
+    let query = await supabase
+    .from('projects')
+    .select(`
+      project_id,
+      title,
+      description,
+      due_date,
+      is_completed,
+      is_final_year_project,
+      is_favorite,
+      progress,
+      priority,
+      project_group(id, title),
+      created_by(user_id, firstname, lastname),
+      assignees:project_assignees(user_id, users(firstname, lastname))
+    `)
 
     if (status === 'pending') {
       query = query.lt('progress', 100);
@@ -16,13 +29,13 @@ const getProjects = async (req, res) => {
     }
     // else: all tasks (no extra filter)
 
-    const { data: tasks, error } = await query;
+    const { data: projects, error } = await query;
 
     if (error) {
-      return res.status(400).json({ message: 'Error fetching tasks', error: error.message });
+      return res.status(400).json({ message: 'Error fetching projects', error: error.message });
     }
 
-    res.status(200).json({ tasks });
+    res.status(200).json({ projects });
 
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
@@ -124,6 +137,67 @@ const createProjectTask = async (req, res) => {
     }
 };
 
+
+const createProject = async (req, res) => {
+  const created_by = req.user.id;
+  try {
+    const {
+      title,
+      description,
+      priority,
+      due_date,
+      assignees,   // Array of user IDs
+    } = req.body;
+
+    const created_by = req.user.id;
+    const formattedDueDate = due_date?.split("T")[0] ?? null;
+
+    // 1. Create main task
+    const { data: project, error: projectError } = await supabase
+      .from('projects')
+      .insert([{
+        created_by,
+        title,
+        description,
+        priority,
+        due_date: formattedDueDate,        
+      }])
+      .select()
+      .single(); // Get project_id
+
+    if (projectError) {
+      console.error("Supabase insert error:", projectError);
+      return res.status(400).json({ message: "Project insert failed", error: projectError.message });
+    }
+
+    const project_id = project.project_id;
+    
+
+    // 2. Insert assignees if any
+    if (Array.isArray(assignees) && assignees.length > 0) {
+      const assigneesData = assignees.map(a => ({
+        project_id,
+        user_id: a.user_id,
+      }));
+
+      const { error: assigneeError } = await supabase
+        .from('project_assignees')
+        .insert(assigneesData);
+
+      if (assigneeError) {
+        return res.status(500).json({ message: "Assigning users failed", error: assigneeError.message });
+      }
+    }
+
+    res.status(201).json({ message: "Project created successfully", project });
+
+  } catch (error) {
+    
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+
 const getDashboardData = async (req, res) => {
     try{
 
@@ -140,6 +214,25 @@ const getUserDashboardData = async (req, res) => {
     }
 };
 
+const deleteProject = async (req, res) => {
+  const { project_id } = req.params
+
+  try {
+    const { error } = await supabase
+      .from('project')
+      .delete()
+      .eq('project_id', project_id)
+
+    if (error) {
+      throw error
+    }
+
+    res.status(204).send()
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message })
+  }
+};
+
 const createBudget = async (req, res) => {
     try{
 
@@ -149,8 +242,10 @@ const createBudget = async (req, res) => {
 };
 
 module.exports={
+    createProject,
     getProjects,
     getProjectTasks,
+    deleteProject,
     getUserDashboardData,
     getDashboardData,
     createProjectTask,

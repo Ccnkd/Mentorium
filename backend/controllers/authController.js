@@ -44,7 +44,12 @@ const registerUser = async (req, res) => {
 
     // Insert into core users table
     await supabase.from('users')
-      .update({ role })
+      .update({
+        role,
+        first_name: firstName,
+        last_name: lastName,
+        email
+      })
       .eq('user_id', user_id);
 
     const payload = roleInsert.getPayload({ user_id, firstName, lastName, indexNumber, gender, department, studentId, email, cwa, title });
@@ -117,9 +122,13 @@ const registerBulkUsers = async (req, res) => {
       const user_id = data?.user?.id;
 
       // Step 4: Update role in core users table
-      const { error: updateError } = await supabase
-        .from('users')
-        .update({ role })
+      await supabase.from('users')
+        .update({
+          role,
+          first_name: firstName,
+          last_name: lastName,
+          email
+        })
         .eq('user_id', user_id);
 
       if (updateError) {

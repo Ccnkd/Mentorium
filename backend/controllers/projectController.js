@@ -140,19 +140,37 @@ const createProjectTask = async (req, res) => {
 
 const createProject = async (req, res) => {
   const created_by = req.user.id;
+
   try {
     const {
       title,
       description,
       priority,
       due_date,
-      assignees,   // Array of user IDs
+      assignees,          // Array of user IDs
+      is_final_year_project,  // boolean from frontend
     } = req.body;
 
-    const created_by = req.user.id;
     const formattedDueDate = due_date?.split("T")[0] ?? null;
 
-    // 1. Create main task
+    let project_group_id = null;
+
+    // If this is a final year project, check user's assigned project group
+    if (is_final_year_project) {
+      const { data: userGroup, error: groupError } = await supabase
+        .from('students')
+        .select('project_group_id')
+        .eq('user_id', created_by)
+        .single();
+
+      if (groupError || !userGroup || !userGroup.project_group_id) {
+        return res.status(400).json({ message: "User has not been assigned a project group" });
+      }
+
+      project_group_id = userGroup.project_group_id;
+    }
+
+    // Create the project, passing project_group (not project_group_id)
     const { data: project, error: projectError } = await supabase
       .from('projects')
       .insert([{
@@ -160,10 +178,12 @@ const createProject = async (req, res) => {
         title,
         description,
         priority,
-        due_date: formattedDueDate,        
+        due_date: formattedDueDate,
+        is_final_year_project: Boolean(is_final_year_project),
+        project_group: project_group_id,  // Correct field here
       }])
       .select()
-      .single(); // Get project_id
+      .single();
 
     if (projectError) {
       console.error("Supabase insert error:", projectError);
@@ -171,9 +191,8 @@ const createProject = async (req, res) => {
     }
 
     const project_id = project.project_id;
-    
 
-    // 2. Insert assignees if any
+    // Insert assignees if provided
     if (Array.isArray(assignees) && assignees.length > 0) {
       const assigneesData = assignees.map(a => ({
         project_id,
@@ -185,17 +204,37 @@ const createProject = async (req, res) => {
         .insert(assigneesData);
 
       if (assigneeError) {
+        // Optionally rollback project creation here if assignees fail
+        await supabase.from('projects').delete().eq('project_id', project_id);
+
         return res.status(500).json({ message: "Assigning users failed", error: assigneeError.message });
       }
     }
 
-    res.status(201).json({ message: "Project created successfully", project });
+    // Update the project group to link to this project if final year project
+    if (project_group_id) {
+      const { error: updateError } = await supabase
+        .from('project_groups')
+        .update({ project_id })
+        .eq('id', project_group_id);
+
+      if (updateError) {
+        // Rollback project creation and assignees insert on failure
+        await supabase.from('projects').delete().eq('project_id', project_id);
+
+        return res.status(500).json({ message: "Updating project group failed, rollback performed", error: updateError.message });
+      }
+    }
+
+    return res.status(201).json({ message: "Project created successfully", project });
 
   } catch (error) {
-    
-    res.status(500).json({ message: "Server error", error: error.message });
+    console.error("Create project error:", error);
+    return res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+
 
 
 const getDashboardData = async (req, res) => {

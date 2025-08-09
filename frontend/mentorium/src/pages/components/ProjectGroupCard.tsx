@@ -1,6 +1,6 @@
 // components/panels/PanelCard.tsx
 import React from "react"
-import type { Panel, Lecturer, ProjectGroup, Member } from "../../utils/types"
+import type {ProjectGroup, Member } from "../../utils/types"
 import {Pencil } from "lucide-react"
 import {
   DropdownMenu,
@@ -43,11 +43,22 @@ const ProjectGroupCard: React.FC<PanelCardProps> = ({ group, onEdit, onDelete, p
               <div className="font-medium text-grey text-xl">
               {member.firstname} {member.lastname}
               </div>
+              <div>
+              </div>
             </div>
           ))
         ) : (
           <p className="italic text-muted-foreground">No students assigned</p>
         )}
+      </div>
+      <div className="flex justify-between items-center font-secondary text-sm">
+      <div>
+       {}
+      </div>
+      <div>
+        Project Approval
+        {group.approval_status}
+      </div>
       </div>
     </div>
   )

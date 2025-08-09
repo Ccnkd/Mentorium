@@ -37,6 +37,7 @@ export const API_PATHS = {
     GET_PANELS: `/api/defense/getPanels`,
     DELETE_PANEL: (id: any)=> `/api/defense/${id}/deletePanel`,
     ASSIGN_PANEL: `/api/defense/assignPanel`,
+    ASSIGN_PROJECT_GROUPS: `/api/defense/assignProjectgroup`,
     GET_PROJECT_GROUPS:"/api/defense/getProjectgroups",
     DELETE_PROJECT_GROUPS: (id: any)=> `/api/defense/${id}/deleteProjectgroup`,
     CREATE_PROJECT_GROUPS: `/api/defense/createProjectgroup`,

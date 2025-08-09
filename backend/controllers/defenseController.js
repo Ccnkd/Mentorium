@@ -199,6 +199,37 @@ const deletePanel = async (req, res) => {
   }
 }
 
+const assignStudentsToProjectGroups = async (req, res) => {
+  const { assignments } = req.body;
+
+  if (!Array.isArray(assignments)) {
+    return res.status(400).json({ error: "Invalid assignments format" });
+  }
+
+  try {
+    // run all updates in parallel
+    const updates = assignments.map(({ studentId, projectGroupId }) =>
+      supabase
+        .from("students")
+        .update({ project_group_id: projectGroupId })
+        .eq("user_id", studentId) // match on user_id since it's the PK
+    );
+
+    const results = await Promise.all(updates);
+
+    const errors = results.filter(r => r.error);
+    if (errors.length > 0) {
+      return res.status(500).json({ error: "Some assignments failed", details: errors });
+    }
+
+    return res.status(200).json({ message: "Project Group assignments updated" });
+  } catch (err) {
+    console.error("Assignment failed", err);
+    return res.status(500).json({ error: "Server error" });
+  }
+};
+
+
 
 const assignLecturersToPanels = async (req, res) => {
   const { assignments } = req.body;
@@ -246,5 +277,6 @@ getPanels,
 deletePanel,
 deleteProjectGroup,
 assignLecturersToPanels,
+assignStudentsToProjectGroups,
 createScoresheets,
 }

@@ -129,7 +129,7 @@ export const CreateModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
       const res = await axiosInstance.post(API_PATHS.PROJECTS.CREATE_PROJECT, project);
       console.log("Project Created:", res.data);
     } catch (error: any) {
-        console.error("Failed to create project:", error);
+        console.error('Failed to create project:', error.response?.data || error.message);
 
         if (error.response) {
           console.log("Response data:", error.response.data);
@@ -274,14 +274,12 @@ export const CreateModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                 </SelectContent>
             </Select>
             </div>
-            <div>
-            </div>
 
             <div className="pt-6">
               <NLDatePicker
                 selectedDate={projectData.due_date}
                 onDateChange ={(date) =>
-                  setProjectData((prev) => ({ ...prev, due_Date: date }))
+                  setProjectData((prev) => ({ ...prev, due_date: date }))
                 }
               />
             </div>
@@ -308,9 +306,27 @@ export const CreateModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
             
             ):(
               <></>
-            )}         
+            )}   
             </div>
-            
+            {user?.role==="student"?
+            (
+              <div className="flex items-center gap-1">
+                <Checkbox
+                checked={projectData.is_final_year_project || false}
+                onCheckedChange={(checked) =>
+                  setProjectData((prev) => ({
+                    ...prev,
+                    is_final_year_project: Boolean(checked),
+                  }))
+                }
+                className="border-2 border-primary rounded-4xl shadow-none"
+                />
+
+              <Label>Final Year Project</Label>
+              </div>
+            ):(
+              <></>
+            )}
             </div>
           </TabsContent>
         </Tabs>

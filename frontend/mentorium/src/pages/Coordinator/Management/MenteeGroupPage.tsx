@@ -6,38 +6,22 @@ import type { MenteeGroup, Student } from "@/utils/types";
 import axiosInstance from "@/utils/axiosInstance";
 import { API_PATHS } from "@/utils/apiPaths";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { ManagementContext } from "@/contexts/ManagementContext";
 
 export const MenteeGroupPage: React.FC = () => {
-  const [menteegroups, setMenteegroups] = React.useState<MenteeGroup[]>([]);
-  const [students, setStudents] = React.useState<Student[]>([]);
+  const {students,setStudents,menteeGroups,finalYears,setMenteeGroups} = React.useContext(ManagementContext);
   const [assignments, setAssignments] = React.useState<{ [groupId: string]: Student[] }>({});
   const [unassigned, setUnassigned] = React.useState<Student[]>([]);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [menteeGroupRes, studentRes] = await Promise.all([
-          axiosInstance.get(API_PATHS.USERS.GET_MENTEE_GROUPS),
-          axiosInstance.get(API_PATHS.USERS.GET_STUDENTS),
-        ]);
 
-        if (menteeGroupRes?.data) setMenteegroups(menteeGroupRes.data);
-        if (studentRes?.data?.users) setStudents(studentRes.data.users);
-      } catch (err) {
-        console.error("Data fetch error:", err);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const groupStudents = (students: Student[], method: "random" | "sorted") => {
     const grouped: { [groupId: string]: Student[] } = {};
     const leftovers: Student[] = [];
     const groupsByDept: { [dept: string]: MenteeGroup[] } = {};
 
-    menteegroups.forEach((group) => {
+    menteeGroups.forEach((group) => {
       const dept = group.mentor.department;
       if (!groupsByDept[dept]) groupsByDept[dept] = [];
       groupsByDept[dept].push(group);
@@ -118,7 +102,7 @@ export const MenteeGroupPage: React.FC = () => {
 
       <ScrollArea className="h-[68vh] rounded-xl border-t-1 border-b-1">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {menteegroups.map((group) => (
+        {menteeGroups.map((group) => (
           <MenteeGroupCard key={group.id} menteegroup={group} />
         ))}
       </div>
@@ -132,7 +116,7 @@ export const MenteeGroupPage: React.FC = () => {
         onSave={handleSaveAssignments}
       >
         {Object.entries(assignments).map(([groupId, assignedStudents]) => {
-          const group = menteegroups.find((g) => g.id === groupId);
+          const group = menteeGroups.find((g) => g.id === groupId);
           return group ? (
             <MenteeGroupCard key={group.id} menteegroup={{ ...group, students: assignedStudents }} previewMode />
           ) : null;

@@ -67,6 +67,7 @@ const getAllStudents = async (req, res) => {
         department,
         student_id,
         current_cwa,
+        mentee_group_id,
         year_of_admission,
         users (
           firstname,

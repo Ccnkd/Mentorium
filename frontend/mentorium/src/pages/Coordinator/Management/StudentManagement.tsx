@@ -1,6 +1,5 @@
-import type {Student } from "../../../utils/types"
 import { API_PATHS } from "@/utils/apiPaths"
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axiosInstance from "@/utils/axiosInstance";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,9 +10,10 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
+import { ManagementContext } from "@/contexts/ManagementContext";
 
 const StudentManagement :React.FC= () => {
-  const [students, setStudents] = React.useState<Student[]>([])
+  const {students,setStudents} = useContext(ManagementContext);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,8 +42,7 @@ const StudentManagement :React.FC= () => {
           <TableRow>
             <TableHead>Index Number</TableHead>
             <TableHead>Name</TableHead>
-            <TableHead>CWA</TableHead>
-            <TableHead>Mentor</TableHead>      
+            <TableHead>CWA</TableHead>    
             <TableHead>Year Of Admission</TableHead>      
             <TableHead>Action</TableHead>
           </TableRow>
@@ -54,7 +53,6 @@ const StudentManagement :React.FC= () => {
               <TableCell>{student.index_number}</TableCell>
               <TableCell>{student.users.firstname} {student.users.lastname}</TableCell>
               <TableCell>{student.current_cwa}</TableCell>
-              <TableCell>{student.mentor}</TableCell>
               <TableCell>{student.year_of_admission}</TableCell>
               <TableCell>
                 <Button

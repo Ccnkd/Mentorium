@@ -5,10 +5,12 @@ import {
   STUDENT_MANAGEMENT_NAVBAR
 } from "@/utils/data";
 import PageHeader from '@/pages/components/PageHeader';
+import ManagementProvider from '@/contexts/ManagementContext';
 
 const ManagementLayout :React.FC= () => {
   const navItems = STUDENT_MANAGEMENT_NAVBAR;
   return (
+    <ManagementProvider>
         <main className="flex flex-1 flex-col px-6 py-4 gap-4">
           {/* Project Header */}
           <PageHeader title="Student Management" icon={GraduationCap} />
@@ -35,6 +37,7 @@ const ManagementLayout :React.FC= () => {
             <Outlet/>
           </div>
         </main>
+        </ManagementProvider>
   )
 }
 

@@ -19,7 +19,7 @@
     department: string;
     student_id: string;
     current_cwa: number;
-    mentee_group_id:string;
+    mentee_group_id: string | null;
     year_of_admission: number;
     users: {
       firstname: string;
@@ -59,9 +59,9 @@
     project_group_id: string
     project_group_name: string
     mentee_group_id:string
-    defense_id: string
+    defense_id: string | null
     approval_status: string
-    project_id : string
+    project_id : Project | null;
     members: Member[]
   }
 
@@ -71,6 +71,7 @@
       lastname: string
       email:string
   }
+  
   export type Announcement = {
     announcement_id?: string;
     title: string;
@@ -141,7 +142,7 @@ export type Subtask = {
     project_group:{
       id: string;
       title: string;
-    }
+    } | null;
     created_by: {
       user_id: string;
       firstname: string;
@@ -152,7 +153,7 @@ export type Subtask = {
       users: {
         firstname: string;
         lastname: string;
-      };
+      } | null;
     }[];
   };
 

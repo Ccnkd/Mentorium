@@ -1,22 +1,11 @@
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { API_PATHS } from '@/utils/apiPaths';
-import axiosInstance from '@/utils/axiosInstance';
-import type { Student } from '@/utils/types';
-import React, { useEffect } from 'react'
+import { MenteeContext } from '@/contexts/MenteeContext';
+import React, { useContext, useEffect } from 'react'
 
 const MenteeManagement:React.FC = () => {
-const [mentees, setMentees] = React.useState<Student[]>([])
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const menteeRes = await axiosInstance.get(API_PATHS.USERS.GET_MENTEES);
-
-      setMentees(menteeRes.data.mentees);
-    };
-
-    fetchData();
-  }, []);
+const { mentees } = useContext(MenteeContext);
 
 
  return (

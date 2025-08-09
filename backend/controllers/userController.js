@@ -107,6 +107,7 @@ const getAllMentees = async (req, res) => {
     .select(`
       user_id,
       index_number,
+      gender,
       current_cwa,
       year_of_admission,
       department,
@@ -269,6 +270,7 @@ const getMenteeGroups = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
 
 const assignStudentsMenteeGroups = async (req, res) => {
   const { assignments } = req.body;

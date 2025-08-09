@@ -19,6 +19,7 @@
     department: string;
     student_id: string;
     current_cwa: number;
+    mentee_group_id:string;
     year_of_admission: number;
     users: {
       firstname: string;
@@ -55,11 +56,21 @@
   };
 
   export type ProjectGroup = {
-    id: string
-    name: string
-    students: Student[]
+    project_group_id: string
+    project_group_name: string
+    mentee_group_id:string
+    defense_id: string
+    approval_status: string
+    project_id : string
+    members: Member[]
   }
 
+  export type Member={
+      user_id: string
+      firstname: string
+      lastname: string
+      email:string
+  }
   export type Announcement = {
     announcement_id?: string;
     title: string;

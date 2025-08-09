@@ -37,6 +37,47 @@ const createDefense = async (req, res) => {
   }
 }
 
+const createProjectGroup = async (req, res) => {
+  const user_id = req.user.id; // supervisor's user id from auth middleware
+
+  try {
+    // 1️⃣ Get the mentee group ID for this user
+    const { data: menteeGroup, error: menteeGroupError } = await supabase
+      .from("mentee_groups")
+      .select("id")
+      .eq("mentor_id", user_id) // match by mentor_id
+      .single();
+
+    if (menteeGroupError || !menteeGroup) {
+      return res.status(404).json({ message: "Mentee group not found" });
+    }
+
+    const mentee_group_id = menteeGroup.id;
+
+    // 2️⃣ Create an empty project group linked to this mentee_group
+    const { data: projectGroup, error: projectGroupError } = await supabase
+      .from("project_groups")
+      .insert([
+        {
+          name: "Untitled Group", // placeholder
+          mentee_group_id: mentee_group_id
+        }
+      ])
+      .select("id, name, mentee_group_id")
+      .single();
+
+    if (projectGroupError) throw projectGroupError;
+
+    // 3️⃣ Return created row
+    res.status(201).json(projectGroup);
+
+  } catch (err) {
+    console.error("Error creating project group:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
+
 const createPanel = async (req, res) => {
   try {
     // Step 1: Insert a placeholder panel to get the ID
@@ -64,6 +105,39 @@ const createPanel = async (req, res) => {
   }
 }
 
+const getProjectGroups = async (req, res) => {
+  try {
+    const user_id = req.user.id;
+
+    // 1️⃣ Get the mentee group ID for this user
+    const { data: menteeGroup, error: menteeGroupError } = await supabase
+      .from("mentee_groups")
+      .select("id")
+      .eq("mentor_id", user_id) // match by mentor_id
+      .single();
+
+    if (menteeGroupError || !menteeGroup) {
+      return res.status(404).json({ message: "Mentee group not found" });
+    }
+
+    const mentee_group_id = menteeGroup.id;
+
+    // 2️⃣ Fetch project groups with related members/projects
+    const { data: projectGroups, error } = await supabase
+      .from("project_groups_full_view")
+      .select(`*`)
+      .eq("mentee_group_id", mentee_group_id);
+
+    if (error) throw error;
+
+    res.status(200).json(projectGroups);
+  } catch (error) {
+    console.error("Supabase fetch error:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+
 const getPanels = async (req, res) => {
   try {
     const { data: panels, error } = await supabase
@@ -71,13 +145,17 @@ const getPanels = async (req, res) => {
       .select(`
         id,
         name,
-        venue,
-        lecturers (
-          user_id,
+        defense_id,
+        project_id,
+        mentee_group_id,
+        approval_status,
+        project:projects(
           title,
-          department,
-          panel_id,
-          users (
+          description
+        ),
+        members:project_group_members(
+          user_id,
+          users(
             firstname,
             lastname
           )
@@ -93,9 +171,22 @@ const getPanels = async (req, res) => {
   }
 };
 
+const deleteProjectGroup = async (req, res) => {
+  const {id} = req.params
+  
+  try {
+    const { data, error } = await supabase
+      .from("project_groups")
+      .delete()
+      .eq('id',id)
 
+    if (error) throw error;
 
-
+    res.status(201).json(data);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+}
 
 const deletePanel = async (req, res) => {
   const { id } = req.params
@@ -155,19 +246,13 @@ const createScoresheets = async (req, res) =>{
     }
 }
 
-const getProjectGroupings = async (req, res) =>{
-    try{
-
-    }catch(error){
-       res.status(500).json({ message: "Server error", error: error.message }); 
-    }
-}
-
 module.exports={
+createProjectGroup,
+getProjectGroups,
 createPanel,
 getPanels,
 deletePanel,
+deleteProjectGroup,
 assignLecturersToPanels,
 createScoresheets,
-getProjectGroupings,
 }

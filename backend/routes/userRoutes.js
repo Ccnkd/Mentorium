@@ -1,5 +1,5 @@
 const express = require("express");
-const { getUsers, getUsersbyId, deleteUser, getSupervisors, getAllMentees, getAllStudents, changeRole, getMenteeGroups, assignStudentsMenteeGroups } = require("../controllers/userController")
+const { getUsers, getUsersbyId, deleteUser, getSupervisors, getAllMentees, getAllStudents, changeRole, getMenteeGroups, assignStudentsMenteeGroups, getProjectGroups } = require("../controllers/userController")
 const {protect} = require("../middleware/authMiddleware");
 const router = express.Router();
 

@@ -1,3 +1,4 @@
+import MenteeProvider from '@/contexts/MenteeContext';
 import PageHeader from '@/pages/components/PageHeader';
 import { MENTEE_MANAGEMENT_NAVBAR } from '@/utils/data';
 import { IdCardIcon } from 'lucide-react';
@@ -7,6 +8,7 @@ import { NavLink, Outlet } from 'react-router-dom';
 const MenteeManagementLayout:React.FC = () => {
   const navItems = MENTEE_MANAGEMENT_NAVBAR;
   return (
+    <MenteeProvider>
         <main className="flex flex-1 flex-col px-6 py-4 gap-4">
           {/* Project Header */}
           <PageHeader title="Mentee Management" icon={IdCardIcon} />
@@ -33,6 +35,7 @@ const MenteeManagementLayout:React.FC = () => {
             <Outlet/>
           </div>
         </main>
+        </MenteeProvider>
   )
 }
 

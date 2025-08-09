@@ -17,7 +17,7 @@ const getProjects = async (req, res) => {
       is_favorite,
       progress,
       priority,
-      project_group(id, title),
+      project_group(id, name),
       created_by(user_id, firstname, lastname),
       assignees:project_assignees(user_id, users(firstname, lastname))
     `)

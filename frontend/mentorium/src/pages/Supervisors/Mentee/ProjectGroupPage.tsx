@@ -7,7 +7,6 @@ import ProjectGroupCard from "@/pages/components/ProjectGroupCard";
 
 const ProjectGroupPage: React.FC = () => {
   const { mentees, projectGroups, setProjectGroups } = useContext(MenteeContext);
-    const firstDept = mentees.length > 0 ? mentees[0] : null;
 
   const handleCreateProjectGroup = async () => {
     try {

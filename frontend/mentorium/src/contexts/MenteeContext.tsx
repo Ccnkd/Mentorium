@@ -31,8 +31,14 @@ export default function MenteeProvider({ children }: { children: React.ReactNode
     fetchData();
   }, []);
 
+    const currentYear = new Date().getFullYear();
+
+    const finalYears = mentees.filter(
+    m => currentYear - m.year_of_admission === 3
+    );
+
   return (
-    <MenteeContext.Provider value={{ mentees, setMentees, projectGroups, setProjectGroups, refetchMentees: fetchData }}>
+    <MenteeContext.Provider value={{ mentees, setMentees, projectGroups, finalYears ,setProjectGroups, refetchMentees: fetchData }}>
       {loading ? (
         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
             <LoadingFlag />

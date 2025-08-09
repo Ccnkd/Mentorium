@@ -41,38 +41,34 @@ const createProjectGroup = async (req, res) => {
   const user_id = req.user.id; // supervisor's user id from auth middleware
 
   try {
-    // 1️⃣ Get the mentee group ID for this user
+    const user_id = req.user.id;
+
     const { data: menteeGroup, error: menteeGroupError } = await supabase
       .from("mentee_groups")
       .select("id")
-      .eq("mentor_id", user_id) // match by mentor_id
+      .eq("mentor_id", user_id)
       .single();
 
     if (menteeGroupError || !menteeGroup) {
       return res.status(404).json({ message: "Mentee group not found" });
     }
 
-    const mentee_group_id = menteeGroup.id;
-
-    // 2️⃣ Create an empty project group linked to this mentee_group
-    const { data: projectGroup, error: projectGroupError } = await supabase
+    const { data, error } = await supabase
       .from("project_groups")
       .insert([
         {
-          name: "Untitled Group", // placeholder
-          mentee_group_id: mentee_group_id
+          name: "Untitled Group",
+          mentee_group_id: menteeGroup.id,
         }
       ])
       .select("id, name, mentee_group_id")
       .single();
 
-    if (projectGroupError) throw projectGroupError;
+    if (error) throw error;
 
-    // 3️⃣ Return created row
-    res.status(201).json(projectGroup);
-
+    // ✅ Always include empty members array
+    res.status(201).json({ ...data, members: [], project_progress: null });
   } catch (err) {
-    console.error("Error creating project group:", err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
@@ -145,17 +141,13 @@ const getPanels = async (req, res) => {
       .select(`
         id,
         name,
-        defense_id,
-        project_id,
-        mentee_group_id,
-        approval_status,
-        project:projects(
-          title,
-          description
-        ),
-        members:project_group_members(
+        venue,
+        lecturers (
           user_id,
-          users(
+          title,
+          department,
+          panel_id,
+          users (
             firstname,
             lastname
           )

@@ -1,11 +1,11 @@
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { MenteeContext } from '@/contexts/MenteeContext';
 import { UserContext } from '@/contexts/UserContext';
-import { Badge, BadgeCent, InfoIcon, TicketCheck, Volume2 } from 'lucide-react';
+import { LandPlot, TicketCheck, UsersRound, Volume2 } from 'lucide-react';
 import React, { useContext } from 'react'
 
 const MenteeOverview:React.FC = () => {
-    const { mentees } = useContext(MenteeContext);
+    const { mentees, finalYears, projectGroups } = useContext(MenteeContext);
     const{user} = useContext(UserContext);
     const firstDept = mentees.length > 0 ? mentees[0].department : null;
     const maleMentees = mentees.filter(m => m.gender === "M");
@@ -17,7 +17,7 @@ const MenteeOverview:React.FC = () => {
         <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-sm bg-muted flex items-center justify-center">
-            <InfoIcon className="size-4 text-muted-foreground"/>
+            <LandPlot className="size-4 text-muted-foreground"/>
             </div>
             <CardTitle className="text-grey font-medium">Overview</CardTitle>
           </div>
@@ -27,20 +27,24 @@ const MenteeOverview:React.FC = () => {
             {/* Left Side */}
             <div className="flex-1 space-y-2 pr-4">
               <div>
-                <p className="text-muted-foreground text-sm">Number of mentees</p>
-                <p className="font-medium text-grey text-4xl">{mentees.length}</p>
+                <p className="text-muted-foreground text-sm">Mentor Name</p>
+                <p className="font-medium text-grey text-2xl">{user.firstname} {user.lastname}</p>
+              </div>
+              <div>
+                <p className="text-muted-foreground text-sm">Department</p>
+                <p className="font-medium text-grey text-2xl">{firstDept}</p>
               </div>
             </div>
 
             {/* Right Side */}
             <div className="flex-1 space-y-2 pl-4 pt-4 md:pt-0">
               <div>
-                <p className="text-muted-foreground text-sm">Mentor</p>
-                <p className="font-medium text-grey text-xl">{user.firstname} {user.lastname}</p>
+                <p className="text-muted-foreground text-sm">Mentee Count</p>
+                <p className="font-medium text-grey text-2xl">{mentees.length}</p>
               </div>
               <div>
-                <p className="text-muted-foreground text-sm">Department</p>
-                <p className="font-medium text-grey text-xl">{firstDept}</p>
+                <p className="text-muted-foreground text-sm">Final Year Students</p>
+                <p className="font-medium text-grey text-2xl">{finalYears.length}</p>
               </div>
             </div>
           </div>
@@ -98,14 +102,13 @@ const MenteeOverview:React.FC = () => {
         <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-sm bg-muted flex items-center justify-center">
-            <BadgeCent className="size-4 text-muted-foreground"/>
+            <UsersRound className="size-4 text-muted-foreground"/>
             </div>
-            <CardTitle className="font-medium text-grey">Budget</CardTitle>
+            <CardTitle className="font-medium text-grey">Project Groups</CardTitle>
           </div>
-          <Badge variant="secondary">Approved</Badge>
         </CardHeader>
         <CardContent className="pt-0">
-          <p className="text-4xl font-medium text-end text-grey">GHC 1,500</p>
+          <p className="text-4xl font-medium text-end text-grey">{projectGroups.length}</p>
         </CardContent>
       </Card>
     </div>

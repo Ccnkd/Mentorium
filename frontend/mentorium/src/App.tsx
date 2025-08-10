@@ -48,12 +48,12 @@ import ProjectGroupPage from "./pages/Supervisors/Mentee/ProjectGroupPage";
 import MenteeAnalytics from "./pages/Supervisors/Mentee/MenteeAnalytics";
 import MenteeManagementLayout from "./components/layouts/MenteeManagementLayout";
 import { MenteeGroupPage } from "./pages/Coordinator/Management/MenteeGroupPage";
+import ProjectGroups from "./pages/Coordinator/Defense/ProjectGroups";
 
 const App: React.FC = () => {
   return (
     <Router>
       <UserProvider>
-        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
           <Routes>
             {/* Public Routes */}
             <Route path="/login" element={<Login />} />
@@ -117,13 +117,15 @@ const App: React.FC = () => {
                 <Route
                   element={<PrivateRoute allowedRoles={["coordinator"]} />}
                 >
+                
                   {/* Defense Management */}
                   <Route path="/defense" element={<DefenseLayout />}>
                     <Route index element={<DefenseOverview />} />
                     <Route path="panels" element={<PanelPage />} />
-                    <Route path="students" element={<StudentManagement />} />
+                    <Route path="projects" element={<ProjectGroups/>} />
                     <Route path="schedule" element={<DefenseSchedule />} />
                     <Route path="scoresheet" element={<ScoresheetPage />} />
+                    <Route path="analytics" element={<ScoresheetPage />} />
                   </Route>
                   <Route path="/management" element={<ManagementLayout />}>
                     <Route index element={<StudentsOverview />} />
@@ -154,7 +156,6 @@ const App: React.FC = () => {
               </Route>
             </Route>
           </Routes>
-        </ThemeProvider>
       </UserProvider>
     </Router>
   );

@@ -1,41 +1,142 @@
 const supabase = require('../config/db');
 
 
-const createDefense = async (req, res) => {
+async function createDefense(req, res) {
   try {
-    // Step 1: Insert a placeholder panel to get the ID
-    const{
+    const user_id = req.user.id; // Coordinator's user_id from auth middleware
+    const {
       title,
       faculty,
       start_date,
       end_date,
       year,
-      project_groups, //array of project group ids
+      scoresheet_url,
+      schedule_url
+    } = req.body;
 
-    } = req.body
-
-    const coordinator_id = req.user.id;
-
-    const {data: projectdefense, error: defenseError}= await supabase
-    .from('project_defense')
-    .insert([{
-      coordinator_id,
-      title,
-      start_date,
-      end_date,
-      faculty
-    }])
-
-    if (defenseError){
-      console.error("Supabase insert error:",defenseError);
-      return res.status(400).json({message: "Failed to insert defense",error: defenseError.message})
+    if (!title || !faculty) {
+      return res.status(400).json({ error: "Missing required fields" });
     }
 
-    res.status(201).json({ ...updated[0], lecturers: [] })
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message })
+    // Step 1: Verify coordinator exists
+    const { data: coordinator, error: coordinatorError } = await supabase
+      .from("coordinators")
+      .select("user_id")
+      .eq("user_id", user_id)
+      .single();
+
+    if (coordinatorError || !coordinator) {
+      return res.status(404).json({ error: "Coordinator not found" });
+    }
+
+    // Step 2: Create the defense
+    const { data: defense, error: defenseError } = await supabase
+      .from("project_defense")
+      .insert([
+        {
+          title,
+          faculty,
+          coordinator_id: coordinator.user_id,
+          start_date,
+          end_date,
+          year,
+          scoresheet_url,
+          schedule_url
+        }
+      ])
+      .select()
+      .single();
+
+    if (defenseError) throw defenseError;
+
+    const defenseId = defense.id;
+
+    // Step 3: Update all panels without a defense_id
+    const { error: panelError } = await supabase
+      .from("panels")
+      .update({ defense_id: defenseId })
+      .is("defense_id", null);
+
+    if (panelError) {
+      // Rollback defense creation if panel update fails
+      await supabase.from("project_defense").delete().eq("id", defenseId);
+      throw panelError;
+    }
+
+    res.status(201).json({
+      message: "Defense created and panels updated successfully",
+      defense
+    });
+
+  } catch (err) {
+    console.error("Error creating defense:", err);
+    res.status(500).json({ error: err.message });
   }
 }
+
+
+async function getDefenseDetails(req, res) {
+  try {
+    const { defenseId } = req.params;
+
+    if (!defenseId) {
+      return res.status(400).json({ error: "Missing defenseId parameter" });
+    }
+
+    const { data: defDetailsArray, error: defDetailsError } = await supabase
+      .from('project_defense')
+      .select('title,faculty,start_date,end_date')
+      .eq('id', defenseId);
+
+    if (defDetailsError) {
+      throw defDetailsError;
+    }
+
+    const defDetails = defDetailsArray.length > 0 ? defDetailsArray[0] : null;
+
+    // 1. Fetch all project groups info for the defense
+    const { data: projectGroups, error: projectGroupsError } = await supabase
+      .from('defense_groups_view')
+      .select('*')
+      .eq('project_defense_id', defenseId);
+
+    if (projectGroupsError) {
+      throw projectGroupsError;
+    }
+
+    // 2. Count distinct panels linked to this defense
+    const { data: panelsData, error: panelsError, count: panelsCount } = await supabase
+      .from('panels')
+      .select('id', { count: 'exact', head: true })
+      .eq('defense_id', defenseId);
+
+    if (panelsError) {
+      throw panelsError;
+    }
+
+    // 3. Count distinct project groups from the fetched data
+    const projectGroupCount = projectGroups.length;
+
+    // 4. Calculate total students by summing members arrays lengths
+    const studentCount = projectGroups.reduce((total, group) => {
+      return total + (group.members?.length || 0);
+    }, 0);
+
+    res.json({
+      defenseId,
+      defDetails,
+      panelCount: panelsCount || 0,
+      projectGroupCount,
+      studentCount,
+      projectGroups,
+    });
+
+  } catch (error) {
+    console.error("Error fetching defense details:", error);
+    res.status(500).json({ error: error.message });
+  }
+}
+
 
 const createProjectGroup = async (req, res) => {
   const user_id = req.user.id; // supervisor's user id from auth middleware
@@ -279,4 +380,6 @@ deleteProjectGroup,
 assignLecturersToPanels,
 assignStudentsToProjectGroups,
 createScoresheets,
+createDefense,
+getDefenseDetails,
 }

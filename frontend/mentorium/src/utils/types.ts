@@ -13,6 +13,22 @@
     };
   }
 
+  export type Defense = {
+    defenseId: string;
+    defDetails: DefDetails;
+    panelCount: number;
+    studentCount: number;
+    projectGroupCount: number;
+    projectGroups: ProjectGroup[]
+  };
+
+  export type DefDetails = {
+    title: string
+    faculty: string
+    start_date: string
+    end_date: string
+  }
+
   export type Student = {
     user_id: string;
     index_number: string;

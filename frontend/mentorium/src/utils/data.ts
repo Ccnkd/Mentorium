@@ -102,9 +102,10 @@ export const SUPERVISOR_PROJECT_NAVBAR = [
 export const DEFENSE_NAVBAR = [
   { title: "Overview", path: "" },
   { title: "Panels", path: "panels" },
-  { title: "Students", path: "students" },
+  { title: "Project Groups", path: "projects" },
   { title: "Schedule", path: "schedule" },
   { title: "Scoresheet", path: "scoresheet" },
+  { title: "Analytics", path: "analytics" },
 ];
 
 export const STUDENT_MANAGEMENT_NAVBAR = [

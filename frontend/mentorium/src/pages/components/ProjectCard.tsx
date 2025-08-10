@@ -52,20 +52,17 @@ const ProjectCard: React.FC<ProjectCardProps> = ({project}) => {
             {/* Top Row: Badge + Date */}
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <PriorityBadge priority={project.priority}/>
+              {project.is_final_year_project?(
+              <Badge variant="outline" className="bg-green-100 text-green-700 border-green-200">
+                Final Year Project
+              </Badge>
+              ):(
+              <></>
+              )}
               <div className="flex items-center gap-1">
                 <Calendar className="w-3 h-3" />
                 <span>{project.due_date}</span>
               </div>
-            </div>
-            <div>
-            {project.is_final_year_project?(
-            <Badge variant="outline" className="bg-green-100 text-green-700 border-green-200">
-                Final Year Project
-            </Badge>
-            ):(
-              <></>
-            )}
-
             </div>
           </div>
         </div>

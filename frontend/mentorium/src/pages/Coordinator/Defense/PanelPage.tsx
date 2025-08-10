@@ -6,34 +6,13 @@ import ShufflePreviewModal from '../../components/ShufflePreviewModal';
 import axiosInstance from "@/utils/axiosInstance"
 import { API_PATHS } from "@/utils/apiPaths"
 import { toast } from "sonner";
+import { DefenseContext } from "@/contexts/DefenseContext";
 
 export const PanelPage: React.FC = () => {
-  const [panels, setPanels] = React.useState<Panel[]>([])
-  const [lecturers, setLecturers] = React.useState<Lecturer[]>([])
+  const {panels,setPanels,lecturers,setLecturers} = React.useContext(DefenseContext);
   const [shuffledPanels, setShuffledPanels] = React.useState<Panel[]>([]);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      const panelRes = await axiosInstance.get(API_PATHS.DEFENSE.GET_PANELS);
-      const lecturerRes = await axiosInstance.get(API_PATHS.USERS.GET_LECTURERS);
-
-      if (panelRes?.data) {
-        setPanels(panelRes.data);
-      } else {
-        console.warn("No panel data received:", panelRes);
-      }
-
-      if (lecturerRes?.data?.users) {
-        setLecturers(lecturerRes.data.users);
-      } else {
-        console.warn("No lecturer data received:", lecturerRes);
-      }
-
-    };
-
-    fetchData();
-  }, []);
 
   const handleCreatePanel = async () => {
     try {

@@ -21,15 +21,15 @@ export const API_PATHS = {
     },
 
     TASKS: {
-    CREATE_TASK: `/api/task/createtask`,
-    DELETE_TASK: (task_id: string) => `/api/task/${task_id}`,
-    UPDATE_TASK: (task_id: any) => `/api/task/${task_id}`,
-    GET_TASK_BY_ID: (task_id: any) => `/api/task/${task_id}`,
-    GET_ALL_TASKS: `/api/task/gettasks`,
-    GET_COMPLETED_TASKS: `/api/task/gettasks?status=completed`,
-    GET_PENDING_TASKS: `/api/task/gettasks?status=pending`,
-    UPDATE_TASK_STATUS: (task_id: any) => `/api/task/${task_id}/status`,
-    UPDATE_TASK_CHECKLIST: (task_id: any) => `/api/task/${task_id}/todo`,
+        CREATE_TASK: `/api/task/createtask`,
+        DELETE_TASK: (task_id: string) => `/api/task/${task_id}`,
+        UPDATE_TASK: (task_id: any) => `/api/task/${task_id}`,
+        GET_TASK_BY_ID: (task_id: any) => `/api/task/${task_id}`,
+        GET_ALL_TASKS: `/api/task/gettasks`,
+        GET_COMPLETED_TASKS: `/api/task/gettasks?status=completed`,
+        GET_PENDING_TASKS: `/api/task/gettasks?status=pending`,
+        UPDATE_TASK_STATUS: (task_id: any) => `/api/task/${task_id}/status`,
+        UPDATE_TASK_CHECKLIST: (task_id: any) => `/api/task/${task_id}/todo`,
     },
 
     DEFENSE: {
@@ -52,6 +52,7 @@ export const API_PATHS = {
 
     PROJECTS: {
     CREATE_PROJECT: `/api/project/createproject`,
+    GET_PROJECT_BY_ID: (project_id: string) => `/api/project/${project_id}`,
     GET_ALL_PROJECTS: `/api/project/getprojects`,
     DELETE_PROJECTS: (project_id: string) => `/api/project/${project_id}`,
     },

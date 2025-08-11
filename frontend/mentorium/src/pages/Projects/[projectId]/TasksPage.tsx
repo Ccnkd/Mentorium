@@ -1,16 +1,26 @@
-import  ProjectLayout  from '@/components/layouts/ProjectLayout';
-//import { UserContext } from '@/contexts/UserContext';
+import { Button } from '@/components/ui/button';
+import { ProjectContext } from '@/contexts/ProjectContext';
 import { useUserAuth } from '@/hooks/useUserAuth'
+import TaskCard from '@/pages/components/TaskCard';
 import React, { useContext } from 'react';
 
 
 const TasksPage :React.FC= () => {
   useUserAuth();
-  //const{user} = useContext(UserContext);
+  const{project} = useContext(ProjectContext);
   return (
-    <ProjectLayout>
-        Budget
-    </ProjectLayout>
+    <>
+    <div >
+    <Button className='rounded-lg'>
+    Create
+    </Button>
+    </div>
+    <div className='flex grid gap-2 pt-2'>
+        {project.tasks.map((task) => (
+          <TaskCard key={task.task_id} task={task}/>
+          ))}
+    </div>
+    </>
   )
 }
 

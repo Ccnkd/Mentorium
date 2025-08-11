@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Volume2 } from 'lucide-react'
+import { Megaphone, Volume2 } from 'lucide-react'
 
 type AnnouncementProps = {
   announcement: Announcement;
@@ -29,7 +29,7 @@ const AnnouncementCard: React.FC<AnnouncementProps> = ({announcement}) => {
         <CardHeader>
             <div className="w-full flex items-center justify-start gap-3">
                 <div className="w-8 h-8 bg-muted rounded-md flex items-center justify-center">
-                    <Volume2 className="size-5 text-muted-foreground" />
+                    <Megaphone className="size-5 text-muted-foreground" />
                 </div>
                 <CardTitle className="font-semibold text-3xl text-grey">
                 {announcement.title}</CardTitle>

@@ -184,7 +184,7 @@ export function AppSidebar({
                         >
                           {/* Red vertical indicator bar */}
                           {isActive && (
-                            <div className="absolute left-0 h-full w-1 bg-red rounded-r-sm" />
+                            <span className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-[3px] bg-primary rounded-full" />
                           )}
                           <item.icon className="size-4" />
                           <span>{item.title}</span>

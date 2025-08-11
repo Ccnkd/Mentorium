@@ -148,23 +148,45 @@ const createTask = async (req, res) => {
 
 
 const updateTask = async (req, res) => {
-    try{
+    try {
+      const task_id = req.params.task_id;
+      const updateData = {
+        title: req.body.title,
+        is_completed: req.body.is_completed,
+        is_favorite: req.body.is_favorite,
+        progress: req.body.progress,
+        description: req.body.description,
+        priority: req.body.priority,
+        due_date: req.body.due_date,
+        subtasks: req.body.subtasks,
+      };
 
-        const task = await task.findbyId(req.params.id);
+      // Remove undefined fields to avoid overwriting with null
+      Object.keys(updateData).forEach(
+        (key) => updateData[key] === undefined && delete updateData[key]
+      );
 
-        task.title = req.body.title || task.title;
-        task.description = req.body.description || task.description;
-        task.priority = req.body.priority || task.priority;
-        task.due_Date = req.body.due_Date || task.due_Date;
-        task.subtasks = req.body.subtasks || task.subtasks;
+      const { data, error } = await supabase
+        .from('tasks')
+        .update(updateData)
+        .eq('task_id', task_id)
+        .select()
+        .single();
 
+      if (error) {
+        return res.status(400).json({ message: "Failed to update task", error });
+      }
 
-        const updatedTask = await task.save();
-        res.json({message: "Task successfully updated"});
-    }catch(error){
-        res.status(500).json({message: "Server error", error: error.message})
+      if (!data) {
+        return res.status(404).json({ message: "Task not found" });
+      }
+
+      return res.json({ message: "Task successfully updated", task: data });
+    } catch (error) {
+      res.status(500).json({ message: "Server error", error: error.message });
     }
 };
+
 
 const deleteTask = async (req, res) => {
   const { task_id } = req.params

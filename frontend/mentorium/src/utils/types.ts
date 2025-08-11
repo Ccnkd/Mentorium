@@ -155,10 +155,7 @@ export type Subtask = {
     is_favorite?: boolean;
     progress?: number;
     priority?: string;
-    project_group:{
-      id: string;
-      title: string;
-    } | null;
+    project_group: ProjectGroup| null;
     created_by: {
       user_id: string;
       firstname: string;
@@ -171,6 +168,7 @@ export type Subtask = {
         lastname: string;
       } | null;
     }[];
+    tasks: Task[];
   };
 
 export type Project_Assignee = {

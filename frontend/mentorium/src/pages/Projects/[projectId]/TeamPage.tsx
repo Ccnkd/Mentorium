@@ -1,17 +1,21 @@
-import  ProjectLayout  from '@/components/layouts/ProjectLayout';
-//import { UserContext } from '@/contexts/UserContext';
+import { ProjectContext } from '@/contexts/ProjectContext';
 import { useUserAuth } from '@/hooks/useUserAuth'
 import React, { useContext } from 'react';
-import SectionCards from '../../components/SectionCards';
 
 
 const TeamPage :React.FC= () => {
   useUserAuth();
-  //const{user} = useContext(UserContext);
+  const { project } = useContext(ProjectContext);
   return (
-    <ProjectLayout>
-        Budget
-    </ProjectLayout>
+    <div>
+      {project?.is_final_year_project ? (
+        project.project_group.members.map((member) => (
+          <div key={member.user_id}>
+            {member.firstname}
+          </div>
+        ))
+      ) : null}
+    </div>
   )
 }
 

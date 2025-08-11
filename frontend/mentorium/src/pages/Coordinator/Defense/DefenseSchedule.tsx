@@ -1,22 +1,14 @@
 import { Button } from '@/components/ui/button'
 import PanelCard from '@/pages/components/PanelCard'
 import type { Panel} from "../../../utils/types"
-import React from 'react'
+import React, { useContext } from 'react'
 import { API_PATHS } from '@/utils/apiPaths'
 import axiosInstance from '@/utils/axiosInstance'
+import { DefenseContext } from '@/contexts/DefenseContext'
 
 const DefenseSchedule: React.FC = () => {
+  const {panels, setPanels} = useContext(DefenseContext);
 
-const [panels, setPanels] = React.useState<Panel[]>([])
-    React.useEffect(() => {    
-    const fetchData = async () => {
-      const panelRes = await axiosInstance.get(API_PATHS.DEFENSE.GET_PANELS);
-
-      setPanels(panelRes.data);
-    };
-
-    fetchData();
-  }, []);
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">

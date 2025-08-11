@@ -1,10 +1,9 @@
 import { useUserAuth } from '@/hooks/useUserAuth';
-import { UserContext } from '@/contexts/UserContext';
 import { API_PATHS } from '@/utils/apiPaths';
 import axiosInstance from '@/utils/axiosInstance';
 import type { Task } from '@/utils/types';
 import { TicketCheck} from 'lucide-react'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TaskCard from '../components/TaskCard';
 import PageHeader from '../components/PageHeader';
 
@@ -29,21 +28,14 @@ const CompletedPage :React.FC= () => {
       <PageHeader title="Completed" icon={TicketCheck} />
           
      {/* Main Content */}
-      <div className="flex-1 flex items-center justify-center">
-        <div className="text-center">
+     <div className='pt-2'>
           <div className='flex grid gap-2'>
-            {tasks.length > 0 ? (tasks.map((task) => (
+            {tasks.map((task) => (
           <TaskCard key={task.task_id} task={task}/>
-          ))):(
-            <div className="flex-1 flex items-center justify-center text-center text-muted-foreground/30 font-medium py-8 text-4xl">
-                No Tasks Completed
-            </div>
-          )}
+          ))}
           </div>
         </div>
-      </div>
     </div>
-    
   )
 }
 

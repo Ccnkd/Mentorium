@@ -8,12 +8,14 @@ import {
   SUPERVISOR_PROJECT_NAVBAR,
 } from "@/utils/data";
 import PageHeader from '@/pages/components/PageHeader';
+import { ProjectContext, ProjectProvider } from '@/contexts/ProjectContext';
 
 
 
-export default function ProjectLayout({ children }: { children: React.ReactNode }) {
+const ProjectContent: React.FC = ()=> {
   const { user } = useContext(UserContext);
-  const { projectId } = useParams();
+  const { project } = useContext(ProjectContext);
+  const { project_id } = useParams();
   const navItems =
     user?.role === "supervisor"
       ? SUPERVISOR_PROJECT_NAVBAR
@@ -22,13 +24,13 @@ export default function ProjectLayout({ children }: { children: React.ReactNode 
   return (     
         <main className="flex flex-1 flex-col px-6 py-4 gap-4">
           {/* Project Header */}
-          <PageHeader title="Project" icon={FolderClosed} />
+          <PageHeader title={project?.title} icon={FolderClosed} />
           {/* Project Tabs */}
           <div className="flex gap-10 border-b text-sm font-medium text-muted-foreground font-secondary">
             {navItems.map((item) => (
               <NavLink
                 key={item.title}
-                to={`/project/${projectId}/${item.path}`}
+                to={`/project/${project_id}/${item.path}`}
                 end={item.path ===""}
                 className={({ isActive }) =>
                   `pb-2 ${isActive ? "border-b-3 border-primary" : ""}`
@@ -46,3 +48,13 @@ export default function ProjectLayout({ children }: { children: React.ReactNode 
         </main>
   );
 }
+
+const ProjectLayout: React.FC = () => {
+  return (
+    <ProjectProvider>
+      <ProjectContent />
+    </ProjectProvider>
+  );
+};
+
+export default ProjectLayout

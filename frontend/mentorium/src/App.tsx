@@ -51,6 +51,7 @@ import { MenteeGroupPage } from "./pages/Coordinator/Management/MenteeGroupPage"
 import ProjectGroups from "./pages/Coordinator/Defense/ProjectGroups";
 
 const App: React.FC = () => {
+  
   return (
     <Router>
       <UserProvider>
@@ -145,11 +146,12 @@ const App: React.FC = () => {
 
                 {/* Project Pages under ProjectLayout */}
                 <Route
-                  path="/project/:projectId"
-                  element={<ProjectLayout children={undefined} />}
+                  path="/project/:project_id"
+                  element={<ProjectLayout/>}
                 >
                   <Route index element={<Overview />} />
                   <Route path="tasks" element={<TasksPage />} />
+                  <Route path="team" element={<TeamPage />} />
                   <Route path="budget" element={<BudgetPage />} />
                   {/* other subpages */}
                 </Route>

@@ -33,7 +33,7 @@ const DefenseOverview :React.FC= () => {
                   <p className="font-medium text-grey text-2xl">{user.firstname} {user.lastname}</p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground text-sm">Faculty</p>
+                  <p className="text-muted-foreground text-sm">Department</p>
                   <p className="font-medium text-grey text-2xl">{defense.defDetails.faculty}</p>
                 </div>
               </div>
@@ -54,7 +54,8 @@ const DefenseOverview :React.FC= () => {
         </Card>
 
         {/* Tasks */}
-        <Card className="col-span-2 font-secondary">
+      
+        <Card className="col-span-2 font-secondary hover:shadow-md">
           <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
             <div className="flex items-center gap-2">
               <div className="w-6 h-6 rounded-sm bg-muted flex items-center justify-center">
@@ -79,7 +80,7 @@ const DefenseOverview :React.FC= () => {
         </Card>
 
         {/* Announcements */}
-        <Card className="font-secondary col-span-2 gap-1">
+        <Card className="font-secondary col-span-2 gap-1 hover:shadow-md">
           <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
             <div className="flex items-center gap-2">
               <div className="w-6 h-6 rounded-sm bg-muted flex items-center justify-center">

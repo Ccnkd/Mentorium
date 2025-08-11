@@ -49,7 +49,7 @@ const SupervisorDashboard :React.FC= () => {
           <br></br>
           {announcement ? (
             <Link to="/announcements">
-              <div className="cursor-pointer hover:opacity-90 transition duration-200 hover:border-l-3">
+              <div className="cursor-pointer rounded-xl hover:shadow-sm transition duration-200">
                 <AnnouncementCard
                   key={announcement.announcement_id}
                   announcement={announcement}
@@ -61,7 +61,7 @@ const SupervisorDashboard :React.FC= () => {
           <div className='text-grey text-xs font-alternate font-semibold tracking-widest'>
             TASKS
           </div>
-          <div className='flex grid gap-2'>
+          <div className='flex grid gap-2 pt-3'>
             {tasks.map((task) => (
           <TaskCard key={task.task_id} task={task}/>
           ))}
@@ -70,7 +70,7 @@ const SupervisorDashboard :React.FC= () => {
           <div className='text-grey text-xs font-alternate font-semibold tracking-widest'>
             PROJECTS
           </div>
-          <div className='flex grid gap-2'>
+          <div className='flex grid gap-2 pt-3'>
           {projects.map((project) => (
           <ProjectCard key={project.project_id} project={project}/>
           ))}

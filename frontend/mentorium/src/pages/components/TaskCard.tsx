@@ -5,7 +5,7 @@ import {
   Card,
   CardContent
 } from "@/components/ui/card";
-import { Calendar, MoreVertical, Pencil, Star, Trash2 } from 'lucide-react';
+import { Calendar, Pencil, Star, Trash2 } from 'lucide-react';
 import { PriorityBadge } from './PriorityBadge';
 import ProgressRing from './ProgressRing';
 import axiosInstance from '@/utils/axiosInstance';
@@ -21,6 +21,67 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
   const [isComplete, setIsComplete] = useState(task.is_completed || false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isActionActive, setIsActionActive] = useState(false);
+  const [progress, setProgress] = useState(task.progress || 0);
+  
+  
+  const date = new Date(task.due_date);
+  const formatted = date.toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+
+  const handleCheckboxChange = (checked: boolean) => {
+    setIsComplete(checked);
+    setProgress(checked ? 100 : 0);
+  };
+
+  const handleFavoriteToggle = () => {
+  setIsFavorite((prev) => !prev);
+  };
+
+const saveTask = async () => {
+  // Compare current local state with original task prop
+  if (
+    task.is_favorite === isFavorite &&
+    task.is_completed === isComplete &&
+    task.progress === progress
+  ) {
+    // No changes, skip save
+    console.log("No changes detected, skipping update");
+    return;
+  }
+
+  // Prepare updated fields based on current state
+  const updatedFields: Partial<Task> = {
+    is_favorite: isFavorite,
+    is_completed: isComplete,
+    progress: progress,
+  };
+
+  try {
+    console.log("Updating task with ID:", task.task_id);
+    const response = await axiosInstance.put(
+      API_PATHS.TASKS.UPDATE_TASK(task.task_id),
+      updatedFields
+    );
+    console.log("Task updated:", response.data);
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      console.error("Update failed:", error.response.data);
+    } else {
+      console.error("Error", error.message);
+    }
+    throw error;
+  }
+};
+
+  const handleMouseLeave = async () => {
+  setIsActionActive(false);
+  await saveTask();
+  };
+
 
   const handleDeleteTask = async (task_id: string) => {
     try {
@@ -43,13 +104,14 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
   };
 
 
+
   return (
     <>
     <Card 
       onClick={()=>setIsModalOpen(true)}
       onMouseEnter={()=>setIsActionActive(true)}
-      onMouseLeave={()=>setIsActionActive(false)}
-      className="w-full border px-4 py-3 hover:cursor-pointer">
+      onMouseLeave={handleMouseLeave}
+      className="w-full px-4 py-3 hover:cursor-pointer">
       <CardContent className="flex items-center justify-between gap-3 p-0">
         {/* Left Section */}
         <div className="flex items-center gap-3">
@@ -57,7 +119,8 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
           <Checkbox
             className="rounded-full border-gray-300"
             checked={isComplete}
-            onCheckedChange={(checked) => setIsComplete(Boolean(checked))}
+            onCheckedChange={handleCheckboxChange}
+            onClick={(e) => {e.stopPropagation()}}
           />
 
           {/* Info */}
@@ -67,7 +130,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
               <PriorityBadge priority={task.priority} />
               <div className="flex items-center gap-1">
                 <Calendar className="w-3 h-3" />
-                <span>{task.due_date}</span>
+                <span>{formatted}</span>
               </div>
             </div>
 
@@ -79,16 +142,20 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
         {/* Right Section */}
         <div className="flex items-center gap-2">
           {/* Favorite Toggle */}
-          <button onClick={() => setIsFavorite(!isFavorite)} className="text-muted-foreground">
-            {isFavorite ? (
-              <Star className="w-4 h-4 fill-yellow-400 text-yellow-500" />
-            ) : (
-              <Star className="w-4 h-4" />
-            )}
-          </button>
+            <button
+          onClick={(e) => {e.stopPropagation();
+            handleFavoriteToggle();
+          }}
+          className="text-muted-foreground"
+        >
+          {isFavorite ? (<Star className="w-4 h-4 fill-yellow-400 text-yellow-500" />
+          ) : (
+            <Star className="w-4 h-4" />
+          )}
+        </button>
 
           {/* Progress Ring */}
-          <ProgressRing progress={task.progress} />
+          <ProgressRing progress={progress} size={70} />
 
           {/* Action Panel */}
           <div

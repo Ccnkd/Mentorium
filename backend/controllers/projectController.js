@@ -22,13 +22,6 @@ const getProjects = async (req, res) => {
       assignees:project_assignees(user_id, users(firstname, lastname))
     `)
 
-    if (status === 'pending') {
-      query = query.lt('progress', 100);
-    } else if (status === 'completed') {
-      query = query.eq('progress', 100);
-    }
-    // else: all tasks (no extra filter)
-
     const { data: projects, error } = await query;
 
     if (error) {
@@ -43,30 +36,36 @@ const getProjects = async (req, res) => {
 };
 
 //Get Project Tasks
-const getProjectTasks = async (req, res) => {
+const getProjectbyId = async (req, res) => {
   try {
     const { status } = req.query;
-    const projectId = req.projects.id;
+    const project_id = req.params.project_id;
 
-    let query = supabase
-      .from('tasks')
-      .select('*')
-      .or(`project_id.eq.${projectId}`);
+    let query = await supabase
+      .from('projects')
+      .select(`
+        project_id,
+        title,
+        description,
+        due_date,
+        is_completed,
+        is_final_year_project,
+        progress,
+        priority,
+        project_group(id,name),
+        created_by(user_id,firstname,lastname),
+        assignees:project_assignees(user_id,users(firstname,lastname)),
+        tasks:tasks(*,subtasks(*))
+        `)
+      .eq(`project_id`, project_id);
 
-    if (status === 'pending') {
-      query = query.lt('progress', 100);
-    } else if (status === 'completed') {
-      query = query.eq('progress', 100);
-    }
-    // else: all tasks (no extra filter)
-
-    const { data: tasks, error } = await query;
+    const { data: projects, error } = await query;
 
     if (error) {
-      return res.status(400).json({ message: 'Error fetching tasks', error: error.message });
+      return res.status(400).json({ message: 'Error fetching project', error: error.message });
     }
 
-    res.status(200).json({ tasks });
+    res.status(200).json({ project: projects[0] });
 
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
@@ -283,7 +282,7 @@ const createBudget = async (req, res) => {
 module.exports={
     createProject,
     getProjects,
-    getProjectTasks,
+    getProjectbyId,
     deleteProject,
     getUserDashboardData,
     getDashboardData,

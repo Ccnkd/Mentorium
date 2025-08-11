@@ -10,6 +10,7 @@ import type { Project } from '@/utils/types';
 import axiosInstance from '@/utils/axiosInstance';
 import { API_PATHS } from '@/utils/apiPaths';
 import { PriorityBadge } from './PriorityBadge';
+import { useNavigate } from 'react-router-dom';
 
 type ProjectCardProps={
   project: Project;
@@ -17,8 +18,13 @@ type ProjectCardProps={
 
 const ProjectCard: React.FC<ProjectCardProps> = ({project}) => {
     const [isFavorite, setIsFavorite] = useState(project.is_favorite||false);
-      const [isActionActive, setIsActionActive] = useState(false);
-    
+    const [isActionActive, setIsActionActive] = useState(false);
+    const navigate = useNavigate();
+
+    const handleCardClick = () => {
+    navigate(`/project/${project.project_id}/`);
+    };
+
     const handleDeleteProject = async (project_id: string) => {
     try {
       console.log("Deleting project ID:", project_id);
@@ -40,7 +46,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({project}) => {
   };
 
   return (
-    <Card className="w-full border px-4 py-3">
+    <Card className="w-full border px-4 py-3"
+    onClick={handleCardClick}>
       <CardContent className="flex items-center justify-between gap-3 p-0">
         {/* Left Section */}
         <div className="flex items-center gap-3 pl-1">

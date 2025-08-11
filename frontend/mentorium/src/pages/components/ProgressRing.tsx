@@ -30,7 +30,7 @@ const ProgressRing: React.FC<ProgressRingProps> = ({
           cy={radius}
           r={radius - 9}
           stroke="#e5e7eb" // gray-200
-          strokeWidth="3"
+          strokeWidth="5"
           fill="none"
         />
       </svg>
@@ -42,7 +42,7 @@ const ProgressRing: React.FC<ProgressRingProps> = ({
         cx={radius}
         cy={radius}
         innerRadius="85%"
-        outerRadius="100%"
+        outerRadius="107%"
         startAngle={90}
         endAngle={90 - angle}
         data={[{ value: progress }]}
@@ -57,7 +57,7 @@ const ProgressRing: React.FC<ProgressRingProps> = ({
 
       {/* Center Label */}
       <span className="absolute inset-0 flex items-center justify-center text-xs font-semibold text-gray-800">
-        {progress}%
+        {progress} %
       </span>
     </div>
   );

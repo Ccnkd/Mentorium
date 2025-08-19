@@ -63,12 +63,10 @@ const MenteeOverview:React.FC = () => {
         </CardHeader>
         <CardContent className="flex justify-between text-sm  ">
           <div>
-          <ul className="space-y-1 mb-4">
-            <li>All Tasks (10)</li>
-            <li className="text-red-500">Overdue (0)</li>
-            <li className="text-orange-500">High Priority (3)</li>
-            <li className="text-yellow-500">Medium Priority (0)</li>
-            <li className="text-green-500">Low Priority (7)</li>
+          <ul className="space-y-1 mb-4 text-lg text-grey">
+            <li>All Mentees ({mentees.length})</li>
+            <li>Males ({maleMentees.length})</li>
+            <li>Females ({mentees.length - maleMentees.length})</li>
           </ul>
           </div>
           <div className="w-[200px] h-[200px] gap-2">

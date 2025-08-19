@@ -33,7 +33,7 @@ const StudentsOverview :React.FC= () => {
                 </div>
                 <div>
                   <p className="text-muted-foreground text-sm">Department</p>
-                  <p className="font-medium text-grey text-2xl">{}</p>
+                  <p className="font-medium text-grey text-2xl">Computer and Biomedical Engineering</p>
                 </div>
               </div>
 
@@ -64,12 +64,11 @@ const StudentsOverview :React.FC= () => {
           </CardHeader>
           <CardContent className="flex justify-between text-sm  ">
             <div>
-            <ul className="space-y-1 mb-4">
-              <li>All Tasks (10)</li>
-              <li className="text-red-500">Overdue (0)</li>
-              <li className="text-orange-500">High Priority (3)</li>
-              <li className="text-yellow-500">Medium Priority (0)</li>
-              <li className="text-green-500">Low Priority (7)</li>
+            <ul className="space-y-1 mb-4 text-lg text-grey">
+              <li>All Students ({students.length})</li>
+              <li >First Years (40)</li>
+              <li >Second Years (27)</li>
+              <li >Final Years ({finalYears.length})</li>
             </ul>
             </div>
             <div className="w-[200px] h-[200px] gap-2">

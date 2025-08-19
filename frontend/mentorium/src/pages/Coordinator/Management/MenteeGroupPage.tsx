@@ -14,8 +14,9 @@ export const MenteeGroupPage: React.FC = () => {
   const [unassigned, setUnassigned] = React.useState<Student[]>([]);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
-
-
+  const groupless = students.filter(
+      s => s.mentee_group_id === null
+    )
   const groupStudents = (students: Student[], method: "random" | "sorted") => {
     const grouped: { [groupId: string]: Student[] } = {};
     const leftovers: Student[] = [];
@@ -105,6 +106,19 @@ export const MenteeGroupPage: React.FC = () => {
         {menteeGroups.map((group) => (
           <MenteeGroupCard key={group.id} menteegroup={group} />
         ))}
+      </div>
+        <br></br>
+      <div className="p-4 border-1 rounded-xl border-primary">
+        <h1>Unassigned Students ({groupless.length})</h1>
+      <div className="p-4">  
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 font-secondary">
+        {groupless.map((student) => (
+          <div>
+            {student.users.firstname} {student.users.lastname}
+            </div>
+        ))}
+      </div>
+      </div>
       </div>
       </ScrollArea>
 

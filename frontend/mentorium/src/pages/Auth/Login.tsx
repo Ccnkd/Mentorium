@@ -170,20 +170,11 @@ const Login: React.FC = () => {
                       <span className="sr-only">Login with Meta</span>
                     </Button>
                   </div>
-                  <div className="font-secondary text-center text-sm text-grey">
-                    Don&apos;t have an account?{" "}
-                    <Link
-                      className="underline underline-offset hover:text-primary "
-                      to="/signup"
-                    >
-                      Sign Up
-                    </Link>
-                  </div>
                 </div>
               </form>
               <div className="bg-muted relative hidden md:block">
                 <img
-                  src="/placeholder.svg"
+                  src="/loginimg.png"
                   alt="Image"
                   className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
                 />

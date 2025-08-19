@@ -56,7 +56,7 @@ const SupervisorManagement :React.FC= () => {
             <TableRow key={lecturer.user_id}>
               <TableCell>{lecturer.title}</TableCell>
               <TableCell>{lecturer.users.firstname} {lecturer.users.lastname}</TableCell>
-              <TableCell>{lecturer.email}</TableCell>
+              <TableCell>{lecturer.users.email}</TableCell>
               <TableCell>{lecturer.panel_id}</TableCell>
               <TableCell>{lecturer.department}</TableCell>
               <TableCell>
